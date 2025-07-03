@@ -1,7 +1,7 @@
 'use server';
 
 import * as xlsx from 'xlsx';
-import NextError from './NextError';
+import {NextError} from './NextError';
 
 export default async function formatSheet(file, requiredFields) {
     try {

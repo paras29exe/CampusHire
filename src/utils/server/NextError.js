@@ -1,5 +1,5 @@
 // src/utils/server/NextError.js
-export default class NextError extends Error {
+export class NextError extends Error {
   constructor(status, message, error = null, data = null) {
     super();
     this.status = status;

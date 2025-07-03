@@ -1,7 +1,6 @@
 'use client'
 import { useEffect } from "react";
 import "./globals.css";
-import extractPdf from "@/utils/server/extractPdf";
 
 
 export default function RootLayout({ children }) {

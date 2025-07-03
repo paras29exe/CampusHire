@@ -32,4 +32,19 @@ const superUserSchema = new mongoose.Schema({
     timestamps: true,
 })
 
-export const SuperUser = mongoose.model("SuperUser", superUserSchema);
+// Encrypt password before saving
+superUserSchema.pre("save", async function (next) {
+    if (this.isModified("password")) {
+        // Hash the password before saving
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
+
+// Method to compare password
+superUserSchema.methods.comparePassword = async function (candidatePassword) {
+    // Compare the provided password with the hashed password
+    return await bcrypt.compare(candidatePassword.trim(), this.password);
+}
+
+export const SuperUser = mongoose.models.SuperUser || mongoose.model("SuperUser", superUserSchema);

@@ -2,7 +2,7 @@
 
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { SignJWT } from "jose";
 
 const studentSchema = new mongoose.Schema({
     name: {
@@ -91,13 +91,14 @@ studentSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword.trim(), this.password);
 }
 
-studentSchema.methods.generateAuthToken = function () {
+studentSchema.methods.generateAuthToken = async function () {
     // Generate a JWT token for the student
-    const token = jwt.sign(
-        { id: this._id, role: this.role },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.TOKEN_EXPIRY || '3d' }
-    );
+    
+    const token = await new SignJWT({ _id: this._id.toString(), role: this.role, name: this.name })
+        .setProtectedHeader({ alg: 'HS256' })   
+        .setIssuedAt()
+        .setExpirationTime(process.env.TOKEN_EXPIRY || '3d') // Token
+        .sign(new TextEncoder().encode(process.env.JWT_SECRET))
     return token;
 }
 

@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import { SignJWT } from "jose";
 
 const superUserSchema = new mongoose.Schema({
     username: {
@@ -11,6 +13,7 @@ const superUserSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
+        select
     },
     email: {
         type: String,
@@ -45,6 +48,17 @@ superUserSchema.pre("save", async function (next) {
 superUserSchema.methods.comparePassword = async function (candidatePassword) {
     // Compare the provided password with the hashed password
     return await bcrypt.compare(candidatePassword.trim(), this.password);
+}
+
+// Method to generate JWT token
+superUserSchema.methods.generateAuthToken = async function () {
+    // Generate a JWT token for the superuser
+    const token = await new SignJWT({ _id: this._id.toString(), role: this.role, name: this.username })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime(process.env.TOKEN_EXPIRY || '3d') // Token valid for 3 days
+        .sign(new TextEncoder().encode(process.env.JWT_SECRET));
+    return token;
 }
 
 export const SuperUser = mongoose.models.SuperUser || mongoose.model("SuperUser", superUserSchema);

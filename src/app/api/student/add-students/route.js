@@ -1,4 +1,4 @@
-'use server-only';
+'use server';
 import { NextResponse } from "next/server";
 import formatSheet from "@/utils/server/formatSheet";
 
@@ -22,6 +22,8 @@ export async function POST(req) {
         const requiredFields = ["name", "rollno", "email", "college_email", "phone", "course", "branch", "batch", "backlogs", "10th_percentage", "12th_percentage", "graduation_percentage"];
 
         const formattedData = await formatSheet(file, requiredFields);
+
+        // save data to database
 
         // Here you would typically save the formatted data to your database
         return NextResponse.json({ data: formattedData }, { status: 200 });

@@ -7,11 +7,11 @@ const JobSchema = new mongoose.Schema({
     },
 
     eligibility_criteria: {
-        batch: { type: [String], required: true }, // e.g., ["2025", "2026"]
+        batch: { type: [String] }, // e.g., ["2025", "2026"]
         // to be entered by admin
         courses: {
             type: Map,
-            of: [String], // e.g., { "B.Tech": ["CSE", "AIDS"], "MCA": null }
+            of: [String] || null, // e.g., { "B.Tech": ["CSE", "AIDS"], "MCA": null }
         },
         cgpa: { type: String } // Keep as String to support "No criteria", "7+", etc.
     },
@@ -31,41 +31,46 @@ const JobSchema = new mongoose.Schema({
 
             // manually entered by admin
             round_details: {
-                type: Map,
-                of: String
+                name: { type: String, required: true }, // e.g., "Technical Interview", "HR Round"
+                type: { type: String, required: true, enum: ['online', 'offline'] }, // e.g., "online", "offline"
+                date: { type: Date, required: true }, // date of the round
+                time: { type: String, required: true }, // time of the round in HH:MM format
+                duration: { type: String }, // duration of the round in minutes
+                link: { type: String }, // link for online rounds, can be null for offline rounds
+                default: {},
             },
             shortlisted_candidates: {
-                type: [mongoose.Schema.Types.ObjectId],
-                ref: 'students',
-            },
+                type: [String], // array of roll numbers
+                default: ["all"] // default to all candidates,
+            }
+
         }
     ],
 
-
     job_details: {
         job_location: { type: String },
-        shift_timings: { type: String },
+        shift_timing: { type: String },
         date_of_joining: { type: String },
-        placement_process: { type: [String] }, 
+        placement_process: { type: [String] },
     },
 
     // done by superuser
-    assigned_to: {
+    assigned_to: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'admins',
         // required: true
-    },
+    }],
 
     // manual details to enter by admin
     links: {
-        college_link: { type: String },
         company_link: { type: String },
+        college_link: { type: String },
     },
     last_date_to_apply: { type: Date },
     status: {
         type: String,
-        enum: ['active', 'inactive', 'archived',],
-        default: 'active'
+        enum: ['active', 'unPublished', 'expired', "unAssigned"],
+        default: 'unAssigned' 
     },
 
 }, { timestamps: true });

@@ -1,13 +1,13 @@
 'use server';
 
-import { Student } from "@/db/models/studentModel";
+import { SuperUser } from "@/db/models/superUserModel";
 import { options } from "@/utils/server/cookieOptions";
 import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     try {
-        const form = await req.formData();
+        const form = !!req.formData && await req.formData();
         const body = form && Object.fromEntries(form.entries());
 
         const { identifier, password } = body;
@@ -20,13 +20,13 @@ export const POST = withDB(async (req) => {
             });
         }
 
-        const user = await Student.findOne({
-            $or: [{ rollno: identifier }, { email: identifier }],
+        const user = await SuperUser.findOne({
+            $or: [{ username: identifier }, { email: identifier }],
         }).select("+password");
 
         if (!user) {
             return NextResponse.json({
-                message: "Student not found with the provided ID or email",
+                message: "No superuser found with the provided username or email",
             }, {
                 status: 404,
             })
@@ -46,7 +46,7 @@ export const POST = withDB(async (req) => {
         user.password = undefined;
         
         const res = NextResponse.json({
-            message: "Student verified successfully",
+            message: "Superuser verified successfully",
             data: user, // Exclude password from response
         }, { status: 200 });
 

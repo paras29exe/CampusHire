@@ -1,5 +1,7 @@
 'use server';
+
 import { Admin } from "@/db/models/adminModel";
+import { options } from "@/utils/server/cookieOptions";
 import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
 
@@ -24,13 +26,14 @@ export const POST = withDB(async (req) => {
 
         if (!user) {
             return NextResponse.json({
-                message: "Admin not found with the provided identifier",
+                message: "Admin not found with the provided ID or email",
             }, {
                 status: 404,
             })
         }
 
         const isPasswordValid = await user.comparePassword(password);
+        
         if (!isPasswordValid) {
             return NextResponse.json({
                 message: "Invalid password",
@@ -38,16 +41,22 @@ export const POST = withDB(async (req) => {
                 status: 401,
             });
         }
-
-        return NextResponse.json({
+        const token = await user.generateAuthToken();
+        // Exclude password from the response
+        user.password = undefined;
+        
+        const res = NextResponse.json({
             message: "Admin verified successfully",
-            data: user
+            data: user, // Exclude password from response
         }, { status: 200 });
 
+        res.cookies.set('accessToken', token, options);
+
+        return res;
     } catch (error) {
         return NextResponse.json({
-            message: "Error verifying admin",
-            error: error.message,
+            message: error.message || "Internal Server Error",
+            error: "An unexpected error occurred",
         }, {
             status: 500,
         });

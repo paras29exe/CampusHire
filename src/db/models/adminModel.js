@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import { SignJWT } from 'jose';
 
 const adminSchema = new mongoose.Schema({
     employee_id: {
@@ -58,13 +59,13 @@ adminSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword.trim(), this.password);
 }
 
-adminSchema.methods.generateAuthToken = function () {
+adminSchema.methods.generateAuthToken = async function () {
     // Generate a JWT token for the admin
-    const token = jwt.sign(
-        { _id: this._id, role: this.role, name: this.name },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.TOKEN_EXPIRY || '3d' }
-    );
+    const token = await new SignJWT({ _id: this._id.toString(), role: this.role })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime(process.env.TOKEN_EXPIRY) // Token valid for 1 hour
+        .sign(new TextEncoder().encode(process.env.JWT_SECRET));
     return token;
 }
 

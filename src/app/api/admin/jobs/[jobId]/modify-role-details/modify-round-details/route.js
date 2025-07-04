@@ -1,3 +1,5 @@
+'use server';
+
 import { Job } from "@/db/models/jobModel";
 import { withDB } from "@/utils/server/dbHandler";
 import { extractRollNumbersFromExcel } from "@/utils/server/extractCandidates";
@@ -23,7 +25,7 @@ export const POST = withDB(async (req, { params }) => {
         }
 
         // Check if the user is authorized to modify the job
-        const reqUser = req.headers.get("user");
+        const reqUser = JSON.parse(req.headers.get("user"));
         if (!job.assigned_to.some(id => id.toString() === reqUser._id.toString())) {
             return NextResponse.json({
                 message: "You are not authorised by superuser to modify this job"

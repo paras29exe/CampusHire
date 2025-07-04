@@ -7,13 +7,14 @@ const JobSchema = new mongoose.Schema({
     },
 
     eligibility_criteria: {
-        batch: { type: [String] }, // e.g., ["2025", "2026"]
+        batch: { type: [String] , default: [] }, // e.g., ["2025", "2026"]
         // to be entered by admin
         courses: {
             type: Map,
             of: [String] || null, // e.g., { "B.Tech": ["CSE", "AIDS"], "MCA": null }
+            default: {}
         },
-        cgpa: { type: String } // Keep as String to support "No criteria", "7+", etc.
+        cgpa: { type: Number, default: 0 } // minimum CGPA required
     },
 
     job_roles: [
@@ -31,10 +32,10 @@ const JobSchema = new mongoose.Schema({
 
             // manually entered by admin
             round_details: {
-                name: { type: String, required: true }, // e.g., "Technical Interview", "HR Round"
-                type: { type: String, required: true, enum: ['online', 'offline'] }, // e.g., "online", "offline"
-                date: { type: Date, required: true }, // date of the round
-                time: { type: String, required: true }, // time of the round in HH:MM format
+                name: { type: String }, // e.g., "Technical Interview", "HR Round"
+                type: { type: String, enum: ['online', 'offline'] }, // e.g., "online", "offline"
+                date: { type: Date,  }, // date of the round
+                time: { type: String }, // time of the round in HH:MM format
                 duration: { type: String }, // duration of the round in minutes
                 link: { type: String }, // link for online rounds, can be null for offline rounds
                 default: {},

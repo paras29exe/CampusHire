@@ -1,3 +1,5 @@
+'use server';
+
 import { Job } from "@/db/models/jobModel";
 import { withDB } from "@/utils/server/dbHandler";
 import mongoose from "mongoose";
@@ -22,7 +24,7 @@ export const POST = withDB(async (req, { params }) => {
         }
 
         // Check if the user is authorized to modify the job
-        const reqUser = req.headers.get("user");
+        const reqUser = JSON.parse(req.headers.get("user"));
 
         if (!job.assigned_to.some(id => id.toString() === reqUser._id.toString())) {
             return NextResponse.json({

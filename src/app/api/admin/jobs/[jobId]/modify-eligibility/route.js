@@ -1,3 +1,5 @@
+'use server';
+
 import { Job } from "@/db/models/jobModel";
 import { withDB } from "@/utils/server/dbHandler";
 import mongoose from "mongoose";
@@ -20,7 +22,7 @@ export const POST = withDB(async (req, { params }) => {
         }
 
         // Check if the user is authorized to modify the job , use job.assigned_to array to find reqUser._id in it
-        const reqUser = req.headers.get("user");
+        const reqUser = JSON.parse(req.headers.get("user"));
         if (!job.assigned_to.some(id => id.toString() === reqUser._id.toString())) {
             return NextResponse.json({
                 message: "You are not authorised by superuser to modify this job"

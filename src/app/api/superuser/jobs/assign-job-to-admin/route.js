@@ -22,16 +22,25 @@ export const POST = withDB(async (req) => {
 
         // Ensure adminIds is an array
         const adminIdsArray = Array.isArray(adminIds) ? adminIds : [adminIds];
-        const currUser = req.headers.get("user");
+        const currUser = JSON.parse(req.headers.get("user"));
 
         // Assign the job to the specified admins
-        await Assignment.create({
-            company: job._id,
-            assigned_to: adminIdsArray,
-            assigned_by: currUser._id, // Assuming the user is the superuser making the request
-            status: 'assigned'
-        });
+        // create assignments for each admin
+        for (const adminId of adminIdsArray) {
+            if (!adminId) continue; // Skip if adminId is empty
+
+            const assignment = new Assignment({
+                company: job._id,
+                assigned_to: adminId,
+                assigned_by: currUser._id, // Assuming currUser is the user making the request
+                status: 'pending', // Set initial status to pending
+            });
+
+            await assignment.save();
+        }
+
         job.assigned_to = adminIdsArray;
+        
         await job.save();
 
         return NextResponse.json({ message: "Job assigned to admins successfully", job }, { status: 200 });

@@ -7,6 +7,14 @@ import { NextResponse } from "next/server";
 export const GET = withDB(async (req) => {
     const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
     const limit = 20; // Number of jobs per page
+
+    if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
+        return NextResponse.json({
+            error: "Invalid pagination parameters",
+            message: "Page and limit must be positive integers",
+        }, { status: 400 });
+    }
+    
     const skip = (page - 1) * limit;
 
     try {

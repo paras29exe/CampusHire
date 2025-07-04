@@ -1,3 +1,5 @@
+'use server';
+
 import { Application } from "@/db/models/applicationsModel";
 import { Job } from "@/db/models/jobModel";
 import { withDB } from "@/utils/server/dbHandler";
@@ -37,7 +39,14 @@ export const GET = withDB(async (req, { params }) => {
         // total number of applicants
         const totalApplicants = applicants.length;
 
-        return NextResponse.json({ applicants, totalApplicants }, { status: 200 });
+        return NextResponse.json({ 
+            data: applicants,
+            pagination: {
+                totalApplicants,
+                currentPage: page,
+                totalPages: Math.ceil(totalApplicants / limit),
+            }
+        }, { status: 200 });
     } catch (err) {
         return NextResponse.json({
             error: err.message || "Unexpected error occurred",

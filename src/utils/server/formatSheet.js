@@ -1,77 +1,62 @@
 'use server';
 
 import * as xlsx from 'xlsx';
-import {NextError} from './NextError';
 
 export default async function formatSheet(file, requiredFields) {
     try {
-        // create buffer from file
         const buffer = Buffer.from(await file.arrayBuffer());
-
         const workbook = xlsx.read(buffer, { type: 'buffer' });
-
         const sheetName = workbook.SheetNames[0];
         const sheetData = workbook.Sheets[sheetName];
-
-        // Convert to JSON
         const rawJsonData = xlsx.utils.sheet_to_json(sheetData);
-        
+
         if (rawJsonData.length === 0) {
-            throw new NextError(400, 'Sheet is empty or not formatted correctly');
+            throw new Error("Sheet is empty or not formatted correctly");
         }
 
-        // Convert all keys to lowercase
+        // Convert keys to lowercase
         const jsonData = rawJsonData.map(item => {
             const lowercasedItem = {};
             Object.keys(item).forEach(key => {
-                lowercasedItem[key.toLowerCase()] = item[key];
+                lowercasedItem[key.toLowerCase().replace(/ /g, '_')] = item[key];
             });
             return lowercasedItem;
         });
 
-        // Validate row for required fields
+        // Check for required fields
         const row = jsonData[0];
-        const missingFields = [];
-
-        requiredFields.forEach(field => {
-            if (row[field] === undefined) {
-                missingFields.push(field);
-            }
-        });
+        const missingFields = requiredFields.filter(field => row[field] === undefined);
 
         if (missingFields.length > 0) {
-            throw new NextError(400, "Some required fields are missing", {missingFields} );
+            const error = new Error("Missing required fields");
+            error.data = missingFields;
+            error.status = 400;
+            throw error;
         }
 
         // Check for duplicate roll numbers
-        const rollNumbers = new Set();
-        const duplicateRollNumbers = [];
+        const rollSet = new Set();
+        const duplicates = [];
 
         jsonData.forEach((item, index) => {
-            if (item.rollno) {
-                const rollNo = item.rollno.toString().trim();
-                if (rollNumbers.has(rollNo)) {
-                    duplicateRollNumbers.push({
-                        rollno: rollNo,
-                        index: index + 1 // +1 to make it 1-based index
-                    });
+            const roll = item.rollno?.toString().trim();
+            if (roll) {
+                if (rollSet.has(roll)) {
+                    duplicates.push({ rollno: roll, index: index + 1 });
                 }
-                rollNumbers.add(rollNo);
+                rollSet.add(roll);
             }
         });
 
-        if (duplicateRollNumbers.length > 0) {
-            throw new NextError(400, `Duplicate roll numbers found`, { duplicateRollNumbers });
+        if (duplicates.length > 0) {
+            const error = new Error("Duplicate roll numbers found");
+            error.duplicates = duplicates;
+            error.status = 400;
+            throw error;
         }
 
         return jsonData;
-    } catch (error) {
-        // Just throw the error, let the API route or server action handle it
-        throw new NextError(
-            error.status || 500,
-            error.message || 'An error occurred while processing the sheet',
-            error.error || error.data || error,
-            null
-        );
-    } 
+    } catch (err) {
+        throw err;
+    }
 }

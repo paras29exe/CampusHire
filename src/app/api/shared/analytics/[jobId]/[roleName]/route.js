@@ -9,6 +9,9 @@ export const GET = withDB(async (req, { params }) => {
     try {
         const { jobId } = params;
         const roleId = req.nextUrl.searchParams.get("roleId");
+        const department = req.nextUrl.searchParams.get("department");
+        const course = req.nextUrl.searchParams.get("course");
+        const branch = req.nextUrl.searchParams.get("branch");
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
         const limit = 50; // Number of applicants per page
 
@@ -26,11 +29,22 @@ export const GET = withDB(async (req, { params }) => {
             return NextResponse.json({ message: "Job not found" }, { status: 404 });
         }
 
-        const applicants = await Application.find({ jobId, role: roleId })
+        let applicants = await Application.find({ jobId, role: roleId })
             .sort({ createdAt: -1 }) // Sort by creation date, most recent first
             .skip((page - 1) * limit) // Pagination: skip to the correct page
             .limit(limit) // Limit the number of applicants returned
-            .populate('applicant', 'name rollno email college_email phone course branch batch')
+            .populate('applicant', 'name rollno email college_email phone course branch department batch')
+        
+        // Filter applicants based on optional query parameters
+        if (department) {
+            applicants = applicants.filter(applicant => applicant.applicant.department === department);
+        }
+        if (course) {
+            applicants = applicants.filter(applicant => applicant.applicant.course === course);
+        }
+        if (branch) {
+            applicants = applicants.filter(applicant => applicant.applicant.branch === branch);
+        }
 
         if ((!applicants || applicants.length === 0) && page === 1) {
             return NextResponse.json({ message: "No applicants found for this Company and role" }, { status: 404 });

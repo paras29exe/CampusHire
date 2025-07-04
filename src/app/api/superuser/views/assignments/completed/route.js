@@ -48,6 +48,7 @@ export const GET = withDB(async (req) => {
 
         // Total number of assignments
         const totalAssignments = await Assignment.countDocuments({ status: "completed" });
+        
         return NextResponse.json({
             data: assignments,
             pagination: {

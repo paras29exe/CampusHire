@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export const GET = withDB(async (req) => {
     const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
-    const limit = 20; // Number of jobs per page
+    const limit = 50; // Number of jobs per page
 
     if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
         return NextResponse.json({
@@ -14,7 +14,7 @@ export const GET = withDB(async (req) => {
             message: "Page and limit must be positive integers",
         }, { status: 400 });
     }
-    
+
     const skip = (page - 1) * limit;
 
     try {
@@ -23,6 +23,13 @@ export const GET = withDB(async (req) => {
             .sort({ createdAt: -1 }) // Sort by creation date in descending order
             .skip(skip)
             .limit(limit);
+
+        if ((!jobs || jobs.length === 0) && page === 1) {
+            return NextResponse.json({
+                message: "No active jobs found.",
+                data: [],
+            }, { status: 404 });
+        }
 
         // Count total expired jobs for pagination metadata
         const totalJobs = await Job.countDocuments({ status: 'expired' });

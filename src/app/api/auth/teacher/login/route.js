@@ -12,6 +12,9 @@ export const POST = withDB(async (req) => {
 
         const { identifier, password } = body;
 
+        console.log("Login attempt with identifier:", identifier);
+
+
         if (!identifier || !password) {
             return NextResponse.json({
                 message: "Credentials are required",

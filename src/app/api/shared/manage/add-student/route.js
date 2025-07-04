@@ -9,9 +9,9 @@ export const POST = withDB(async (req) => {
         const formData = await req.formData();
         const body = formData && Object.fromEntries(formData.entries());
     
-        const { rollno, name, email, college_email, phone, course, branch, batch, backlogs, tenth_percentage, twelfth_percentage } = body;
+        const { rollno, name, email, college_email, phone, course, branch, department, batch, backlogs, tenth_percentage, twelfth_percentage } = body;
     
-        if (!rollno || !name || !email || !college_email || !phone || !course || !branch || !batch || !tenth_percentage || !twelfth_percentage) {
+        if (!rollno || !name || !email || !college_email || !phone || !course || !branch || !department || !batch || !tenth_percentage || !twelfth_percentage) {
             return NextResponse.json({ message: "All fields are required" }, { status: 400 });
         }
     
@@ -55,6 +55,7 @@ export const POST = withDB(async (req) => {
             phone,
             course,
             branch,
+            department,
             batch,
             backlogs: backlogs ? parseInt(backlogs) : 0, // Default to 0 if not provided
             tenth_percentage: parseFloat(tenth_percentage),

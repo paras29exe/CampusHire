@@ -52,6 +52,10 @@ const studentSchema = new mongoose.Schema({
         type: String, // e.g., "CSE", "AIDS"
         required: true
     },
+    department: {
+        type: String, 
+        required: true
+    },
     batch: {
         type: String, // e.g., "2025", "2026"
         required: true

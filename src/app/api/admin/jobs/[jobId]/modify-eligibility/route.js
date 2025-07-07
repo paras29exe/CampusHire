@@ -29,9 +29,7 @@ export const POST = withDB(async (req, { params }) => {
             }, { status: 403 });
         }
 
-        const form = await req.formData();
-        const body = form && Object.fromEntries(form.entries());
-        const { batch, courses, cgpa } = body;
+        const { batch, courses, cgpa } = await req.json();
 
         // Update eligibility criteria
         job.eligibility_criteria = {

@@ -48,7 +48,7 @@ export const POST = withDB(async (req, { params }) => {
             const requiredFields = ['name', 'type', 'date', 'time'];
             const missingFields = requiredFields.filter(field => !parsedRound?.[field]);
 
-            const isTypeValid = ['online', 'offline'].includes(parsedRound?.type);
+            const isTypeValid = ['online', 'offline'].includes(parsedRound?.type.toLowerCase());
 
             if (missingFields.length > 0 || !isTypeValid) {
                 return NextResponse.json({

@@ -32,14 +32,24 @@ export const POST = withDB(async (req, { params }) => {
             }, { status: 403 });
         }
         
-        const form = await req.formData();
-        const body = form && Object.fromEntries(form.entries());
-        const { links, lastDate } = body;
+        
+        const { collegeLink, companyLink, lastDate } = await req.json();
+
+        // Validate links and last date
+        if (collegeLink && typeof collegeLink !== 'string') {
+            return NextResponse.json({ message: "Invalid college link format" }, { status: 400 });
+        }
+        if (companyLink && typeof companyLink !== 'string') {
+            return NextResponse.json({ message: "Invalid company link format" }, { status: 400 });
+        }   
+        if (lastDate && isNaN(new Date(lastDate).getTime())) {
+            return NextResponse.json({ message: "Invalid last date format" }, { status: 400 });
+        }
 
         // Update job links and last date to apply
         job.links = {
-            ...job.links,
-            ...(links ? JSON.parse(links) : {})
+            collegeLink: collegeLink ? collegeLink.trim() : job.links.collegeLink,
+            companyLink: companyLink ? companyLink.trim() : job.links.companyLink,
         };
         job.last_date_to_apply = lastDate ? new Date(lastDate) : job.last_date_to_apply;
 

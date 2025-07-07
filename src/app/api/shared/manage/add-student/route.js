@@ -6,10 +6,7 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     try {
-        const formData = await req.formData();
-        const body = formData && Object.fromEntries(formData.entries());
-    
-        const { rollno, name, email, college_email, phone, course, branch, department, batch, backlogs, tenth_percentage, twelfth_percentage } = body;
+        const { rollno, name, email, college_email, phone, course, branch, department, batch, backlogs, tenth_percentage, twelfth_percentage } = await req.json();
     
         if (!rollno || !name || !email || !college_email || !phone || !course || !branch || !department || !batch || !tenth_percentage || !twelfth_percentage) {
             return NextResponse.json({ message: "All fields are required" }, { status: 400 });

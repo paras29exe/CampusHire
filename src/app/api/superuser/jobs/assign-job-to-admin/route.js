@@ -7,7 +7,8 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     const jobId = req.nextUrl.searchParams.get("jobId");
-    const adminIds = await req.formData().then(formData => formData.get("adminIds"));
+    const adminIds = await req.json()
+    const currUser = JSON.parse(req.headers.get("user"));
 
     if (!jobId || !adminIds) {
         return NextResponse.json({ error: "Job ID and Admin IDs are required" }, { status: 400 });
@@ -22,7 +23,6 @@ export const POST = withDB(async (req) => {
 
         // Ensure adminIds is an array
         const adminIdsArray = Array.isArray(adminIds) ? adminIds : [adminIds];
-        const currUser = JSON.parse(req.headers.get("user"));
 
         // Assign the job to the specified admins
         // create assignments for each admin

@@ -9,10 +9,16 @@ import { Teacher } from "@/db/models/teacherModel";
 
 export const POST = withDB(async (req) => {
     try {
+        // array of courses with branches .... B.tech-CSE, B.Tech-IT, M.Tech-CSE, MCA
         const formData = await req.formData();
-        const reqUser = JSON.parse(req.headers.get("user"));
+        const courseAndBranch = formData.get("course_and_branch");
+
+        if (!courseAndBranch) {
+            return NextResponse.json({ error: "Course Selection is required" }, { status: 400 });
+        }
 
         const file = formData.get("file");
+        
         if (!file) {
             return NextResponse.json({ error: "File is required" }, { status: 400 });
         }
@@ -26,20 +32,44 @@ export const POST = withDB(async (req) => {
             return NextResponse.json({ error: "File size exceeds the limit of 16 MB." }, { status: 400 });
         }
 
-        const requiredFields = ["name", "rollno", "email", "college_email", "phone", "course", "branch", "batch", "backlogs", "tenth_percentage", "twelfth_percentage", "graduation_percentage"];
+        const requiredFields = ["name", "rollno", "email", "college_email", "phone", "batch", "backlogs", "tenth_percentage", "twelfth_percentage", "graduation_percentage"];
 
         const formattedData = await formatSheet(file, requiredFields);
 
-        // save data to database
         if (!formattedData || formattedData.length === 0) {
             return NextResponse.json({ error: "No valid data found in the file." }, { status: 400 });
         }
+
         // Assuming formattedData is an array of student objects
         if (formattedData.length > 500) {
             return NextResponse.json({ error: "Too many students. Please upload a file with less than 500 students." }, { status: 400 });
         }
 
-        const newStudents = await filterOnlyUniqueStudents(formattedData);
+        const filteredStudents = await filterOnlyUniqueStudents(formattedData);
+
+        if (filteredStudents.length === 0) {
+            return NextResponse.json({ error: "No unique or new students found in the file." }, {
+                status: 400
+            });
+        }
+
+        // save the course and branch from the form data
+        let course = null;
+        let branch = null;
+
+        if (courseAndBranch.includes("-")) {
+            [course, branch] = courseAndBranch.split("-"); //B.Tech-CSE
+        } else {
+            course = courseAndBranch;
+            branch = null; // If no branch is specified, set it to null
+        }
+
+        const newStudents = filteredStudents.forEach(student => {
+            student.course = course.toUpperCase(); // Set the course and branch from the form data
+            if (branch) {
+                student.branch = branch.toUpperCase(); // Set the branch if provided
+            }
+        })
 
         const teacher = await Teacher.findById(reqUser._id, "email");
 

@@ -1,8 +1,8 @@
 "use client"
 
-import { Calendar, MapPin, Globe, Users, IndianRupee } from "lucide-react"
+import { Calendar, MapPin, Globe, Users, IndianRupee, Group, ListChecks } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 
@@ -11,6 +11,8 @@ function JobCard({ jobData }) {
     // Redirect to application page
     window.location.href = `/apply/${jobData.companyName.toLowerCase().replace(/\s+/g, "-")}`
   }
+
+  const status = "applied" // Example status, replace with actual logic if needed
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
@@ -29,12 +31,12 @@ function JobCard({ jobData }) {
             <CardTitle className="text-xl text-wrap font-bold text-gray-900 truncate">
               {jobData.companyName}
             </CardTitle>
-            <div className="flex items-center gap-1 text-sm text-blue-600">
+            <Button variant="link" className="flex p-0! m-0! h-fit items-center gap-1 text-sm text-blue-600">
               <Globe className="h-4 w-4 flex-shrink-0" />
-              <span className="truncate">{jobData.website}</span>
-            </div>
+              {jobData.website}
+            </Button>
           </div>
-          <Badge variant="secondary" className="flex items-center gap-1 ml-2 flex-shrink-0">
+          <Badge variant="secondary" className="flex bg-green-600 text-white items-center gap-1 ml-2 flex-shrink-0">
             <Users className="h-3 w-3" />
             {jobData.numberOfRoles} roles
           </Badge>
@@ -48,15 +50,25 @@ function JobCard({ jobData }) {
             <span className="truncate">{jobData.location}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <IndianRupee className="h-4 w-4 text-gray-400 flex-shrink-0" />
+          <div className="flex items-center gap-2 text-sm text-black">
+            <IndianRupee className="h-4 w-4 flex-shrink-0" />
             <span className="font-medium">{jobData.package}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-red-600">
+          <div className="flex items-center gap-2 text-sm font-bold text-red-600">
             <Calendar className="h-4 w-4 flex-shrink-0" />
             <span>Apply by: {formatDate(jobData.lastDateToApply)}</span>
           </div>
+
+          <div className="flex items-center gap-2 text-sm ">
+            <Users className="h-4 w-4 flex-shrink-0" />
+            <span>{"Batch"}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm ">
+            <ListChecks className="h-4 w-4 flex-shrink-0" />
+            <span>{"Eligibility"}</span>
+          </div>
+
         </div>
 
         <Separator />
@@ -74,6 +86,7 @@ function JobCard({ jobData }) {
       </CardContent>
 
       <CardFooter className="pt-4 mt-auto">
+        
         <Button onClick={handleApplyNow} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
           Apply Now
         </Button>
@@ -135,17 +148,19 @@ export default function ResponsiveJobCards() {
   return (
     <div className=" w-full p-4">
       <div className=" mx-auto">
-        <div className="mb-8 mx-auto w-fit">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Job Opportunities</h1>
-          <p className="text-gray-600">Discover your next career opportunity</p>
-        </div>
-        
-        {/* Responsive grid layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {jobsData.map((job, index) => (
-            <JobCard key={index} jobData={job} />
-          ))}
-        </div>
+        <Card className="w-full p-0 shadow-none border-none bg-background">
+          <CardHeader >
+            <CardTitle className="text-3xl font-bold text-gray-900 text-center">Job Opportunities</CardTitle>
+            <CardDescription className="text-sm text-center sm:text-base text-gray-600">Discover your next career opportunity</CardDescription>
+          </CardHeader>
+
+          {/* Responsive grid layout */}
+          <CardContent className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {jobsData.map((job, index) => (
+              <JobCard key={index} jobData={job} />
+            ))}
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

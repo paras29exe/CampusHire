@@ -6,11 +6,9 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     try {
-        const formData = await req.formData();
-        const body = formData && Object.fromEntries(formData.entries());
-
         // Validate required fields
-        const { employee_id, name, email, phone, department } = body;
+        const { employee_id, name, email, phone, department } = await req.json();
+        
         if (!employee_id || !name || !email || !phone || department) {
             return NextResponse.json({
                 error: "All fields are required",

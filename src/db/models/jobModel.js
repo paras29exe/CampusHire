@@ -10,9 +10,8 @@ const JobSchema = new mongoose.Schema({
         batch: { type: [String] , default: [] }, // e.g., ["2025", "2026"]
         // to be entered by admin
         courses: {
-            type: Map,
-            of: [String] || null, // e.g., { "B.Tech": ["CSE", "AIDS"], "MCA": null }
-            default: {}
+            type: [String], // e.g., ["B.Tech-CSE", "M.Tech-AIML", "MBA"]
+            default: []
         },
         cgpa: { type: Number, default: 0 } // minimum CGPA required
     },

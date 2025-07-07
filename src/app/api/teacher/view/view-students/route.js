@@ -28,8 +28,6 @@ export const GET = withDB(async (req) => {
             .sort(course ? {name: 1} : {department: 1}) // Sort by creation or name 
             .skip(skip)
             .limit(limit)
-            .populate('department', 'name') // Populate department name
-            .populate('course', 'name'); // Populate course name
 
         // Count total students for pagination metadata
         const totalStudents = await Student.countDocuments(query);

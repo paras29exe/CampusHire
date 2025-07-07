@@ -19,7 +19,7 @@ export const POST = withDB(async (req) => {
         })
 
         const data = res.data?.data ;
-        // console.log("Data received from PDF processing script:", data);
+        
         data.eligibility_criteria = undefined; // Remove eligibility criteria if not needed
 
         // Ensure `data` is an object before passing to Job.create

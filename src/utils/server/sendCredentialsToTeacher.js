@@ -33,8 +33,8 @@ export const sendCredentialsToTeacher = async (email, studentsData) => {
         await transporter.sendMail({
             from: '"CampusHire Portal" <paras.webdev404@gmail.com>',
             to: email,
-            subject: "Credentials for Newly Added Students",
-            text: "Attached are the login credentials for the students you uploaded.",
+            subject: `Credentials for Newly Added ${studentsData[0].course + (studentsData[0].branch ? ("-" + studentsData[0].branch) : "" )} Students`,
+            text: "Check the attached file for the credentials of newly added students. ",
             attachments: [
                 {
                     filename: "students_credentials.xlsx",

@@ -3,9 +3,9 @@ import { AppSidebar } from "@/components/app-sidebar";
 
 export default function DashboardLayout({ children }) {
     return (
-        <SidebarProvider>
+        <SidebarProvider className="">
             <AppSidebar role={'student'} />
-            <main className="">
+            <main className="w-full ">
                 <div className="w-full sticky top-0 z-50 bg-background h-12  flex items-center justify-start">
                     <SidebarTrigger className={'hover:bg-white '} />
                 </div>

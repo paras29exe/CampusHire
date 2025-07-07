@@ -50,7 +50,6 @@ const studentSchema = new mongoose.Schema({
     },
     branch: {
         type: String, // e.g., "CSE", "AIDS"
-        required: true
     },
     department: {
         type: String, 

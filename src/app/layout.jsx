@@ -1,6 +1,7 @@
 'use client'
 import { useEffect } from "react";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 
 export default function RootLayout({ children }) {
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
       <body
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );

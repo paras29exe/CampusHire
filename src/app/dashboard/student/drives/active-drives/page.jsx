@@ -1,4 +1,4 @@
-import DriveCardDemo from "@/utils/client/JobCard"
+import DriveCardDemo from "@/components/JobCard"
 
 function page() {
   return (

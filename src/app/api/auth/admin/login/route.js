@@ -7,10 +7,7 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     try {
-        const form = await req.formData();
-        const body = form && Object.fromEntries(form.entries());
-
-        const { identifier, password } = body;
+        const { identifier, password } = await req.json() ;
 
         if (!identifier || !password) {
             return NextResponse.json({

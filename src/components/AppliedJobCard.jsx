@@ -1,0 +1,174 @@
+"use client"
+
+import { Calendar, MapPin, IndianRupee, Monitor, Users, Clock, Eye } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+
+function AppliedJobCard({ jobData }) {
+  const handleViewDescription = () => {
+    // Redirect to full job description page
+    window.location.href = `/applied-jobs/${jobData.companyName.toLowerCase().replace(/\s+/g, "-")}`
+  }
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })
+  }
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "selected":
+        return "bg-green-100 text-green-800 border-green-200"
+      case "rejected":
+        return "bg-red-100 text-red-800 border-red-200"
+      default:
+        return "bg-blue-100 text-blue-800 border-blue-200"
+    }
+  }
+
+  const getDriveTypeIcon = (type) => {
+    return type === "online" ? <Monitor className="h-3 w-3 sm:h-4 sm:w-4" /> : <Users className="h-3 w-3 sm:h-4 sm:w-4" />
+  }
+
+  return (
+    <Card className="w-full py-0.5 hover:shadow-md transition-shadow duration-300 ">
+      <CardContent className="p-4 sm:p-6 relative">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          {/* Left Section - Company and Role Info */}
+          <div className="flex-1 space-y-6">
+            <div>
+              <Card className="flex flex-row items-center p-0 border-none outline-none shadow-none gap-4">
+                <CardTitle className="text-base sm:text-xl max-sm:max-w-1/2 break-words! hyphens-auto font-bold text-gray-900">{jobData.companyName}</CardTitle>
+                <Badge className={`w-fit flex shrink text-wrap whitespace-break-spaces text-center text-xs p-1 bg-green-600 `}>
+                  Applied on : {formatDate(jobData.appliedOn)}
+                </Badge>
+              </Card>
+              <h3 className="text-sm sm:text-lg font-semibold text-gray-700 ">Applied for: {jobData.roleApplied}</h3>
+            </div>
+
+            {/* Job Details Grid */}
+            <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-3 sm:mt-4">
+              <div className="flex *:text-black *:font-bold items-center gap-2 text-xs sm:text-sm text-gray-700">
+                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 " />
+                <div>
+                  <span >Applied:</span>
+                  <div className="font-medium">{formatDate(jobData.appliedOn)}</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
+                <Clock className="h-3 w-3 sm:h-4 sm:w-4 " />
+                <div>
+                  <span className="">Next Round:</span>
+                  <div className="font-medium text-orange-600">{jobData.nextRound}</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
+                <IndianRupee className="h-3 w-3 sm:h-4 sm:w-4 " />
+                <div>
+                  <span className="">Package:</span>
+                  <div className="font-medium text-green-600">{jobData.package}</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
+                <MapPin className="h-3 w-3 sm:h-4 sm:w-4 " />
+                <div>
+                  <span className="">Location:</span>
+                  <div className="font-medium">{jobData.location}</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
+                {getDriveTypeIcon(jobData.driveType)}
+                <div>
+                  <span className="">Drive Type:</span>
+                  <div className="font-medium capitalize">
+                    {jobData.driveType}
+                    <Badge variant="outline" className="ml-2 text-xs">
+                      {jobData.driveType === "online" ? "Remote" : "On-site"}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Section - CTA Button */}
+          <div className="flex-shrink-0">
+            <Separator orientation="vertical" className="hidden lg:block h-24 mx-4" />
+            <Button
+              onClick={handleViewDescription}
+              className="w-full whitespace-break-spaces lg:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 text-sm"
+            >
+              <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+              View Description
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+export default function AppliedJobsDemo() {
+  const appliedJobs = [
+    {
+      companyName: "Microsoft India",
+      roleApplied: "Software Development Engineer",
+      appliedOn: "2024-01-10",
+      nextRound: "Technical Interview",
+      package: "₹15-20 LPA",
+      location: "Hyderabad, Telangana",
+      driveType: "online",
+      status: "in-progress",
+    },
+    {
+      companyName: "Google",
+      roleApplied: "Frontend Developer",
+      appliedOn: "2024-01-08",
+      nextRound: "HR Round",
+      package: "₹18-25 LPA",
+      location: "Bangalore, Karnataka",
+      driveType: "offline",
+      status: "selected",
+    },
+    {
+      companyName: "Amazon",
+      roleApplied: "Data Scientist",
+      appliedOn: "2024-01-05",
+      nextRound: "Final Round",
+      package: "₹12-18 LPA",
+      location: "Mumbai, Maharashtra",
+      driveType: "online",
+      status: "in-progress",
+    },
+  ]
+
+  return (
+    <div className="w-full p-4 ">
+      <div className="w-full max-w-none space-y-4 sm:space-y-6">
+        <Card className="w-full p-0 shadow-none border-none bg-background">
+          <CardHeader >
+            <CardTitle className="text-3xl font-bold text-gray-900 text-center">Applied Jobs</CardTitle>
+            <CardDescription className="text-sm text-center sm:text-base text-gray-700">Track your job applications and interview progress</CardDescription>
+          </CardHeader>
+          <CardContent className="w-full space-y-2 sm:space-y-4 max-md:p-0">
+            {appliedJobs.map((job, index) => (
+              <div key={index}>
+                <AppliedJobCard jobData={job} />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}

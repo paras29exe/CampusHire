@@ -5,17 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
-function ShortlistedDriveCard() {
-    const shortlistedData = {
-        companyName: "Google India",
-        roleShortlisted: "Software Engineer Intern",
-        applicationDate: "2024-01-15",
-        nextRoundDate: "2024-01-25",
-        roundName: "Technical Interview",
-        package: "₹8-12 LPA",
-        location: "Bangalore, Karnataka",
-        driveType: "online", // "online" or "offline"
-    }
+export default function ShortlistedDriveCard({shortlistedData}) {
 
     const handleViewDetails = () => {
         // Redirect to full job description page
@@ -54,7 +44,7 @@ function ShortlistedDriveCard() {
                             <h2 className=" text-lg sm:text-xl font-bold text-foreground">
                                 {shortlistedData.companyName} 
                             </h2>
-                            <p className="text-xs  sm:text-sm font-semibold text-blue-700">{shortlistedData.roleShortlisted}</p>
+                            <p className="text-xs  sm:text-sm font-semibold text-blue-700">{shortlistedData.roleName}</p>
                         </div>
                     </div>
                 </div>
@@ -78,7 +68,7 @@ function ShortlistedDriveCard() {
                             </div>
                             <div>
                                 <p className=" text-gray-600">Applied On</p>
-                                <p className="font-semibold text-gray-900">{formatDate(shortlistedData.applicationDate)}</p>
+                                <p className="font-semibold text-gray-900">{formatDate(shortlistedData.appliedOn)}</p>
                             </div>
                         </div>
 
@@ -123,7 +113,7 @@ function ShortlistedDriveCard() {
                                 <div className="flex items-center gap-2">
                                     <p className="font-semibold text-xs text-gray-900 capitalize">{shortlistedData.driveType}</p>
                                     <Badge variant="outline" className="text-xs">
-                                        {shortlistedData.driveType === "online" ? "Remote" : "On-site"}
+                                        {shortlistedData.driveType || "Will Update soon"}
                                     </Badge>
                                 </div>
                             </div>
@@ -140,7 +130,7 @@ function ShortlistedDriveCard() {
 
                 {/* CTA Button */}
                 <CardFooter className="p-0 mt-6  flex-col gap-0">
-                    <h4 className="text-xs font-bold">Next Step Awaiting : <span className="text-red-500">Technical round</span> </h4>
+                    <h4 className="text-xs font-bold">Next Step Awaiting : <span className="text-red-500">{shortlistedData.roundName || "Unknown"}</span> </h4>
                     <Button
                         size={'lg'}
                         variant={'outline'}
@@ -148,63 +138,12 @@ function ShortlistedDriveCard() {
                         className="w-full bg-blue-600 text-white font-semibold  hover:shadow-xl transition-all duration-300 group"
                     >
                         <span className="flex items-center justify-center gap-2">
-                            View Full Details
+                            View Description
                             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
                         </span>
                     </Button>
                 </CardFooter>
             </CardContent>
         </Card>
-    )
-}
-
-export default function ShortlistedDrivesDemo() {
-    const shortlistedDrives = [
-        {
-            companyName: "Google India",
-            roleShortlisted: "Software Engineer Intern",
-            applicationDate: "2024-01-15",
-            nextRoundDate: "2024-01-25",
-            roundName: "Technical Interview",
-            package: "₹8-12 LPA",
-            location: "Bangalore, Karnataka",
-            driveType: "online",
-        },
-        {
-            companyName: "Microsoft",
-            roleShortlisted: "Product Manager Intern",
-            applicationDate: "2024-01-12",
-            nextRoundDate: "2024-01-28",
-            roundName: "Case Study Round",
-            package: "₹10-15 LPA",
-            location: "Hyderabad, Telangana",
-            driveType: "offline",
-        },
-    ]
-
-    return (
-        <div className="min-h-screen bg-gradient-to-br p-4">
-            <div className="mx-auto space-y-8">
-                <Card className="shadow-none bg-gradient-to-r pt-0 border-none outline-none ">
-                    <CardHeader className="text-center pt-0">
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                            <Trophy className="h-8 w-8 text-yellow-600" />
-                            {/* <Sparkles className="h-6 w-6 text-yellow-500" /> */}
-                        </div>
-                        <CardTitle className="text-3xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
-                            Your Shortlisted Drives
-                        </CardTitle>
-                        <p className="text-gray-600 text-lg">Amazing work! You've been selected for these exciting opportunities</p>
-                    </CardHeader>
-                    <CardContent className="space-y-4 p-0">
-                        {shortlistedDrives.map((drive, index) => (
-                            <div key={index}>
-                                <ShortlistedDriveCard />
-                            </div>
-                        ))}
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
     )
 }

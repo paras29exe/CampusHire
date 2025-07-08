@@ -2,6 +2,7 @@
 import { Application } from "@/db/models/applicationsModel";
 import { Job } from "@/db/models/jobModel";
 import { withDB } from "@/utils/server/dbHandler";
+import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 

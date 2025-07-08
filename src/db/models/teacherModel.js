@@ -69,4 +69,4 @@ teacherSchema.methods.generateAuthToken = function () {
     return token;
 };
 
-export const Teacher = mongoose.models.Teacher || mongoose.model("Teacher", teacherSchema);
+export const Teacher = mongoose.models.teachers || mongoose.model("teachers", teacherSchema);

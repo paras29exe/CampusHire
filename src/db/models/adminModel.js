@@ -69,4 +69,4 @@ adminSchema.methods.generateAuthToken = async function () {
     return token;
 }
 
-export const Admin = mongoose.models.Admin || mongoose.model("Admin", adminSchema);
+export const Admin = mongoose.models.admins || mongoose.model("admins", adminSchema);

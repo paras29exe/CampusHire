@@ -81,7 +81,7 @@ export const POST = withDB(async (req) => {
         }
 
         // Insert only fully unique students
-        const insertedStudents = await Student.insertMany(newStudents);
+        const insertedStudents = await Student.create(newStudents);
 
         return NextResponse.json({
             message: "Successfully inserted new students.",

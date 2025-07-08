@@ -61,4 +61,4 @@ superUserSchema.methods.generateAuthToken = async function () {
     return token;
 }
 
-export const SuperUser = mongoose.models.SuperUser || mongoose.model("SuperUser", superUserSchema);
+export const SuperUser = mongoose.models.superusers || mongoose.model("superusers", superUserSchema);

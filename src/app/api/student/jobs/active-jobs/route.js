@@ -1,6 +1,6 @@
 'use server';
 
-import { Student } from "@/db/models/studentModel";
+// import { Student } from "@/db/models/studentModel";
 import { NextResponse } from "next/server";
 import { withDB } from "@/utils/server/dbHandler";
 import { Application } from "@/db/models/applicationsModel";
@@ -8,7 +8,8 @@ import { Job } from "@/db/models/jobModel";
 
 export const GET = withDB(async (req) => {
     try {
-        const student = JSON.parse(req.headers.get('student') || '{}');
+        const student = JSON.parse(req.headers.get('user') || '{}');
+        // console.log(student)
 
         // Find all applications by the student
         const applications = await Application.find({ applicant: student._id })
@@ -21,11 +22,8 @@ export const GET = withDB(async (req) => {
         const activeJobs = await Job.find({
             _id: { $nin: appliedJobIds },
             status: 'active',
-        });
+        }).select('company job_details last_date_to_apply job_roles eligibility_criteria');
 
-        if (!activeJobs || activeJobs.length === 0) {
-            return NextResponse.json({ message: "We are sorry! No active jobs found for You." }, { status: 404 });
-        }
         
         return NextResponse.json({
             message: "Active jobs fetched successfully",

@@ -66,6 +66,11 @@ const JobSchema = new mongoose.Schema({
         company_link: { type: String },
         college_link: { type: String },
     },
+    drive_type: {
+        type: String,
+        enum: ['online', 'offline'],
+        default: 'online' // default to online drive
+    },
     last_date_to_apply: { type: Date },
     status: {
         type: String,
@@ -75,4 +80,4 @@ const JobSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-export const Job = mongoose.models.Job || mongoose.model("Job", JobSchema);
+export const Job = mongoose.models.jobs || mongoose.model("jobs", JobSchema);

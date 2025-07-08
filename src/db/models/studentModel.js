@@ -105,4 +105,4 @@ studentSchema.methods.generateAuthToken = async function () {
     return token;
 }
 
-export const Student = mongoose.models.Student || mongoose.model("Student", studentSchema);
+export const Student = mongoose.models.students || mongoose.model("students", studentSchema);

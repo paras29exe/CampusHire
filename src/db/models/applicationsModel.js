@@ -15,10 +15,6 @@ const applicationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, // from job.job_roles[x]._id
     required: true
   },
-  appliedAt: {
-    type: Date,
-    default: Date.now
-  },
   status: {
     type: String,
     enum: ['applied', 'shortlisted', 'rejected', 'selected'],

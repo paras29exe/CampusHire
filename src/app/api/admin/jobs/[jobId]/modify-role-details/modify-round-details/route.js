@@ -3,6 +3,7 @@
 import { Job } from "@/db/models/jobModel";
 import { withDB } from "@/utils/server/dbHandler";
 import { extractRollNumbersFromExcel } from "@/utils/server/extractCandidates";
+import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 export const POST = withDB(async (req, { params }) => {
     try {

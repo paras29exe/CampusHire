@@ -5,31 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { formatDate } from "@/utils/client/formatDate"
 
-function AppliedJobCard({ jobData }) {
+export default function AppliedJobCard({ jobData }) {
   const handleViewDescription = () => {
     // Redirect to full job description page
     window.location.href = `/applied-jobs/${jobData.companyName.toLowerCase().replace(/\s+/g, "-")}`
-  }
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
-  }
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "selected":
-        return "bg-green-100 text-green-800 border-green-200"
-      case "rejected":
-        return "bg-red-100 text-red-800 border-red-200"
-      default:
-        return "bg-blue-100 text-blue-800 border-blue-200"
-    }
   }
 
   const getDriveTypeIcon = (type) => {
@@ -45,7 +26,7 @@ function AppliedJobCard({ jobData }) {
             <div>
               <Card className="flex flex-row items-center p-0 border-none outline-none shadow-none gap-4">
                 <CardTitle className="text-base sm:text-xl max-sm:max-w-1/2 break-words! hyphens-auto font-bold text-gray-900">{jobData.companyName}</CardTitle>
-                <Badge className={`w-fit flex shrink text-wrap whitespace-break-spaces text-center text-xs p-1 bg-green-600 `}>
+                <Badge className={`w-fit flex shrink text-wrap whitespace-break-spaces text-center text-xs p-1 bg-orange-600`}>
                   Applied on : {formatDate(jobData.appliedOn)}
                 </Badge>
               </Card>
@@ -66,7 +47,7 @@ function AppliedJobCard({ jobData }) {
                 <Clock className="h-3 w-3 sm:h-4 sm:w-4 " />
                 <div>
                   <span className="">Next Round:</span>
-                  <div className="font-medium text-orange-600">{jobData.nextRound}</div>
+                  <div className="font-medium text-orange-600">{jobData.nextRound || "Will Update Soon"}</div>
                 </div>
               </div>
 
@@ -91,9 +72,9 @@ function AppliedJobCard({ jobData }) {
                 <div>
                   <span className="">Drive Type:</span>
                   <div className="font-medium capitalize">
-                    {jobData.driveType}
+                    {jobData.driveType || "Will Update Soon"}
                     <Badge variant="outline" className="ml-2 text-xs">
-                      {jobData.driveType === "online" ? "Remote" : "On-site"}
+                      {jobData.driveType}
                     </Badge>
                   </div>
                 </div>
@@ -118,7 +99,7 @@ function AppliedJobCard({ jobData }) {
   )
 }
 
-export default function AppliedJobsDemo() {
+function AppliedJobsDemo() {
   const appliedJobs = [
     {
       companyName: "Microsoft India",
@@ -152,23 +133,4 @@ export default function AppliedJobsDemo() {
     },
   ]
 
-  return (
-    <div className="w-full p-4 ">
-      <div className="w-full max-w-none space-y-4 sm:space-y-6">
-        <Card className="w-full p-0 shadow-none border-none bg-background">
-          <CardHeader >
-            <CardTitle className="text-3xl font-bold text-gray-900 text-center">Applied Jobs</CardTitle>
-            <CardDescription className="text-sm text-center sm:text-base text-gray-700">Track your job applications and interview progress</CardDescription>
-          </CardHeader>
-          <CardContent className="w-full space-y-2 sm:space-y-4 max-md:p-0">
-            {appliedJobs.map((job, index) => (
-              <div key={index}>
-                <AppliedJobCard jobData={job} />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  )
 }

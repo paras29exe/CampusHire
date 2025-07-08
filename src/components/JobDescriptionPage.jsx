@@ -292,7 +292,7 @@ export default function JobDescriptionPage() {
                     <CardContent className="px-5 ">
                         <Carousel opts={{
                             align: "start",
-                            loop: true,
+                            // loop: true,
                         }} className="max-w-none">
                             <CarouselContent>
                                 {jobData.job_roles.map((role, index) => (

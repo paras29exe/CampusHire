@@ -60,7 +60,7 @@ export const POST = withDB(async (req, {params}) => {
     } catch (error) {
         return NextResponse.json({
             message: error.message || "Unexpected error occurred",
-            error: error.error || "An error occurred while applying for the job"
+            error: error.name || "An error occurred while applying for the job"
         }, { status: 500 });
     }
 });

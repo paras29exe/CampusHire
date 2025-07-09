@@ -10,7 +10,6 @@ export const middleware = async (req) => {
         return NextResponse.next();
     }
 
-
     const token = req.cookies.get('accessToken')?.value || req.headers.get('authorization')?.split(' ')[1];
 
     if (!token) {
@@ -25,11 +24,11 @@ export const middleware = async (req) => {
         const decoded = response.payload;
 
         // If the request is for shared API and the user has a valid role, allow access
-        if (decoded && decoded.role && decoded.role !== 'student' && pathname.startsWith('/api/shared')) {
+        if (decoded && (decoded.role !== 'student' && pathname.startsWith('/api/shared'))) {
             return NextResponse.next();
         }
 
-        if (!decoded || !decoded._id || decoded.role !== reqRole) {
+        if ((!decoded || !decoded._id || decoded.role !== reqRole) && !pathname.startsWith('/api/views')) {
             return NextResponse.json({ message: 'Unauthorized to access this feature' }, { status: 403 });
         }
         // If the token is valid, you can proceed with the request

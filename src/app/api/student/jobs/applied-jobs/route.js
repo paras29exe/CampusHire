@@ -70,7 +70,7 @@ export const GET = withDB(async (req) => {
     } catch (error) {
         return NextResponse.json({
             message: error.message || "Unexpected error occurred",
-            error: error.error || "An error occurred while fetching active jobs",
+            error: error.name || "An error occurred while fetching active jobs",
         }, { status: 500 });
     }
 });

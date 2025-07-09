@@ -1,38 +1,60 @@
 import { useAuthStore } from '@/store/store'
 import axios from 'axios'
-import { usePathname } from 'next/navigation'
-import React, { useEffect } from 'react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 function page() {
+    const { userData, setUserData } = useAuthStore()
 
     const { role } = useAuthStore()
+    const { reset } = useForm()
 
     const onSubmit = async (data) => {
         if (data.newPassword !== data.confirmPassword) {
-          toast.error("New passwords do not match")
-          return
+            toast.error("New passwords do not match")
+            return
         }
-    
+
         try {
-          const res = await fetch("/api/auth/change-password", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              oldPassword: data.oldPassword,
-              newPassword: data.newPassword,
-            }),
-          })
-    
-          if (!res.ok) throw new Error()
-    
-          toast.success("Password changed successfully!")
-          reset()
-          setIsChangingPassword(false)
-        } catch {
-          toast.error("Failed to change password. Please check your old password.")
+            const response = await axios.put("/api/auth/change-password", {
+                oldPassword: data.oldPassword,
+                newPassword: data.newPassword
+            })
+            toast.success("Password changed successfully!")
+            reset()
+            setIsChangingPassword(false)
+        } catch (err) {
+            toast.error("Failed to change password:" + err.response.data.message || err.message)
         }
-      }
-    
+    }
+
+    const handleCancel = () => {
+        reset()
+        setIsChangingPassword(false)
+    }
+
+    return (
+        <>
+            {
+                role == 'student' ? (
+                    <StudentProfilePage
+                        userData={userData}
+                        onSubmit={onSubmit}
+                        handleCancel={handleCancel}
+                    />
+                ) : (
+                    <AuthorityProfilePage
+                        userData={userData}
+                        onSubmit={onSubmit}
+                        handleCancel={handleCancel}
+                    />
+                )
+            }
+        </>
+
+    )
+
 }
 
 export default page

@@ -26,12 +26,11 @@ const mockStudent = {
   tenth_percentage: 85.5,
   twelfth_percentage: 78.2,
   graduation_percentage: null,
-  role: "student",
+  role: "userData",
   createdAt: "2021-08-15T10:30:00Z",
 }
 
-export default function StudentProfilePage() {
-  const [student, setStudent] = useState(null)
+export default function StudentProfilePage({userData, onSubmit, handleCancel}) {
   const [isChangingPassword, setIsChangingPassword] = useState(false)
   const [showOldPassword, setShowOldPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
@@ -45,43 +44,10 @@ export default function StudentProfilePage() {
     defaultValues: { oldPassword: "", newPassword: "", confirmPassword: "" },
   })
 
-  useEffect(() => {
-    setStudent(mockStudent) // Replace with API call
-  }, [])
-
   const getInitials = (name) => name.split(" ").map((n) => n[0]).join("").toUpperCase()
 
-  const handleCancel = () => {
-    reset()
-    setIsChangingPassword(false)
-  }
 
-  const onSubmit = async (data) => {
-    if (data.newPassword !== data.confirmPassword) {
-      toast.error("New passwords do not match")
-      return
-    }
-
-    try {
-      const res = await fetch("/api/auth/change-password", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          oldPassword: data.oldPassword,
-          newPassword: data.newPassword,
-        }),
-      })
-      if (!res.ok) throw new Error()
-
-      reset()
-      setIsChangingPassword(false)
-      toast.success("Password changed successfully!")
-    } catch {
-      toast.error("Failed to change password. Please check your old password.")
-    }
-  }
-
-  if (!student) {
+  if (!userData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -97,17 +63,17 @@ export default function StudentProfilePage() {
           <CardHeader className="text-center">
             <Avatar className="w-20 h-20 mx-auto mb-4">
               <AvatarFallback className="text-2xl bg-blue-600 text-white">
-                {getInitials(student.name)}
+                {getInitials(userData.name)}
               </AvatarFallback>
             </Avatar>
-            <CardTitle className="text-2xl">{student.name}</CardTitle>
+            <CardTitle className="text-2xl">{userData.name}</CardTitle>
             <div className="flex justify-center gap-2 mt-2">
-              <Badge>{student.role}</Badge>
-              <Badge variant="outline">{student.rollno}</Badge>
-              {student.backlogs > 0 && (
+              <Badge>{userData.role}</Badge>
+              <Badge variant="outline">{userData.rollno}</Badge>
+              {userData.backlogs > 0 && (
                 <Badge variant="destructive" className="flex items-center gap-1">
                   <AlertTriangle className="h-3 w-3" />
-                  {student.backlogs} Backlog{student.backlogs > 1 ? "s" : ""}
+                  {userData.backlogs} Backlog{userData.backlogs > 1 ? "s" : ""}
                 </Badge>
               )}
             </div>
@@ -121,9 +87,9 @@ export default function StudentProfilePage() {
               <CardTitle className="flex items-center gap-2"><Mail className="h-5 w-5" /> Contact</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Input disabled value={student.email} />
-              <Input disabled value={student.college_email} />
-              <Input disabled value={student.phone} />
+              <Input disabled value={userData.email} />
+              <Input disabled value={userData.college_email} />
+              <Input disabled value={userData.phone} />
             </CardContent>
           </Card>
 
@@ -132,10 +98,10 @@ export default function StudentProfilePage() {
               <CardTitle className="flex items-center gap-2"><GraduationCap className="h-5 w-5" /> Academic Info</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
-              <Input disabled value={student.course} />
-              <Input disabled value={student.branch} />
-              <Input disabled value={student.department} />
-              <Input disabled value={student.batch} />
+              <Input disabled value={userData.course} />
+              <Input disabled value={userData.branch} />
+              <Input disabled value={userData.department} />
+              <Input disabled value={userData.batch} />
             </CardContent>
           </Card>
         </div>
@@ -146,10 +112,10 @@ export default function StudentProfilePage() {
             <CardTitle className="flex items-center gap-2"><Award className="h-5 w-5" /> Performance</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Input disabled value={`${student.tenth_percentage}%`} />
-            <Input disabled value={`${student.twelfth_percentage}%`} />
-            <Input disabled value={student.graduation_percentage ? `${student.graduation_percentage}%` : "N/A"} />
-            <Input disabled value={student.backlogs} />
+            <Input disabled value={`${userData.tenth_percentage}%`} />
+            <Input disabled value={`${userData.twelfth_percentage}%`} />
+            <Input disabled value={userData.graduation_percentage ? `${userData.graduation_percentage}%` : "N/A"} />
+            <Input disabled value={userData.backlogs} />
           </CardContent>
         </Card>
 

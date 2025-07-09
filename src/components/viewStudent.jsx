@@ -6,43 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
-export default function ViewStudentPage({ studentId = "student123" }) {
-  const [student, setStudent] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    fetchStudent()
-  }, [studentId])
-
-  const fetchStudent = async () => {
-    try {
-      // Mock data - replace with actual API call
-      const mockStudent = {
-        name: "Rahul Sharma",
-        rollno: "21CSE001",
-        email: "rahul.sharma@gmail.com",
-        college_email: "21cse001@college.edu",
-        phone: "+91 9876543210",
-        course: "B.Tech",
-        branch: "CSE",
-        department: "Computer Science",
-        batch: "2025",
-        backlogs: 1,
-        tenth_percentage: 85.5,
-        twelfth_percentage: 78.2,
-        graduation_percentage: null,
-        role: "student",
-        createdAt: "2021-08-15T10:30:00Z",
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setStudent(mockStudent)
-    } catch (error) {
-      console.error("Failed to fetch student")
-    } finally {
-      setLoading(false)
-    }
-  }
+export default function ViewStudent({ student, loading, setLoading }) {
 
   if (loading) {
     return (

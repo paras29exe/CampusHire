@@ -10,20 +10,9 @@ import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { toast } from "sonner"
 
-const mockTeacher = {
-  employee_id: "EMP001",
-  name: "Dr. Rajesh Kumar",
-  email: "rajesh.kumar@college.edu",
-  phone: "+91 9876543210",
-  department: "Computer Science",
-  role: "teacher",
-  createdAt: "2023-01-15T10:30:00Z",
-}
 
-export default function AuthorityProfilePage({ userData }) {
-  const [teacher, setTeacher] = useState(null)
+export default function AuthorityProfilePage({ userData, onSubmit, handleCancel }) {
   const [isChangingPassword, setIsChangingPassword] = useState(false)
   const [showOldPassword, setShowOldPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
@@ -41,43 +30,8 @@ export default function AuthorityProfilePage({ userData }) {
     },
   })
 
-  useEffect(() => {
-    // Replace with actual API call
-    setTeacher(mockTeacher)
-  }, [])
 
-  const onSubmit = async (data) => {
-    if (data.newPassword !== data.confirmPassword) {
-      toast.error("New passwords do not match")
-      return
-    }
-
-    try {
-      const res = await fetch("/api/auth/change-password", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          oldPassword: data.oldPassword,
-          newPassword: data.newPassword,
-        }),
-      })
-
-      if (!res.ok) throw new Error()
-
-      toast.success("Password changed successfully!")
-      reset()
-      setIsChangingPassword(false)
-    } catch {
-      toast.error("Failed to change password. Please check your old password.")
-    }
-  }
-
-  const handleCancel = () => {
-    reset()
-    setIsChangingPassword(false)
-  }
-
-  if (!teacher) {
+  if (!userData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -96,34 +50,34 @@ export default function AuthorityProfilePage({ userData }) {
           <CardHeader className="text-center">
             <Avatar className="w-20 h-20 mx-auto mb-4">
               <AvatarFallback className="text-2xl bg-blue-600 text-white">
-                {getInitials(teacher.name)}
+                {getInitials(userData.name)}
               </AvatarFallback>
             </Avatar>
-            <CardTitle className="text-2xl">{teacher.name}</CardTitle>
-            <Badge className="w-fit mx-auto">{teacher.role}</Badge>
+            <CardTitle className="text-2xl">{userData.name}</CardTitle>
+            <Badge className="w-fit mx-auto">{userData.role}</Badge>
           </CardHeader>
 
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label className="text-sm text-gray-600">Employee ID</Label>
-              <Input value={teacher.employee_id} disabled />
+              <Input value={userData.employee_id} disabled />
             </div>
             <div>
               <Label className="text-sm text-gray-600">Department</Label>
-              <Input value={teacher.department} disabled />
+              <Input value={userData.department} disabled />
             </div>
             <div>
               <Label className="text-sm text-gray-600">Email</Label>
-              <Input value={teacher.email} disabled />
+              <Input value={userData.email} disabled />
             </div>
             <div>
               <Label className="text-sm text-gray-600">Phone</Label>
-              <Input value={teacher.phone} disabled />
+              <Input value={userData.phone} disabled />
             </div>
             <div className="md:col-span-2">
               <Label className="text-sm text-gray-600">Member Since</Label>
               <Input
-                value={new Date(teacher.createdAt).toLocaleDateString("en-IN", {
+                value={new Date(userData.createdAt).toLocaleDateString("en-IN", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",

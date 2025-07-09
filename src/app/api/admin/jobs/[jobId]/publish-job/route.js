@@ -73,8 +73,8 @@ export const POST = withDB(async (req, { params }) => {
         }, { status: 200 });
     } catch (err) {
         return NextResponse.json({
-            error: err.message || "Unexpected error occurred",
-            message: "An error occurred while publishing the job",
+            message: err.message || "Unexpected error occurred",
+            error: "An error occurred while publishing the job",
         }, { status: 500 });
     }
 });

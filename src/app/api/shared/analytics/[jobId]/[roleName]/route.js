@@ -63,8 +63,8 @@ export const GET = withDB(async (req, { params }) => {
          }, { status: 200 });
     } catch (err) {
         return NextResponse.json({
-            error: err.message || "Unexpected error occurred",
-            message: "An error occurred while fetching applicants"
+            message: err.message || "Unexpected error occurred",
+            error: "An error occurred while fetching applicants"
         }, { status: err.status || 500 });
     }   
 });

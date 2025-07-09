@@ -34,7 +34,7 @@ export const GET = withDB(async (req) => {
         }, { status: 200 });        
     } catch (err) {
         return NextResponse.json(
-            { error: err.message || "Unexpected error occurred", message: "An error occurred while fetching pending assignments" },
+            { message: err.message || "Unexpected error occurred", error: "An error occurred while fetching pending assignments" },
             { status: 500 }
         );
     }

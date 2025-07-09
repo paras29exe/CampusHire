@@ -2,6 +2,7 @@
 
 import JobCard from "@/components/activeJobCard"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useStudentJobsStore } from "@/store/store"
 import axios from "axios"
 import { useEffect, useState } from "react"
 
@@ -55,22 +56,24 @@ function page() {
   //   },
   // ]
 
-  const [jobsData, setJobsData] = useState([])
+  const { activeJobs, setActiveJobs } = useStudentJobsStore();
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         const response = await axios.get('/api/student/jobs/active-jobs');
-        setJobsData(response.data.data);
+        setActiveJobs(response.data.data);
+
+        console.log("Active jobs fetched successfully:", response.data.data);
       } catch (error) {
         console.error(error.response?.data.message || "Failed to fetch active jobs");
       }
     };
-    fetchJobs();
+    if(!activeJobs.length) fetchJobs();
   }, [ ]);
   
 
-  if(jobsData) return (
+  return (
     <div className=" w-full p-4">
       <div className=" mx-auto">
         <Card className="w-full p-0 shadow-none border-none bg-background">
@@ -81,7 +84,7 @@ function page() {
 
           {/* Responsive grid layout */}
           <CardContent className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-0 gap-6">
-            {jobsData.map((job, index) => (
+            {activeJobs?.map((job, index) => (
               <JobCard key={index} jobData={job} />
             ))}
           </CardContent>

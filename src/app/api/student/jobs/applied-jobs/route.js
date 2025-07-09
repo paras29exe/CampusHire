@@ -10,6 +10,8 @@ export const GET = withDB(async (req) => {
     try {
         const student = JSON.parse(req.headers.get('user') || '{}');
 
+           
+
         // Find all applications by the student
         const appliedJobs = await Application.aggregate([
             {

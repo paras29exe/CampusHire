@@ -18,8 +18,8 @@ export const POST = withDB(async (req) => {
             withCredentials: true, // Ensure credentials are sent if needed
         })
 
-        const data = res.data?.data ;
-        
+        const data = res.data?.data;
+
         data.eligibility_criteria = undefined; // Remove eligibility criteria if not needed
 
         // Ensure `data` is an object before passing to Job.create
@@ -30,8 +30,13 @@ export const POST = withDB(async (req) => {
         // make job in database with the data received from the PDF processing script
         const job = await Job.create(data);
 
-        return NextResponse.json({ message: "PDF file processed successfully", data : job }, { status: 200 });
+        return NextResponse.json({ message: "PDF file processed successfully", data: job }, { status: 200 });
     } catch (err) {
-        return NextResponse.json({ error: err.error, message: err.message || "An error occurred while processing the PDF file" }, { status: err.status || 500 });
+        return NextResponse.json({
+            error: err.error,
+            message: err.message || "An error occurred while processing the PDF file"
+        },{ 
+            status: err.status || 500 
+        });
     }
 });

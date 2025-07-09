@@ -46,8 +46,8 @@ export const POST = withDB(async (req) => {
         return NextResponse.json({ message: "Job assigned to admins successfully", job }, { status: 200 });
     } catch (err) {
         return NextResponse.json({
-            error: err.message || "Unexpected error occurred",
-            message: "An error occurred while assigning the job"
+            message: err.message || "Unexpected error occurred",
+            error: "An error occurred while assigning the job"
         }, { status: err.status || 500 });
     }
 })

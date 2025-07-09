@@ -8,126 +8,126 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { formatDate } from "@/utils/client/formatDate"
 import Link from "next/link"
 
-export default function JobDescriptionPage() {
-    const jobData = {
-        company: {
-            name: "Microsoft India",
-            website: "https://careers.microsoft.com",
-        },
-        eligibility_criteria: {
-            batch: ["2024", "2025"], // Array of strings
-            courses: {
-                "B.Tech": ["Computer Science", "Information Technology", "Electronics", "AIDS", "Data Science"],
-                "M.Tech": ["Computer Science", "Software Engineering"],
-                MCA: ["MCA"], // null means all branches
-                "B.Sc": ["Computer Science", "Information Technology"],
-            },
-            cgpa: 7.5, // Number
-        },
-        job_roles: [
-            {
-                _id: "role1",
-                role: "Software Development Engineer",
-                skills_required: ["JavaScript", "React", "Node.js", "Python", "SQL", "Git", "AWS"],
-                responsibilities: [
-                    "Develop and maintain web applications using modern frameworks",
-                    "Collaborate with cross-functional teams to deliver high-quality software",
-                    "Write clean, maintainable, and efficient code",
-                    "Participate in code reviews and technical discussions",
-                    "Debug and resolve technical issues",
-                ],
-                package_details: {
-                    internship_period: "6 months",
-                    stipend: "50000",
-                    package: "12-15",
-                    conditions: "Performance-based increment after probation period",
-                },
-                round_details: {
-                    name: "Technical Interview",
-                    type: "online",
-                    date: "2024-02-15",
-                    time: "10:00",
-                    duration: "60 minutes",
-                    link: "https://teams.microsoft.com/interview-link-1",
-                },
-            },
-            {
-                _id: "role2",
-                role: "Data Scientist",
-                skills_required: ["Python", "R", "Machine Learning", "SQL", "Tableau", "Statistics", "TensorFlow"],
-                responsibilities: [
-                    "Analyze large datasets to extract meaningful insights",
-                    "Build and deploy machine learning models",
-                    "Create data visualizations and reports",
-                    "Collaborate with business teams to understand requirements",
-                    "Optimize data processing pipelines",
-                ],
-                package_details: {
-                    internship_period: "6 months",
-                    stipend: "55000",
-                    package: "14-18",
-                    conditions: "Certification in relevant technologies preferred",
-                },
-                round_details: {
-                    name: "Case Study Round",
-                    type: "offline",
-                    date: "2024-02-18",
-                    time: "14:00",
-                    duration: "90 minutes",
-                    link: null,
-                },
-            },
-            {
-                _id: "role3",
-                role: "Product Manager",
-                skills_required: ["Product Strategy", "Market Research", "Analytics", "Communication", "Agile", "SQL"],
-                responsibilities: [
-                    "Define product roadmap and strategy",
-                    "Conduct market research and competitive analysis",
-                    "Work with engineering teams to deliver features",
-                    "Analyze product metrics and user feedback",
-                    "Coordinate with stakeholders across departments",
-                ],
-                package_details: {
-                    internship_period: "6 months",
-                    stipend: "60000",
-                    package: "15-20",
-                    conditions: "MBA preferred but not mandatory",
-                },
-                round_details: {
-                    name: "HR Interview",
-                    type: "online",
-                    date: "2024-02-20",
-                    time: "11:30",
-                    duration: "45 minutes",
-                    link: "https://zoom.us/interview-link-3",
-                },
-            },
-        ],
-        job_details: {
-            job_location: "Bangalore, Hyderabad, Mumbai",
-            shift_timing: "9:00 AM - 6:00 PM (Flexible working hours)",
-            date_of_joining: "July 2024",
-            placement_process: [
-                "Online Application Screening",
-                "Online Assessment Test",
-                "Technical Interview Round 1",
-                "Technical Interview Round 2",
-                "HR Interview",
-                "Final Selection",
-            ],
-        },
-        assigned_to: [
-            { _id: "mentor1", name: "Dr. Rajesh Kumar", email: "rajesh.kumar@college.edu", department: "CSE" },
-            { _id: "mentor2", name: "Prof. Priya Sharma", email: "priya.sharma@college.edu", department: "IT" },
-        ],
-        links: {
-            company_link: "https://careers.microsoft.com/apply/sde-2024",
-            college_link: "https://college.edu/placements/microsoft-2024",
-        },
-        last_date_to_apply: "2024-02-10",
-        status: "active",
-    }
+export default function JobDescriptionPage({ jobData }) {
+    // const jobData = {
+    //     company: {
+    //         name: "Microsoft India",
+    //         website: "https://careers.microsoft.com",
+    //     },
+    //     eligibility_criteria: {
+    //         batch: ["2024", "2025"], // Array of strings
+    //         courses: {
+    //             "B.Tech": ["Computer Science", "Information Technology", "Electronics", "AIDS", "Data Science"],
+    //             "M.Tech": ["Computer Science", "Software Engineering"],
+    //             MCA: ["MCA"], // null means all branches
+    //             "B.Sc": ["Computer Science", "Information Technology"],
+    //         },
+    //         cgpa: 7.5, // Number
+    //     },
+    //     job_roles: [
+    //         {
+    //             _id: "role1",
+    //             role: "Software Development Engineer",
+    //             skills_required: ["JavaScript", "React", "Node.js", "Python", "SQL", "Git", "AWS"],
+    //             responsibilities: [
+    //                 "Develop and maintain web applications using modern frameworks",
+    //                 "Collaborate with cross-functional teams to deliver high-quality software",
+    //                 "Write clean, maintainable, and efficient code",
+    //                 "Participate in code reviews and technical discussions",
+    //                 "Debug and resolve technical issues",
+    //             ],
+    //             package_details: {
+    //                 internship_period: "6 months",
+    //                 stipend: "50000",
+    //                 package: "12-15",
+    //                 conditions: "Performance-based increment after probation period",
+    //             },
+    //             round_details: {
+    //                 name: "Technical Interview",
+    //                 type: "online",
+    //                 date: "2024-02-15",
+    //                 time: "10:00",
+    //                 duration: "60 minutes",
+    //                 link: "https://teams.microsoft.com/interview-link-1",
+    //             },
+    //         },
+    //         {
+    //             _id: "role2",
+    //             role: "Data Scientist",
+    //             skills_required: ["Python", "R", "Machine Learning", "SQL", "Tableau", "Statistics", "TensorFlow"],
+    //             responsibilities: [
+    //                 "Analyze large datasets to extract meaningful insights",
+    //                 "Build and deploy machine learning models",
+    //                 "Create data visualizations and reports",
+    //                 "Collaborate with business teams to understand requirements",
+    //                 "Optimize data processing pipelines",
+    //             ],
+    //             package_details: {
+    //                 internship_period: "6 months",
+    //                 stipend: "55000",
+    //                 package: "14-18",
+    //                 conditions: "Certification in relevant technologies preferred",
+    //             },
+    //             round_details: {
+    //                 name: "Case Study Round",
+    //                 type: "offline",
+    //                 date: "2024-02-18",
+    //                 time: "14:00",
+    //                 duration: "90 minutes",
+    //                 link: null,
+    //             },
+    //         },
+    //         {
+    //             _id: "role3",
+    //             role: "Product Manager",
+    //             skills_required: ["Product Strategy", "Market Research", "Analytics", "Communication", "Agile", "SQL"],
+    //             responsibilities: [
+    //                 "Define product roadmap and strategy",
+    //                 "Conduct market research and competitive analysis",
+    //                 "Work with engineering teams to deliver features",
+    //                 "Analyze product metrics and user feedback",
+    //                 "Coordinate with stakeholders across departments",
+    //             ],
+    //             package_details: {
+    //                 internship_period: "6 months",
+    //                 stipend: "60000",
+    //                 package: "15-20",
+    //                 conditions: "MBA preferred but not mandatory",
+    //             },
+    //             round_details: {
+    //                 name: "HR Interview",
+    //                 type: "online",
+    //                 date: "2024-02-20",
+    //                 time: "11:30",
+    //                 duration: "45 minutes",
+    //                 link: "https://zoom.us/interview-link-3",
+    //             },
+    //         },
+    //     ],
+    //     job_details: {
+    //         job_location: "Bangalore, Hyderabad, Mumbai",
+    //         shift_timing: "9:00 AM - 6:00 PM (Flexible working hours)",
+    //         date_of_joining: "July 2024",
+    //         placement_process: [
+    //             "Online Application Screening",
+    //             "Online Assessment Test",
+    //             "Technical Interview Round 1",
+    //             "Technical Interview Round 2",
+    //             "HR Interview",
+    //             "Final Selection",
+    //         ],
+    //     },
+    //     assigned_to: [
+    //         { _id: "mentor1", name: "Dr. Rajesh Kumar", email: "rajesh.kumar@college.edu", department: "CSE" },
+    //         { _id: "mentor2", name: "Prof. Priya Sharma", email: "priya.sharma@college.edu", department: "IT" },
+    //     ],
+    //     links: {
+    //         company_link: "https://careers.microsoft.com/apply/sde-2024",
+    //         college_link: "https://college.edu/placements/microsoft-2024",
+    //     },
+    //     last_date_to_apply: "2024-02-10",
+    //     status: "active",
+    // }
 
     const handleApplyToRole = (roleId, roleName) => {
         window.location.href = `/apply/role/${roleId}?company=${jobData.company.name.toLowerCase().replace(/\s+/g, "-")}&role=${roleName.toLowerCase().replace(/\s+/g, "-")}`
@@ -135,11 +135,12 @@ export default function JobDescriptionPage() {
 
 
     const formatTime = (timeString) => {
-        const [hours, minutes] = timeString.split(":")
-        const hour = Number.parseInt(hours)
-        const ampm = hour >= 12 ? "PM" : "AM"
-        const displayHour = hour % 12 || 12
-        return `${displayHour}:${minutes} ${ampm}`
+        // const [hours, minutes] = timeString.split(":")
+        // const hour = Number.parseInt(hours)
+        // const ampm = hour >= 12 ? "PM" : "AM"
+        // const displayHour = hour % 12 || 12
+        // return `${displayHour}:${minutes} ${ampm}`
+        return true
     }
 
     const isApplicationOpen = () => {
@@ -262,8 +263,7 @@ export default function JobDescriptionPage() {
                             {jobData.assigned_to.map((mentor) => (
                                 <div key={mentor._id} className="flex items-center gap-3 sm:px-4 bg-gray-50 rounded-lg">
                                     <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
-                                        {mentor.name
-                                            .split(" ")
+                                        {mentor?.name?.split(" ")
                                             .map((n) => n[0])
                                             .join("")}
                                     </div>
@@ -315,12 +315,12 @@ export default function JobDescriptionPage() {
                                                                 <div className="flex justify-between">
                                                                     <span className="text-sm text-gray-600">Stipend:</span>
                                                                     <span className="font-medium text-green-700">
-                                                                        ₹{role.package_details.stipend}/month
+                                                                        ₹{role.package_details.stipend}
                                                                     </span>
                                                                 </div>
                                                                 <div className="flex justify-between">
                                                                     <span className="text-sm text-gray-600">Full-time Package:</span>
-                                                                    <span className="font-bold text-green-700">₹{role.package_details.package} LPA</span>
+                                                                    <span className="font-bold text-green-700">{role.package_details.package} </span>
                                                                 </div>
                                                                 {role.package_details.conditions && (
                                                                     <div className="pt-2 border-t border-green-200">
@@ -336,28 +336,28 @@ export default function JobDescriptionPage() {
                                                             <div className="space-y-2 bg-orange-50 p-4 rounded-lg border border-orange-200">
                                                                 <div className="flex justify-between">
                                                                     <span className="text-sm text-gray-600">Round:</span>
-                                                                    <span className="font-medium">{role.round_details.name}</span>
+                                                                    <span className="font-medium">{role.round_details?.name}</span>
                                                                 </div>
                                                                 <div className="flex justify-between">
                                                                     <span className="text-sm text-gray-600">Type:</span>
                                                                     <Badge variant="outline" className="text-xs capitalize">
-                                                                        {role.round_details.type}
+                                                                        {role.round_details?.type}
                                                                     </Badge>
                                                                 </div>
                                                                 <div className="flex justify-between">
                                                                     <span className="text-sm text-gray-600">Date & Time:</span>
                                                                     <span className="font-medium">
-                                                                        {formatDate(role.round_details.date)} at {formatTime(role.round_details.time)}
+                                                                        {formatDate(role.round_details?.date)} at {formatTime(role.round_details?.time)}
                                                                     </span>
                                                                 </div>
                                                                 <div className="flex justify-between">
                                                                     <span className="text-sm text-gray-600">Duration:</span>
-                                                                    <span className="font-medium">{role.round_details.duration}</span>
+                                                                    <span className="font-medium">{role.round_details?.duration}</span>
                                                                 </div>
-                                                                {role.round_details.link && (
+                                                                {role.round_details?.link && (
                                                                     <div className="pt-2 border-t border-orange-200">
                                                                         <a
-                                                                            href={role.round_details.link}
+                                                                            href={role.round_details?.link}
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
                                                                             className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
@@ -407,25 +407,25 @@ export default function JobDescriptionPage() {
                                                 <Separator />
                                                 <div className="space-y-4">
                                                     <div className="flex flex-wrap gap-4">
-                                                        <Button
-                                                            onClick={() => handleApplyToRole(role._id, role.role)}
-                                                            disabled={!isApplicationOpen()}
-                                                            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400"
-                                                        >
-                                                            {isApplicationOpen() ? `Apply for ${role.role}` : "Applications Closed"}
-                                                        </Button>
                                                         <Button variant="outline" asChild>
-                                                            <a href={jobData.links.company_link} target="_blank" rel="noopener noreferrer">
+                                                            <a href={jobData.links?.company_link} target="_blank" rel="noopener noreferrer">
                                                                 <ExternalLink className="h-4 w-4 mr-2" />
                                                                 Company Portal
                                                             </a>
                                                         </Button>
                                                         <Button variant="outline" asChild>
-                                                            <a href={jobData.links.college_link} target="_blank" rel="noopener noreferrer">
+                                                            <a href={jobData.links?.college_link} target="_blank" rel="noopener noreferrer">
                                                                 <ExternalLink className="h-4 w-4 mr-2" />
                                                                 College Portal
                                                             </a>
                                                         </Button>
+                                                        {/* <Button
+                                                            onClick={() => handleApplyToRole(role._id, role.role)}
+                                                            disabled={!isApplicationOpen()}
+                                                            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400"
+                                                        >
+                                                            {isApplicationOpen() ? `Apply for ${role.role}` : "Applications Closed"}
+                                                        </Button> */}
                                                     </div>
                                                 </div>
                                             </CardContent>

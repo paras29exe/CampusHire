@@ -66,8 +66,8 @@ export const POST = withDB(async (req) => {
 
     } catch (err) {
         return NextResponse.json({
-            error: err.message || "Unexpected error occurred",
-            message: "An error occurred while adding the student"
+            message: err.message || "Unexpected error occurred",
+            error: "An error occurred while adding the student"
         }, { status: err.status || 500 });
     }
 }

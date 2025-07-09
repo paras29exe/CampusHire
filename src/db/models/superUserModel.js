@@ -3,10 +3,15 @@ import bcrypt from "bcrypt";
 import { SignJWT } from "jose";
 
 const superUserSchema = new mongoose.Schema({
-    username: {
+    employee_id: {
         type: String,
         required: true,
         unique: true,
+        trim: true,
+    },
+    name: {
+        type: String,
+        required: true,
         trim: true,
     },
     password: {

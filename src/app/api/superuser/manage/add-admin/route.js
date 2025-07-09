@@ -39,8 +39,8 @@ export const POST = withDB(async (req) => {
         }, { status: 201 });
     } catch (err) {
         return NextResponse.json({
-            error: err.message || "Unexpected error occurred",
-            message: "An error occurred while adding the admin",
+            message: err.message || "Unexpected error occurred",
+            error: "An error occurred while adding the admin",
         }, { status: 500 });
     }
 });

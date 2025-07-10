@@ -23,16 +23,14 @@ const DEPARTMENTS = [
     "Management",
 ]
 
-export default function AddTeacher({ onSubmit }) {
-    const [showPassword, setShowPassword] = useState(false)
+export default function AddTeacher({ onSubmit, role }) {
 
-    const { register, handleSubmit, setValue, formState: { errors, isSubmitting }, reset, }
+    const { register, handleSubmit, setValue, formState: { errors, isSubmitting } }
         = useForm({
             defaultValues: {
                 employee_id: "",
                 name: "",
                 email: "",
-                password: "",
                 phone: "",
                 department: "",
             },
@@ -98,28 +96,6 @@ export default function AddTeacher({ onSubmit }) {
                                     {errors.department && <p className="text-sm text-red-600">{errors.department.message}</p>}
                                 </div>
 
-                                <div className="space-y-2">
-                                    <Label>Password *</Label>
-                                    <div className="relative">
-                                        <Input
-                                            type={showPassword ? "text" : "password"}
-                                            {...register("password", {
-                                                required: "Password is required",
-                                                minLength: { value: 6, message: "Password must be at least 6 characters" },
-                                            })}
-                                        />
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
-                                            className="absolute right-0 top-0 h-full px-3"
-                                            onClick={() => setShowPassword(!showPassword)}
-                                        >
-                                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                        </Button>
-                                    </div>
-                                    {errors.password && <p className="text-sm text-red-600">{errors.password.message}</p>}
-                                </div>
                             </div>
 
                             <Button type="submit" disabled={isSubmitting} className="w-full">

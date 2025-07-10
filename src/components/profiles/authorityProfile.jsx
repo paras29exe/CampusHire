@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { formatDate } from "@/utils/client/formatDate"
 
 
 export default function AuthorityProfilePage({ userData, onSubmit, handleCancel }) {
@@ -77,11 +78,7 @@ export default function AuthorityProfilePage({ userData, onSubmit, handleCancel 
             <div className="md:col-span-2">
               <Label className="text-sm text-gray-600">Member Since</Label>
               <Input
-                value={new Date(userData.createdAt).toLocaleDateString("en-IN", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+                value={formatDate(userData.createdAt)}
                 disabled
               />
             </div>

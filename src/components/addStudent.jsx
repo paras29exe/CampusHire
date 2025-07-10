@@ -9,14 +9,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
+import { COURSE_OPTIONS } from "@/constants/courses"
 
-const COURSES = ["B.Tech", "M.Tech", "MCA", "BCA", "B.Sc", "M.Sc", "MBA"]
-const BRANCHES = ["CSE", "IT", "ECE", "EEE", "MECH", "CIVIL", "AIDS", "DS", "CYBER"]
-const DEPARTMENTS = ["Computer Science", "Information Technology", "Electronics", "Mechanical", "Civil"]
-const BATCHES = ["2024", "2025", "2026", "2027", "2028"]
+// there are multiple times btech courses with different branches
+// e.g. BTech-CSE, BTech-IT, BTech-ECE,
+// so in courses show btech only once 
+// and in branches show the branches of that course
 
-export default function AddStudent({onSubmit}) {
-  const [showPassword, setShowPassword] = useState(false)
+// use filter or something
+
+const COURSES = [...new Set(COURSE_OPTIONS.map(c => c.split("-")[0]))]
+const DEPARTMENTS = ["Computer Applications", "Information Technology", "Electronics", "Mechanical", "Civil"]
+const BATCHES = ["2024", "2025", "2026", "2027", "2028", "2029", "2030"]
+
+export default function AddStudent({ onSubmit }) {
+  const [branches, setBranches] = useState([])
 
   const {
     register,
@@ -27,8 +34,17 @@ export default function AddStudent({onSubmit}) {
     reset,
   } = useForm()
 
-  const watchCourse = watch("course")
+  const handleCourseChange = (value) => {
+    setValue("course", value)
+    // Reset branch, department, and batch when course changes
+    setValue("branch", "")
+    setValue("department", "")
+    setValue("batch", "")
 
+    setBranches(() => {
+      COURSE_OPTIONS.filter(course => course.startsWith(value)).map(course => course.split("-")[1])
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -56,28 +72,6 @@ export default function AddStudent({onSubmit}) {
                   {errors.rollno && <p className="text-sm text-red-600">{errors.rollno.message}</p>}
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Password *</Label>
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      {...register("password", {
-                        required: "Password is required",
-                        minLength: { value: 6, message: "Password must be at least 6 characters" },
-                      })}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                  {errors.password && <p className="text-sm text-red-600">{errors.password.message}</p>}
-                </div>
               </div>
 
               {/* Contact Information */}
@@ -117,7 +111,7 @@ export default function AddStudent({onSubmit}) {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="space-y-2">
                   <Label>Course *</Label>
-                  <Select onValueChange={(value) => setValue("course", value)}>
+                  <Select onValueChange={(value) => handleCourseChange(value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select course" />
                     </SelectTrigger>
@@ -139,7 +133,7 @@ export default function AddStudent({onSubmit}) {
                       <SelectValue placeholder="Select branch" />
                     </SelectTrigger>
                     <SelectContent>
-                      {BRANCHES.map((branch) => (
+                      {branches.map((branch) => (
                         <SelectItem key={branch} value={branch}>
                           {branch}
                         </SelectItem>

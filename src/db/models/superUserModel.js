@@ -18,7 +18,7 @@ const superUserSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        select
+        select: false,
     },
     email: {
         type: String,

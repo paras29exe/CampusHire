@@ -2,6 +2,7 @@
 
 import { Student } from "@/db/models/studentModel";
 import { withDB } from "@/utils/server/dbHandler";
+import { generatePassword } from "@/utils/server/generatePassword";
 import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
@@ -48,6 +49,7 @@ export const POST = withDB(async (req) => {
             rollno,
             name,
             email,
+            password: generatePassword(),
             college_email,
             phone,
             course,

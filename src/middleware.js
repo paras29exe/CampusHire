@@ -11,7 +11,6 @@ export const middleware = async (req) => {
     }
 
     const token = req.cookies.get('accessToken')?.value || req.headers.get('authorization')?.split(' ')[1];
-
     if (!token) {
         return NextResponse.json({ message: 'No access token found' }, { status: 404 });
     }
@@ -24,13 +23,18 @@ export const middleware = async (req) => {
         const decoded = response.payload;
 
         // If the request is for shared API and the user has a valid role, allow access
-        if (decoded && (decoded.role !== 'student' && pathname.startsWith('/api/shared'))) {
+        if (decoded && decoded._id && (decoded.role !== 'student' && pathname.startsWith('/api/shared'))) {
             return NextResponse.next();
         }
 
-        if ((!decoded || !decoded._id || decoded.role !== reqRole) && !pathname.startsWith('/api/views')) {
+        // all the roles can acess the views API
+        if (pathname.startsWith('/api/views')) {
+            // just to ensure the user is logged in and skip the role check
+        }
+        else if (!decoded || !decoded._id || decoded.role !== reqRole) {
             return NextResponse.json({ message: 'Unauthorized to access this feature' }, { status: 403 });
         }
+
         // If the token is valid, you can proceed with the request
         const res = NextResponse.next();
         res.headers.set('user', JSON.stringify(decoded));

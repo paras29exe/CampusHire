@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 
 export const GET = withDB(async (req, { params }) => {
     try {
-        const { jobId } = params;
+        const { jobId } = await params;
         const roleId = req.nextUrl.searchParams.get("roleId");
         const department = req.nextUrl.searchParams.get("department");
         const course = req.nextUrl.searchParams.get("course");

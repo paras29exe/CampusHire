@@ -6,7 +6,7 @@ export const middleware = async (req) => {
     const { pathname } = req.nextUrl;
 
     // Skip all `/api/auth` paths
-    if ((pathname.startsWith('/api/auth') && !pathname.includes('auto-login'))) {
+    if (pathname.startsWith('/api/auth') && !pathname.includes('auto-login')) {
         return NextResponse.next();
     }
 
@@ -31,7 +31,7 @@ export const middleware = async (req) => {
         if (pathname.startsWith('/api/views')) {
             // just to ensure the user is logged in and skip the role check
         }
-        else if (!decoded || !decoded._id || decoded.role !== reqRole) {
+        else if ((!decoded || !decoded._id || decoded.role !== reqRole) && !pathname.includes('auto-login')) {
             return NextResponse.json({ message: 'Unauthorized to access this feature' }, { status: 403 });
         }
 

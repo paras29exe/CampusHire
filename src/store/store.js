@@ -1,7 +1,7 @@
 // import zustand from 'zustand';
 import { create } from 'zustand';
 
-export const useStudentJobsStore = create((set) => ({
+export const useJobsStore = create((set) => ({
     activeJobs: [],
     setActiveJobs: (jobs) => set({ activeJobs: jobs }),
     appliedJobs: [],
@@ -10,6 +10,11 @@ export const useStudentJobsStore = create((set) => ({
     setShortlistedJobs: (jobs) => set({ shortlistedJobs: jobs }),
     expiredJobs: [],
     setExpiredJobs: (jobs) => set({ expiredJobs: jobs }),
+
+    unpublishedJobs: [],
+    setUnpublishedJobs: (jobs) => set({ unpublishedJobs: jobs }),
+    unassignedJobs: [],
+    setUnassignedJobs: (jobs) => set({ unassignedJobs: jobs }),
 }));
 
 export const useAuthStore = create((set) => ({

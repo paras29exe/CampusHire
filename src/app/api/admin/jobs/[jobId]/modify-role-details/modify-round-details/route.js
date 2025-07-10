@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 export const POST = withDB(async (req, { params }) => {
     try {
-        const { jobId } = params;
+        const { jobId } = await params;
         const roleId = req.nextUrl.searchParams.get("roleId");
 
         if (!jobId || !roleId) {

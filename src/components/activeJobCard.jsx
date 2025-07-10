@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { formatDate } from "@/utils/client/formatDate"
 
-function JobCard({ jobData }) {
+function ActiveJobCard({ jobData }) {
   const handleApplyNow = () => {
     // Redirect to application page
     window.location.href = `/apply/${jobData.companyName.toLowerCase().replace(/\s+/g, "-")}`
@@ -18,17 +19,6 @@ function JobCard({ jobData }) {
       ...jobData.job_details,
       package: "Not Disclosed",
     }
-  }
-
-  const status = "applied" // Example status, replace with actual logic if needed
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
   }
 
   return (
@@ -110,4 +100,4 @@ function JobCard({ jobData }) {
   )
 }
 
-export default JobCard
+export default ActiveJobCard

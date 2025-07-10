@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 
 export const GET = withDB(async (req, { params }) => {
     try {
-        const { jobId } = params;
+        const { jobId } = await params;
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
         const limit = 50; // Number of applicants per page
 

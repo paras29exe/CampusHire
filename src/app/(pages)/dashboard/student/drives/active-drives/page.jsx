@@ -1,8 +1,8 @@
 'use client'
 
-import JobCard from "@/components/activeJobCard"
+import ActiveJobCard from "@/components/activeJobCard"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useStudentJobsStore } from "@/store/store"
+import { useJobsStore } from "@/store/store"
 import axios from "axios"
 import { useEffect, useState } from "react"
 
@@ -56,7 +56,7 @@ function page() {
   //   },
   // ]
 
-  const { activeJobs, setActiveJobs } = useStudentJobsStore();
+  const { activeJobs, setActiveJobs } = useJobsStore();
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -85,7 +85,7 @@ function page() {
           {/* Responsive grid layout */}
           <CardContent className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-0 gap-6">
             {activeJobs?.map((job, index) => (
-              <JobCard key={index} jobData={job} />
+              <ActiveJobCard key={index} jobData={job} />
             ))}
           </CardContent>
         </Card>

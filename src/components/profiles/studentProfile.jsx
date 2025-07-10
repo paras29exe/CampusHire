@@ -30,8 +30,7 @@ const mockStudent = {
   createdAt: "2021-08-15T10:30:00Z",
 }
 
-export default function StudentProfilePage({userData, onSubmit, handleCancel}) {
-  const [isChangingPassword, setIsChangingPassword] = useState(false)
+export default function StudentProfilePage({userData, onSubmit, handleCancel, isChangingPassword, setIsChangingPassword}) {
   const [showOldPassword, setShowOldPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
 

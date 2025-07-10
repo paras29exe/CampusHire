@@ -10,9 +10,8 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req, { params }) => {
     try {
-        const role = params.role?.toLowerCase();
-        console.log("Role:", role);
-
+        const { role } = await params;
+        
         if (!role || !['student', 'superuser', 'admin', 'teacher'].includes(role)) {
             return NextResponse.json({
                 message: "Invalid role specified",
@@ -20,8 +19,8 @@ export const POST = withDB(async (req, { params }) => {
                 status: 400,
             });
         }
-
         const { identifier, password } = await req.json();
+
 
         if (!identifier || !password) {
             return NextResponse.json({
@@ -41,7 +40,7 @@ export const POST = withDB(async (req, { params }) => {
         const Model = modelMap[role];
 
         const user = await Model.findOne({
-            $or: [{ username: identifier }, { email: identifier }],
+            $or: [{ rollno: identifier }, { email: identifier }, { employee_id: identifier }, { username: identifier }],
         }).select("+password");
 
         if (!user) {
@@ -66,14 +65,16 @@ export const POST = withDB(async (req, { params }) => {
         user.password = undefined;
 
         const res = NextResponse.json({
-            message: "Superuser verified successfully",
-            data: user, // Exclude password from response
+            message: `${role.charAt(0).toUpperCase() + role.slice(1)} verified successfully`,
+            user, // Exclude password from response
+            role,
         }, { status: 200 });
 
         res.cookies.set('accessToken', token, options);
 
         return res;
     } catch (error) {
+        console.log("Error during login:", error);
         return NextResponse.json({
             message: error.message || "Internal Server Error",
             error: "An unexpected error occurred",

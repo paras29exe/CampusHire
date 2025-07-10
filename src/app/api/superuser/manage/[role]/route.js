@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req, { params }) => {
     try {
-        const role = params.role?.split('-')?.[1]?.toLowerCase();
+        const role = await params.role?.split('-')?.[1]?.toLowerCase();
 
         console.log("Role:", role);
 

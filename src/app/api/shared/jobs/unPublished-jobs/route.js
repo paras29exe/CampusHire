@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export const GET = withDB(async (req) => {
     const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
-    const limit = 20; // Number of jobs per page
+    const limit = 30; // Number of jobs per page
     const skip = (page - 1) * limit;
 
     try {

@@ -37,10 +37,12 @@ export const GET = withDB(async (req) => {
         }
 
         const updatedToken = await userData.generateAuthToken();
+        userData.password = undefined; // Remove password from the response
 
         const res = NextResponse.json({
             message: "User data retrieved successfully",
-            data: userData,
+            user: userData,
+            role: user.role,
         }, { status: 200 });
 
         res.cookies.set('accessToken', updatedToken, options);

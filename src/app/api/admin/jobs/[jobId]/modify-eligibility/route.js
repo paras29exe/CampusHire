@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req, { params }) => {
     try {
-        const { jobId } = params;
+        const { jobId } = await params;
         
         if (!jobId) {
             return NextResponse.json({ message: "Job ID is required", }, { status: 400, });

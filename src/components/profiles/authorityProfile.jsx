@@ -13,8 +13,7 @@ import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"
 
 
-export default function AuthorityProfilePage({ userData, onSubmit, handleCancel }) {
-  const [isChangingPassword, setIsChangingPassword] = useState(false)
+export default function AuthorityProfilePage({ userData, onSubmit, handleCancel, isChangingPassword, setIsChangingPassword }) {
   const [showOldPassword, setShowOldPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
 

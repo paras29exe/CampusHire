@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-function page() {
+export default function page() {
     const { userData, setUserData } = useAuthStore()
+    const [isChangingPassword, setIsChangingPassword] = useState(false)
 
     const { role } = useAuthStore()
     const { reset } = useForm()
@@ -52,9 +53,5 @@ function page() {
                 )
             }
         </>
-
     )
-
 }
-
-export default page

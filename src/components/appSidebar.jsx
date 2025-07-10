@@ -1,83 +1,20 @@
 'use client';
 
 import React from "react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
-  SidebarFooter,
-  useSidebar
-} from "@/components/ui/sidebar";
-import {
-  Briefcase,
-  Clipboard,
-  LayoutDashboard,
-  PersonStanding,
-  User,
-  Settings,
-  LogOut,
-  GraduationCap,
-  ChevronRight
-} from "lucide-react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter } from "@/components/ui/sidebar";
+import { User, Settings, LogOut, GraduationCap } from "lucide-react";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SheetTrigger } from "./ui/sheet";
 import { Dialog } from "@radix-ui/react-dialog";
+import { SidebarCollapsibleItem } from "./ui/sidebarCollapsibleItem";
+import { getSidebarItems } from "@/constants/sidebarItems";
 
 export const AppSidebar = ({ role = "student" }) => {
-  const { open, setOpen, openMobile, setOpenMobile } = useSidebar()
   const pathname = usePathname();
 
-  const [collapsibleOpen, setCollapsibleOpen] = React.useState(true);
-
-  const items = {
-    student: [
-      {
-        title: 'Dashboard',
-        icon: <LayoutDashboard />,
-        href: '/dashboard/student',
-      },
-      {
-        title: 'Drives',
-        icon: <Briefcase />,
-        subItems: [
-          {
-            title: 'Active Drives',
-            href: 'active-drives',
-          },
-          {
-            title: 'Applied Drives',
-            href: 'applied-drives',
-          },
-          {
-            title: 'Expired Drives',
-            href: 'expired-drives',
-          },
-          {
-            title: 'Shortlisted Drives',
-            href: 'shortlisted-drives',
-          },
-        ]
-      },
-      {
-        title: "Mentor",
-        icon: <PersonStanding />,
-        href: '/dashboard/student/mentor',
-      }
-    ]
-  };
-
-  const roleItems = items[role] || [];
+  const roleItems = getSidebarItems(role);
 
   if (roleItems.length === 0) {
     return null;
@@ -111,38 +48,7 @@ export const AppSidebar = ({ role = "student" }) => {
                 {roleItems.map((item, index) => (
                   // <SidebarMenuItem key={index}>
                   item.subItems ? (
-                    <Collapsible key={index} defaultOpen={collapsibleOpen} open={(open || openMobile) && collapsibleOpen} onOpenChange={setCollapsibleOpen} className="group/collapsible ">
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton tooltip={item.title} className={' text-gray-700 text-base font-semibold'}>
-                          {item.icon}
-                          <span>{item.title}</span>
-
-                          {/* is open then rotate 90 deg */}
-                          <ChevronRight className={cn("ml-auto transition-transform outline-gray-700 ", collapsibleOpen ? "rotate-90" : "rotate-0")} />
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {item.subItems.map((subItem, subIndex) => (
-                            <SidebarMenuSubItem key={subIndex}>
-                              <SidebarMenuSubButton
-                                size="sm"
-                                className={"text-black font-semibold"}
-                                isActive={pathname.endsWith(subItem.href)}
-                                asChild
-                              >
-                                <SheetTrigger asChild>
-
-                                  <Link href={subItem.href}>
-                                    {subItem.title}
-                                  </Link>
-                                </SheetTrigger>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    </Collapsible>
+                    <SidebarCollapsibleItem key={index} item={item} pathname={pathname} />
                   ) : (
                     <SidebarMenuButton key={index}
                       className={"text-gray-700 text-base font-semibold"}
@@ -161,7 +67,7 @@ export const AppSidebar = ({ role = "student" }) => {
             </SidebarGroup>
           </SidebarContent>
 
-          <SidebarFooter>
+          <SidebarFooter className={' border-t border-foreground/50 '}>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Profile">

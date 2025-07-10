@@ -6,7 +6,7 @@ import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req, { params }) => {
-    const { jobId } = params;
+    const { jobId } = await params;
 
     try {
         // Validate jobId

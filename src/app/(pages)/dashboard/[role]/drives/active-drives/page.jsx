@@ -1,10 +1,11 @@
 'use client';
 
 import ActiveJobCard from "@/components/activeJobCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useJobsStore } from "@/store/store";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function page() {
     const { activeJobs, setActiveJobs } = useJobsStore()
@@ -37,14 +38,7 @@ export default function page() {
             setLoading(false);
         }
     };
-
-    // Initial load only if Zustand has no data
-    useEffect(() => {
-        if (activeJobs.length === 0) {
-            fetchJobs();
-        }
-    }, []);
-
+    
     // Infinite scroll logic
     useEffect(() => {
         const observer = new IntersectionObserver(([entry]) => {
@@ -57,7 +51,7 @@ export default function page() {
         if (element) observer.observe(element);
 
         return () => element && observer.unobserve(element);
-    }, [page, totalPages, loading]);
+    }, [page, totalPages]);
 
     return (
         <div className=" w-full p-4">

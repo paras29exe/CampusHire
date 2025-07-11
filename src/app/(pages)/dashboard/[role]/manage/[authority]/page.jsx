@@ -5,7 +5,7 @@ import AddAuthority from '@/components/addAuthority';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { useParams, useRouter } from 'next/navigation';
+import { notFound, redirect, useParams, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/store';
 
 const superuserApiMap = {
@@ -19,25 +19,28 @@ const adminApiMap = {
 };
 
 export default function Page() {
-  const { role: loggedInUserRole } = useAuthStore();
+  const { role } = useAuthStore();
+  const loggedInUserRole = role 
   const params = useParams();
   const router = useRouter();
 
-  const roleToAdd = params.authority?.split('-')?.[1]; 
+  const roleToAdd = params.authority?.split('-')?.[1]?.toLowerCase(); 
   const [apiEndpoint, setApiEndpoint] = useState(null);
   const { reset } = useForm();
 
   useEffect(() => {
     if (!loggedInUserRole || !roleToAdd) {
-      toast('You are not authorized to add authorities');
+      toast('You are not authorized to add ' + roleToAdd);
+      router.replace('/unauthorized');
+      return;
     };
 
     if (loggedInUserRole === 'superuser') {
-      superuserApiMap[roleToAdd] ? setApiEndpoint(superuserApiMap[roleToAdd]) : toast('Invalid Route Or Authority to add');
+      superuserApiMap[roleToAdd] ? setApiEndpoint(superuserApiMap[roleToAdd]) : router.replace('/not-found');
     } else if (loggedInUserRole === 'admin') {
-      adminApiMap[roleToAdd] ? setApiEndpoint(adminApiMap[roleToAdd]) : toast('Invalid Route or authority to add');
+      adminApiMap[roleToAdd] ? setApiEndpoint(adminApiMap[roleToAdd]) : router.replace('/not-found');
     } else {
-      toast('You are not authorized to add authorities');
+      router.replace('/not-found');
     }
 
   }, [loggedInUserRole, roleToAdd]);
@@ -58,7 +61,7 @@ export default function Page() {
     }
   };
 
-  if (!apiEndpoint) return ;
+  if (!apiEndpoint) return;
 
   return <AddAuthority onSubmit={onSubmit} role={roleToAdd} />;
 }

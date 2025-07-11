@@ -1,17 +1,18 @@
 'use client';
 
-import React from "react";
+import React, { useState } from "react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter } from "@/components/ui/sidebar";
-import { User, Settings, LogOut, GraduationCap } from "lucide-react";
+import { User, Settings, LogOut, GraduationCap, AlertTriangle } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SheetTrigger } from "./ui/sheet";
-import { Dialog } from "@radix-ui/react-dialog";
 import { SidebarCollapsibleItem } from "./ui/sidebarCollapsibleItem";
 import { getSidebarItems } from "@/constants/sidebarItems";
+import LogoutDialog from "./logoutDialog";
+import { Dialog } from "@radix-ui/react-dialog";
 
-export const AppSidebar = ({ role = "student" }) => {
+export const AppSidebar = ({ role }) => {
   const pathname = usePathname();
 
   const roleItems = getSidebarItems(role);
@@ -53,6 +54,7 @@ export const AppSidebar = ({ role = "student" }) => {
                     <SidebarMenuButton key={index}
                       className={"text-gray-700 text-base font-semibold"}
                       asChild
+                      isActive={pathname.endsWith(item.href)}
                       tooltip={item.title}>
                       <SheetTrigger asChild>
                         <Link href={item.href} >
@@ -71,27 +73,28 @@ export const AppSidebar = ({ role = "student" }) => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Profile">
-                  <a href="/profile">
-                    <User />
-                    <span>Profile</span>
-                  </a>
+                  <SheetTrigger asChild>
+                    <Link href="/profile">
+                      <User />
+                      <span>Profile</span>
+                    </Link>
+                  </SheetTrigger>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Settings">
-                  <a href="/settings">
-                    <Settings />
-                    <span>Settings</span>
-                  </a>
+                  <SheetTrigger asChild>
+                    <Link href="/settings">
+                      <Settings />
+                      <span>Settings</span>
+                    </Link>
+                  </SheetTrigger>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Logout">
-                  <a href="/logout">
-                    <LogOut />
-                    <span>Logout</span>
-                  </a>
-                </SidebarMenuButton>
+                <SheetTrigger asChild>
+                  <LogoutDialog />
+                </SheetTrigger>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarFooter>

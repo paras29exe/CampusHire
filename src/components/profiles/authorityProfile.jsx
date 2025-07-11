@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Lock, Eye, EyeOff, Save, X } from "lucide-react"
+import { Lock, Eye, EyeOff, Save, X, User, Mail, Phone, Calendar, Building, Hash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,24 +12,12 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"
 
-
 export default function AuthorityProfilePage({ userData, onSubmit, handleCancel, isChangingPassword, setIsChangingPassword }) {
-  const [showOldPassword, setShowOldPassword] = useState(false)
-  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showPasswords, setShowPasswords] = useState({ old: false, new: false })
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    defaultValues: {
-      oldPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    },
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+    defaultValues: { oldPassword: "", newPassword: "", confirmPassword: "" }
   })
-
 
   if (!userData) {
     return (
@@ -39,139 +27,164 @@ export default function AuthorityProfilePage({ userData, onSubmit, handleCancel,
     )
   }
 
-  const getInitials = (name) => name.split(" ").map((n) => n[0]).join("").toUpperCase()
+  const getInitials = (name) => name?.split(" ").map((n) => n[0]).join("").toUpperCase()
+
+  const profileFields = [
+    { label: "Employee ID", value: userData.employee_id, icon: Hash },
+    { label: "Department", value: userData.department, icon: Building },
+    { label: "Email", value: userData.email, icon: Mail },
+    { label: "Phone", value: userData.phone, icon: Phone },
+    { label: "Member Since", value: formatDate(userData.createdAt), icon: Calendar, span: true }
+  ]
+
+  const passwordFields = [
+    {
+      key: "oldPassword",
+      label: "Current Password",
+      placeholder: "Enter current password",
+      validation: { required: "Current password is required" },
+      showKey: "old"
+    },
+    {
+      key: "newPassword",
+      label: "New Password",
+      placeholder: "Enter new password",
+      validation: {
+        required: "New password is required",
+        minLength: { value: 6, message: "Password must be at least 6 characters" }
+      },
+      showKey: "new"
+    },
+    {
+      key: "confirmPassword",
+      label: "Confirm Password",
+      placeholder: "Confirm new password",
+      validation: { required: "Please confirm your new password" },
+      showKey: null
+    }
+  ]
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-2xl mx-auto space-y-6">
-
-        {/* Profile Card */}
-        <Card>
-          <CardHeader className="text-center">
-            <Avatar className="w-20 h-20 mx-auto mb-4">
-              <AvatarFallback className="text-2xl bg-blue-600 text-white">
-                {getInitials(userData.name)}
-              </AvatarFallback>
-            </Avatar>
-            <CardTitle className="text-2xl">{userData.name}</CardTitle>
-            <Badge className="w-fit mx-auto">{userData.role}</Badge>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+      <div className="max-w-4xl mx-auto space-y-6">
+        
+        {/* Enhanced Profile Card */}
+        <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+          <CardHeader className="text-center pb-4">
+            <div className="relative">
+              <Avatar className="w-24 h-24 mx-auto mb-4 ring-4 ring-blue-100">
+                <AvatarFallback className="text-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white">
+                  {getInitials(userData.name)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                <Badge className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-0 shadow-md">
+                  {userData.role}
+                </Badge>
+              </div>
+            </div>
+            <CardTitle className="text-3xl font-bold text-gray-800 mt-2">{userData.name}</CardTitle>
           </CardHeader>
 
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label className="text-sm text-gray-600">Employee ID</Label>
-              <Input value={userData.employee_id} disabled />
-            </div>
-            <div>
-              <Label className="text-sm text-gray-600">Department</Label>
-              <Input value={userData.department} disabled />
-            </div>
-            <div>
-              <Label className="text-sm text-gray-600">Email</Label>
-              <Input value={userData.email} disabled />
-            </div>
-            <div>
-              <Label className="text-sm text-gray-600">Phone</Label>
-              <Input value={userData.phone} disabled />
-            </div>
-            <div className="md:col-span-2">
-              <Label className="text-sm text-gray-600">Member Since</Label>
-              <Input
-                value={formatDate(userData.createdAt)}
-                disabled
-              />
-            </div>
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+            {profileFields.map(({ label, value, icon: Icon, span }) => (
+              <div key={label} className={`group ${span ? 'md:col-span-2' : ''}`}>
+                <Label className="text-sm font-medium text-gray-600 mb-2 flex items-center gap-2">
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </Label>
+                <Input 
+                  value={value} 
+                  disabled 
+                  className="bg-gray-50 border-gray-200 group-hover:bg-gray-100 transition-colors"
+                />
+              </div>
+            ))}
           </CardContent>
         </Card>
 
-        {/* Change Password */}
-        <Card>
+        {/* Enhanced Password Change Card */}
+        <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-xl text-gray-800">
               <Lock className="h-5 w-5" />
-              Change Password
+              Security Settings
             </CardTitle>
           </CardHeader>
 
           <CardContent>
             {!isChangingPassword ? (
-              <div className="text-center py-4">
-                <p className="text-gray-600 mb-4">Keep your account secure by changing your password regularly</p>
-                <Button onClick={() => setIsChangingPassword(true)}>
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Lock className="h-8 w-8 text-blue-600" />
+                </div>
+                <p className="text-gray-600 mb-6">Keep your account secure by changing your password regularly</p>
+                <Button 
+                  onClick={() => setIsChangingPassword(true)}
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md"
+                >
                   <Lock className="h-4 w-4 mr-2" />
                   Change Password
                 </Button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-6">
+                <div className="grid gap-6">
+                  {passwordFields.map(({ key, label, placeholder, validation, showKey }) => (
+                    <div key={key} className="relative">
+                      <Label className="text-sm font-medium text-gray-700 mb-2 block">
+                        {label} <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        type={showKey && showPasswords[showKey] ? "text" : "password"}
+                        {...register(key, validation)}
+                        placeholder={placeholder}
+                        className="pr-12"
+                      />
+                      {showKey && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-8 px-3 hover:bg-transparent"
+                          onClick={() => setShowPasswords(prev => ({ ...prev, [showKey]: !prev[showKey] }))}
+                        >
+                          {showPasswords[showKey] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
+                      )}
+                      {errors[key] && (
+                        <p className="text-sm text-red-600 mt-1 flex items-center gap-1">
+                          <X className="h-3 w-3" />
+                          {errors[key].message}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
 
-                {/* Old Password */}
-                <div className="relative">
-                  <Label>Current Password *</Label>
-                  <Input
-                    type={showOldPassword ? "text" : "password"}
-                    {...register("oldPassword", { required: "Current password is required" })}
-                    placeholder="Enter current password"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-6 px-3"
-                    onClick={() => setShowOldPassword(!showOldPassword)}
+                <Separator className="my-6" />
+
+                <div className="flex gap-3">
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmitting} 
+                    className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-md"
+                    onClick={handleSubmit(onSubmit)}
                   >
-                    {showOldPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </Button>
-                  {errors.oldPassword && <p className="text-sm text-red-600">{errors.oldPassword.message}</p>}
-                </div>
-
-                {/* New Password */}
-                <div className="relative">
-                  <Label>New Password *</Label>
-                  <Input
-                    type={showNewPassword ? "text" : "password"}
-                    {...register("newPassword", {
-                      required: "New password is required",
-                      minLength: { value: 6, message: "Password must be at least 6 characters" },
-                    })}
-                    placeholder="Enter new password"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-6 px-3"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                  >
-                    {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </Button>
-                  {errors.newPassword && <p className="text-sm text-red-600">{errors.newPassword.message}</p>}
-                </div>
-
-                {/* Confirm Password */}
-                <div>
-                  <Label>Confirm Password *</Label>
-                  <Input
-                    type="password"
-                    {...register("confirmPassword", { required: "Please confirm your new password" })}
-                    placeholder="Confirm new password"
-                  />
-                  {errors.confirmPassword && <p className="text-sm text-red-600">{errors.confirmPassword.message}</p>}
-                </div>
-
-                <Separator />
-
-                <div className="flex gap-2">
-                  <Button type="submit" disabled={isSubmitting} className="flex-1">
                     <Save className="h-4 w-4 mr-2" />
                     {isSubmitting ? "Changing..." : "Change Password"}
                   </Button>
-                  <Button type="button" variant="outline" onClick={handleCancel}>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={handleCancel}
+                    className="hover:bg-gray-50"
+                  >
                     <X className="h-4 w-4 mr-2" />
                     Cancel
                   </Button>
                 </div>
-              </form>
+              </div>
             )}
           </CardContent>
         </Card>

@@ -72,7 +72,7 @@ export default function UnassignedJobsDemo() {
     })
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
+        <div className="p-4">
             <div className="max-w-6xl mx-auto space-y-6">
                 <Card className="border-red-200 bg-red-50">
                     <CardHeader>

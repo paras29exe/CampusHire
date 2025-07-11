@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner"
 import axios from "axios"
 import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/store/store"
 
 const ROLES = [
   { value: "student", label: "Student" },
@@ -22,6 +23,7 @@ const ROLES = [
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
+  const { setUserData, setRole } = useAuthStore()
 
   const {
     register,
@@ -51,7 +53,9 @@ export default function LoginPage() {
         password: data.password
       })
       toast.success("Login successful!")
-      router.replace(`/dashboard/${data.role}`)
+      setUserData(response.data.user);
+      setRole(response.data.role);
+      router.replace(`/dashboard/${data.role}/drives/active-drives`)
     } catch (error) {
       console.error("Login error:", error)
       toast.error("Login failed. Please check your credentials and try again.")
@@ -107,12 +111,12 @@ export default function LoginPage() {
                         <div className="flex items-center gap-2">
                           <div
                             className={`w-2 h-2 rounded-full ${role.value === "student"
-                                ? "bg-blue-500"
-                                : role.value === "teacher"
-                                  ? "bg-green-500"
-                                  : role.value === "admin"
-                                    ? "bg-orange-500"
-                                    : "bg-purple-500"
+                              ? "bg-blue-500"
+                              : role.value === "teacher"
+                                ? "bg-green-500"
+                                : role.value === "admin"
+                                  ? "bg-orange-500"
+                                  : "bg-purple-500"
                               }`}
                           />
                           {role.label}

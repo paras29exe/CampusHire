@@ -1,3 +1,7 @@
+'use client';
+
+import AuthorityProfilePage from '@/components/profiles/authorityProfile';
+import StudentProfilePage from '@/components/profiles/studentProfile';
 import { useAuthStore } from '@/store/store'
 import axios from 'axios'
 import { useState } from 'react'
@@ -8,12 +12,14 @@ export default function page() {
     const { userData, setUserData } = useAuthStore()
     const [isChangingPassword, setIsChangingPassword] = useState(false)
 
+    console.log(userData)
+
     const { role } = useAuthStore()
     const { reset } = useForm()
 
     const onSubmit = async (data) => {
         if (data.newPassword !== data.confirmPassword) {
-            toast.error("New passwords do not match")
+            toast("New passwords do not match")
             return
         }
 
@@ -22,11 +28,11 @@ export default function page() {
                 oldPassword: data.oldPassword,
                 newPassword: data.newPassword
             })
-            toast.success("Password changed successfully!")
+            toast("Password changed successfully!")
             reset()
             setIsChangingPassword(false)
         } catch (err) {
-            toast.error("Failed to change password:" + err.response.data.message || err.message)
+            toast("Failed to change password:" + err.response.data.message || err.message)
         }
     }
 
@@ -43,12 +49,16 @@ export default function page() {
                         userData={userData}
                         onSubmit={onSubmit}
                         handleCancel={handleCancel}
+                        isChangingPassword={isChangingPassword}
+                        setIsChangingPassword={setIsChangingPassword}
                     />
                 ) : (
                     <AuthorityProfilePage
                         userData={userData}
                         onSubmit={onSubmit}
                         handleCancel={handleCancel}
+                        isChangingPassword={isChangingPassword}
+                        setIsChangingPassword={setIsChangingPassword}
                     />
                 )
             }

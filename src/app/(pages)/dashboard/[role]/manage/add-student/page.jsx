@@ -1,3 +1,5 @@
+'use client'
+
 import AddStudentPage from "@/components/addStudent"
 
 function page() {
@@ -18,6 +20,7 @@ function page() {
             toast.error("Failed to add student")
         }
     }
+
     return (
         <AddStudentPage onSubmit={onSubmit} />
     )

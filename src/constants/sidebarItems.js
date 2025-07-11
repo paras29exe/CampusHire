@@ -116,8 +116,7 @@ export function getSidebarItems(role) {
                 icon: <Users />,
                 subItems: [
                     { title: 'Add Student', href: 'add-student' },
-                    { title: 'All Students', href: 'all-students' },
-                    { title: 'Shortlisted Students', href: 'shortlisted-students' },
+                    { title: 'All Students', href: 'View-students' },
                 ]
             },
             {

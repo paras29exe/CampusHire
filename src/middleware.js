@@ -4,9 +4,10 @@ import { NextResponse } from 'next/server';
 
 export const middleware = async (req) => {
     const { pathname } = req.nextUrl;
+    const validRoles = ['admin', 'student', 'teacher', 'superuser'];
 
     // Skip all `/api/auth` paths
-    if (pathname.startsWith('/api/auth') && !pathname.includes('auto-login')) {
+    if (pathname.endsWith('/login')) {
         return NextResponse.next();
     }
 
@@ -18,20 +19,19 @@ export const middleware = async (req) => {
     try {
         const reqRole = pathname.split('api/')[1]?.split('/')[0];
         const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-
         const response = await jwtVerify(token, secret);
         const decoded = response.payload;
 
-        // If the request is for shared API and the user has a valid role, allow access
-        if (decoded && decoded._id && (decoded.role !== 'student' && pathname.startsWith('/api/shared'))) {
-            return NextResponse.next();
+        // student role cannot access shared APIs
+        if (decoded && decoded._id && (decoded.role === 'student' && pathname.startsWith('/api/shared'))) {
+            return NextResponse.json({ message: 'Unauthorized to access this feature' }, { status: 403 });
         }
 
         // all the roles can acess the views API
         if (pathname.startsWith('/api/views')) {
             // just to ensure the user is logged in and skip the role check
         }
-        else if ((!decoded || !decoded._id || decoded.role !== reqRole) && !pathname.includes('auto-login') && !pathname.includes('logout')) {
+        else if (decoded.role !== reqRole && !pathname.startsWith('/api/shared') && !pathname.startsWith('/api/auth')) {
             return NextResponse.json({ message: 'Unauthorized to access this feature' }, { status: 403 });
         }
 

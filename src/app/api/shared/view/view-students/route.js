@@ -5,32 +5,48 @@ import { NextResponse } from "next/server";
 export const GET = withDB(async (req) => {
     try {
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
-        const limit = 300; // Number of students per page
+        const limit = 200; // Number of students per page
         const skip = (page - 1) * limit;
 
         const course = req.nextUrl.searchParams.get("course");
         const branch = req.nextUrl.searchParams.get("branch");
         const department = req.nextUrl.searchParams.get("department");
+        const search = req.nextUrl.searchParams.get("search") || '';
+
+        const reqUser = JSON.parse(req.headers.get("user"))
 
         const query = {};
-        if (department) query.department = department;
-        if (course) query.course = course;
-        if (branch) query.branch = branch;
+        if (reqUser.role === 'teacher') {
+            query.addedBy = reqUser._id;
+        }
+
+        // Build query based on search params and also case insensitive
+        if (department && department !== 'all') query.department = { $regex: new RegExp(department.replace('+', ' '), 'i') };
+
+        if (course && course !== 'all') query.course = { $regex: new RegExp(course, 'i') };
+
+        if (branch && branch !== 'all') query.branch = { $regex: new RegExp(branch, 'i') }
+
+        if (search) {
+            const searchRegex = new RegExp(search, 'i'); // Case insensitive search
+            query.$or = [
+                { name: searchRegex },
+                { rollno: searchRegex },
+            ]
+        }
 
         // Fetch all students with pagination
         const students = await Student.find(query)
-            .sort({ department: 1, course: 1, name: 1 }) // Sort by name in ascending order
+            .sort({ department: 1, course: 1, branch: 1, name: 1 }) // Sort by name in ascending order
             .skip(skip)
             .limit(limit)
-            .populate('department', 'name') // Populate department name
-            .populate('course', 'name'); // Populate course name
 
         // Count total students for pagination metadata
         const totalStudents = await Student.countDocuments(query);
 
         return NextResponse.json({
             message: "Students fetched successfully",
-            data: students,
+            data: students || [],
             pagination: {
                 totalStudents,
                 currentPage: page,

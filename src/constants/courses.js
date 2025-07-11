@@ -1,8 +1,8 @@
 export const COURSE_OPTIONS = [
   // B.Tech
   "B.Tech-CSE",
-  "B.Tech-AI&ML",
-  "B.Tech-AI&DS",
+  "B.Tech-AIML",
+  "B.Tech-AIDS",
   "B.Tech-Robotics&AI",
   "B.Tech-Cyber",
   "B.Tech-DS",

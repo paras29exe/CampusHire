@@ -42,9 +42,9 @@ export const POST = withDB(async (req, { params }) => {
         }
 
         // validate phone number format (10 digits)
-        if (!/^\d{10}$/.test(phone)) {
+        if (!/^\d{10}$/.test(phone.replace("-", ""))) {
             return NextResponse.json({
-                error: "Phone number must be 10 digits",
+                message: "Phone number must be 10 digits",
             }, { status: 400 });
         }
 
@@ -61,25 +61,25 @@ export const POST = withDB(async (req, { params }) => {
 
         if (existingUser) {
             return NextResponse.json({
-                error: "Admin with the provided email, phone, or employee ID already exists",
+                message: "Admin with the provided email, phone, or employee ID already exists",
             }, { status: 409 });
         }
 
         const randomPassword = generatePassword()
 
         // Create new admin
-        const newAuthority = await Admin.create({
+        const newAuthority = await Model.create({
             employee_id,
             name,
             email,
             password: randomPassword,
-            phone,
+            phone: phone.replace("-", ""),
             department, // whichever role has department in schema it get added
         });
 
         return NextResponse.json({
             message: `New ${role.toUpperCase()} added successfully`,
-            data: randomPassword,
+            password: randomPassword,
         }, { status: 201 });
     } catch (err) {
         return NextResponse.json({

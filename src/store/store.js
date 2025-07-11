@@ -32,3 +32,16 @@ export const useApiStore = create((set) => ({
     clearError: () => set({ error: null }),
 }))
 
+export const useDataStore = create((set) => ({
+    studentsData: [],
+    setStudentsData: (data) => set({ studentsData: data }),
+    teachersData: [],
+    setTeachersData: (data) => set({ teachersData: data }),
+    adminsData: [],
+    setAuthoritiesData: (data) => set({ adminsData: data }),
+    superusersData: [],
+    setSuperusersData: (data) => set({ superusersData: data }),
+    cachedParams: {},
+    setCachedParams: (params) => set({ cachedParams: params})
+}));
+

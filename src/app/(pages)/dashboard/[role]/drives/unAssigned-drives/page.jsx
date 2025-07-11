@@ -47,6 +47,7 @@ export default function UnassignedJobsDemo() {
 
     // Infinite scroll logic
     useEffect(() => {
+        if (loading) return;
         const observer = new IntersectionObserver(([entry]) => {
             if (entry.isIntersecting) {
                 fetchJobs();
@@ -57,7 +58,7 @@ export default function UnassignedJobsDemo() {
         if (element) observer.observe(element);
 
         return () => element && observer.unobserve(element);
-    }, [page, totalPages, loading]);
+    }, [page, totalPages]);
 
     const handleAddNewJob = () => {
         window.location.href = "/superuser/jobs/add"

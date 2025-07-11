@@ -33,7 +33,7 @@ export default function page() {
             setTotalPages(response.data.pagination.totalPages);
             setPage(prev => prev + 1);
         } catch (err) {
-            console.error('Error fetching unpublished jobs:', err);
+            console.error('Error fetching Active jobs:', err);
         } finally {
             setLoading(false);
         }

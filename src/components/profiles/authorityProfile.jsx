@@ -65,25 +65,25 @@ export default function AuthorityProfilePage({ userData, onSubmit, handleCancel,
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+    <div className=" p-4">
       <div className="max-w-4xl mx-auto space-y-6">
-        
+
         {/* Enhanced Profile Card */}
         <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader className="text-center pb-4">
             <div className="relative">
               <Avatar className="w-24 h-24 mx-auto mb-4 ring-4 ring-blue-100">
-                <AvatarFallback className="text-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white">
+                <AvatarFallback className="text-5xl bg-blue-400 text-white">
                   {getInitials(userData.name)}
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-0 shadow-md">
-                  {userData.role}
-                </Badge>
-              </div>
+
+              <Badge className="px-10 py-2 text-lg bg-accent text-foreground shadow-md">
+                {userData.role.toUpperCase()}
+              </Badge>
             </div>
-            <CardTitle className="text-3xl font-bold text-gray-800 mt-2">{userData.name}</CardTitle>
+            <CardTitle className="sm:text-3xl text-xl font-bold text-foreground underline">{userData.name}</CardTitle>
+
           </CardHeader>
 
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
@@ -93,9 +93,9 @@ export default function AuthorityProfilePage({ userData, onSubmit, handleCancel,
                   <Icon className="h-4 w-4" />
                   {label}
                 </Label>
-                <Input 
-                  value={value} 
-                  disabled 
+                <Input
+                  value={value}
+                  disabled
                   className="bg-gray-50 border-gray-200 group-hover:bg-gray-100 transition-colors"
                 />
               </div>
@@ -119,7 +119,7 @@ export default function AuthorityProfilePage({ userData, onSubmit, handleCancel,
                   <Lock className="h-8 w-8 text-blue-600" />
                 </div>
                 <p className="text-gray-600 mb-6">Keep your account secure by changing your password regularly</p>
-                <Button 
+                <Button
                   onClick={() => setIsChangingPassword(true)}
                   className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md"
                 >
@@ -165,18 +165,18 @@ export default function AuthorityProfilePage({ userData, onSubmit, handleCancel,
                 <Separator className="my-6" />
 
                 <div className="flex gap-3">
-                  <Button 
-                    type="submit" 
-                    disabled={isSubmitting} 
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
                     className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-md"
                     onClick={handleSubmit(onSubmit)}
                   >
                     <Save className="h-4 w-4 mr-2" />
                     {isSubmitting ? "Changing..." : "Change Password"}
                   </Button>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     onClick={handleCancel}
                     className="hover:bg-gray-50"
                   >

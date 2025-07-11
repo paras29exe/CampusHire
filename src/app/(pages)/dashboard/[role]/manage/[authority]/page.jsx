@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { notFound, redirect, useParams, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/store';
+import { PasswordRevealModal } from '@/components/passwordRevealModal';
 
 const superuserApiMap = {
   teacher: '/api/superuser/manage/add-teacher',
@@ -20,13 +21,16 @@ const adminApiMap = {
 
 export default function Page() {
   const { role } = useAuthStore();
-  const loggedInUserRole = role 
+  const loggedInUserRole = role
   const params = useParams();
   const router = useRouter();
 
-  const roleToAdd = params.authority?.split('-')?.[1]?.toLowerCase(); 
+  const roleToAdd = params.authority?.split('-')?.[1]?.toLowerCase();
   const [apiEndpoint, setApiEndpoint] = useState(null);
   const { reset } = useForm();
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (!loggedInUserRole || !roleToAdd) {
@@ -50,18 +54,25 @@ export default function Page() {
 
     try {
       const response = await axios.post(apiEndpoint, data);
-      if (response.status === 201) {
-        toast.success(`${roleToAdd} added successfully`);
-        reset();
-      } else {
-        throw new Error('Failed to add');
-      }
+      setPassword(response.data.password);
+      setModalOpen(true);
+      reset();
     } catch (error) {
+      console.error('Error adding authority:', error);
       toast.error(error?.response?.data?.message || `Failed to add ${roleToAdd}`);
     }
   };
 
   if (!apiEndpoint) return;
 
-  return <AddAuthority onSubmit={onSubmit} role={roleToAdd} />;
+  return (
+    <>
+      <AddAuthority onSubmit={onSubmit} role={roleToAdd} />
+      <PasswordRevealModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        password={password}
+      />
+    </>
+  )
 }

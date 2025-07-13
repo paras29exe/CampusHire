@@ -10,8 +10,6 @@ export const GET = withDB(async (req) => {
     try {
         const student = JSON.parse(req.headers.get('user') || '{}');
 
-           
-
         // Find all applications by the student
         const appliedJobs = await Application.aggregate([
             {
@@ -43,6 +41,12 @@ export const GET = withDB(async (req) => {
                         }
                     }
                 }
+            },
+            {
+                $sort: { "jobData.createdAt": -1 } // Sort by job creation date
+            },
+            {
+                $limit: 50 // Limit to 50 applied jobs
             },
             {
                 $project: {

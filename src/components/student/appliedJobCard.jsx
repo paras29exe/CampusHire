@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"
+import Link from "next/link"
 
 export default function AppliedJobCard({ jobData }) {
   const handleViewDescription = () => {
@@ -85,13 +86,15 @@ export default function AppliedJobCard({ jobData }) {
           {/* Right Section - CTA Button */}
           <div className="flex-shrink-0">
             <Separator orientation="vertical" className="hidden lg:block h-24 mx-4" />
-            <Button
-              onClick={handleViewDescription}
-              className="w-full whitespace-break-spaces lg:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 text-sm"
-            >
-              <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-              View Description
-            </Button>
+            <Link href={`/job-description?jobId=${jobData._id}`} className="w-full">
+              <Button
+                onClick={handleViewDescription}
+                className="w-full whitespace-break-spaces lg:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 text-sm"
+              >
+                <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+                View Description
+              </Button>
+            </Link>
           </div>
         </div>
       </CardContent>

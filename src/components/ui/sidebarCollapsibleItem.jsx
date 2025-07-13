@@ -12,7 +12,7 @@ export function SidebarCollapsibleItem({ item, pathname }) {
     return (
         <Collapsible defaultOpen={open} onOpenChange={setOpen} className="group/collapsible ">
             <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title} className={' text-gray-700 text-base font-semibold'}>
+                <SidebarMenuButton tooltip={item.title} className={' text-gray-700 text-sm font-semibold'}>
                     {item.icon}
                     <span>{item.title}</span>
 
@@ -26,7 +26,7 @@ export function SidebarCollapsibleItem({ item, pathname }) {
                         <SidebarMenuSubItem key={subIndex}>
                             <SidebarMenuSubButton
                                 size="sm"
-                                className={"text-zinc-600 font-semibold"}
+                                className={"text-zinc-600 text-xs font-semibold"}
                                 isActive={pathname.endsWith(subItem.href)}
                                 asChild
                             >

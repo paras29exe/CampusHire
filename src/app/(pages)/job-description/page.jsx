@@ -1,7 +1,7 @@
 'use client'
 
 import JobDescriptionPage from "@/components/JobDescriptionPage"
-import { useApi } from "@/store/store";
+import { useApi, useAuthStore } from "@/store/store";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,28 +10,32 @@ export default function Page() {
     // This page is currently not implemented, but it can be used to display job descriptions
     const searchParams = useSearchParams();
     const jobId = searchParams.get('jobId');
+
     const [jobData, setJobData] = useState(null);
-    const { pageLoading, setPageLoading } = useApi();
+    const { role } = useAuthStore()
+
+
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchJobDescription = async () => {
             try {
-                setPageLoading(true);
-                const response = await axios.get(`/api/shared/jobs/job-description?jobId=${jobId}`);
-                setJobData(() =>response.data.data);
+                setLoading(true);
+                const response = await axios.get(`/api/views/job-description`, {
+                    params: { jobId }
+                });
+                setJobData(response.data.data);
             } catch (error) {
                 console.error('Error fetching job description:', error.response?.data || error.message);
-            }finally{
-                setPageLoading(false);
+            } finally {
+                setLoading(false);
             }
         };
 
-        if (jobId) {
-            fetchJobDescription();
-        }
-    }, [])
+        fetchJobDescription();
+    }, [jobId])
 
-    if(!jobId) {
+    if (!jobId) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <h1 className="text-2xl font-bold">Job ID is required to view the job description.</h1>
@@ -39,7 +43,7 @@ export default function Page() {
         );
     }
 
-    if(jobData)return (
-        <JobDescriptionPage jobData={jobData} />
+    if(jobData) return (
+        <JobDescriptionPage jobData={jobData} role={role} />
     )
 }

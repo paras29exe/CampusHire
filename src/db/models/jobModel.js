@@ -49,6 +49,7 @@ const JobSchema = new mongoose.Schema({
 
     job_details: {
         job_location: { type: String },
+        package: { type: String }, // e.g., "₹12-18 LPA" or "Not Disclosed"
         shift_timing: { type: String },
         date_of_joining: { type: String },
         placement_process: { type: [String] },
@@ -74,8 +75,8 @@ const JobSchema = new mongoose.Schema({
     last_date_to_apply: { type: Date },
     status: {
         type: String,
-        enum: ['active', 'unPublished', 'expired', "unAssigned"],
-        default: 'unAssigned' 
+        enum: ['active', 'unpublished', 'expired', "unassigned"],
+        default: 'unassigned' 
     },
 
 }, { timestamps: true });

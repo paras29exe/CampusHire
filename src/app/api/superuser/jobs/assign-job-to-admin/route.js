@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     const jobId = req.nextUrl.searchParams.get("jobId");
-    const adminIds = await req.json()
+    const {adminIds} = await req.json()
     const currUser = JSON.parse(req.headers.get("user"));
 
     if (!jobId || !adminIds) {
@@ -40,6 +40,7 @@ export const POST = withDB(async (req) => {
         }
 
         job.assigned_to = adminIdsArray;
+        job.status = 'unpublished'; 
         
         await job.save();
 

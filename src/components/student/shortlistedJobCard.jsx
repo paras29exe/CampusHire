@@ -4,21 +4,14 @@ import { Calendar, MapPin, IndianRupee, Monitor, Users, Trophy, Star, ArrowRight
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { formatDate } from "@/utils/client/formatDate"
+import Link from "next/link"
 
-export default function ShortlistedDriveCard({shortlistedData}) {
+export default function ShortlistedDriveCard({ jobData }) {
 
     const handleViewDetails = () => {
         // Redirect to full job description page
-        window.location.href = `/shortlisted/${shortlistedData.companyName.toLowerCase().replace(/\s+/g, "-")}`
-    }
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString)
-        return date.toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-        })
+        window.location.href = `/shortlisted/${jobData.companyName.toLowerCase().replace(/\s+/g, "-")}`
     }
 
     const getDriveTypeIcon = (type) => {
@@ -28,7 +21,7 @@ export default function ShortlistedDriveCard({shortlistedData}) {
     return (
         <Card className="w-full transition-all duration-300 border-0 relative overflow-hidden group">
             {/* Decorative elements */}
-            
+
 
             <CardHeader className="relative">
                 <div className="flex items-start justify-between">
@@ -42,9 +35,9 @@ export default function ShortlistedDriveCard({shortlistedData}) {
                         </div>
                         <div>
                             <h2 className=" text-lg sm:text-xl font-bold text-foreground">
-                                {shortlistedData.companyName} 
+                                {jobData.companyName}
                             </h2>
-                            <p className="text-xs  sm:text-sm font-semibold text-blue-700">{shortlistedData.roleName}</p>
+                            <p className="text-xs  sm:text-sm font-semibold text-blue-700">{jobData.roleName}</p>
                         </div>
                     </div>
                 </div>
@@ -68,7 +61,7 @@ export default function ShortlistedDriveCard({shortlistedData}) {
                             </div>
                             <div>
                                 <p className=" text-gray-600">Applied On</p>
-                                <p className="font-semibold text-gray-900">{formatDate(shortlistedData.appliedOn)}</p>
+                                <p className="font-semibold text-gray-900">{formatDate(jobData.appliedOn)}</p>
                             </div>
                         </div>
 
@@ -78,8 +71,8 @@ export default function ShortlistedDriveCard({shortlistedData}) {
                             </div>
                             <div>
                                 <p className="text-gray-600">Next Round</p>
-                                <p className="font-semibold text-orange-700">{formatDate(shortlistedData.nextRoundDate)}</p>
-                                <p className="text-sm text-orange-600 font-medium">{shortlistedData.roundName}</p>
+                                <p className="font-semibold text-orange-700">{formatDate(jobData.nextRoundDate)}</p>
+                                <p className="text-sm text-orange-600 font-medium">{jobData.nextRoundName}</p>
                             </div>
                         </div>
 
@@ -89,7 +82,7 @@ export default function ShortlistedDriveCard({shortlistedData}) {
                             </div>
                             <div>
                                 <p className=" text-gray-600">Package</p>
-                                <p className="font-bold text-green-700 text-sm">{shortlistedData.package}</p>
+                                <p className="font-bold text-green-700 text-sm">{jobData.package}</p>
                             </div>
                         </div>
                     </div>
@@ -102,18 +95,18 @@ export default function ShortlistedDriveCard({shortlistedData}) {
                             </div>
                             <div>
                                 <p className=" text-gray-600">Location</p>
-                                <p className="font-semibold text-gray-900">{shortlistedData.location}</p>
+                                <p className="font-semibold text-gray-900">{jobData.location}</p>
                             </div>
                         </div>
 
                         <div className="flex items-center gap-3 px-3 bg-white/60 rounded-lg border border-gray-100">
-                            <div className="p-2 bg-indigo-100 rounded-full">{getDriveTypeIcon(shortlistedData.driveType)}</div>
+                            <div className="p-2 bg-indigo-100 rounded-full">{getDriveTypeIcon(jobData.driveType)}</div>
                             <div>
                                 <p className="text-xs  text-gray-600">Drive Type</p>
                                 <div className="flex items-center gap-2">
-                                    <p className="font-semibold text-xs text-gray-900 capitalize">{shortlistedData.driveType}</p>
+                                    <p className="font-semibold text-xs text-gray-900 capitalize">{jobData.driveType}</p>
                                     <Badge variant="outline" className="text-xs">
-                                        {shortlistedData.driveType || "Will Update soon"}
+                                        {jobData.driveType || "Will Update soon"}
                                     </Badge>
                                 </div>
                             </div>
@@ -130,18 +123,20 @@ export default function ShortlistedDriveCard({shortlistedData}) {
 
                 {/* CTA Button */}
                 <CardFooter className="p-0 mt-6  flex-col gap-0">
-                    <h4 className="text-xs font-bold">Next Step Awaiting : <span className="text-red-500">{shortlistedData.roundName || "Unknown"}</span> </h4>
-                    <Button
-                        size={'lg'}
-                        variant={'outline'}
-                        onClick={handleViewDetails}
-                        className="w-full bg-blue-600 text-white font-semibold  hover:shadow-xl transition-all duration-300 group"
-                    >
-                        <span className="flex items-center justify-center gap-2">
-                            View Description
-                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
-                        </span>
-                    </Button>
+                    <h4 className="text-xs font-bold">Next Step Awaiting : <span className="text-red-500">{jobData.nextRoundName || "To be Announced"}</span> </h4>
+                    <Link href={`/job-description?jobId=${jobData._id}`} className="w-full">
+                        <Button
+                            size={'lg'}
+                            variant={'outline'}
+                            onClick={handleViewDetails}
+                            className="w-full bg-blue-600 text-white font-semibold  hover:shadow-xl transition-all duration-300 group"
+                        >
+                            <span className="flex items-center justify-center gap-2">
+                                View Description
+                                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
+                            </span>
+                        </Button>
+                    </Link>
                 </CardFooter>
             </CardContent>
         </Card>

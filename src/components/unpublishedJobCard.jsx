@@ -6,24 +6,25 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"
+import Link from "next/link"
 
-export default function UnpublishedJobCard({jobData}) {
-//   const jobData = {
-//     company: {
-//       name: "Microsoft India",
-//       website: "https://careers.microsoft.com",
-//     },
-//     job_details: {
-//       location: "Bangalore, Hyderabad, Mumbai",
-//       package: "₹12-18 LPA",
-//     },
-//     createdAt: "2024-01-15T10:30:00Z",
-//     job_roles: [
-//       { _id: "1", role: "Software Development Engineer" },
-//       { _id: "2", role: "Data Scientist" },
-//       { _id: "3", role: "Product Manager" },
-//     ],
-//   }
+export default function UnpublishedJobCard({ jobData }) {
+  //   const jobData = {
+  //     company: {
+  //       name: "Microsoft India",
+  //       website: "https://careers.microsoft.com",
+  //     },
+  //     job_details: {
+  //       location: "Bangalore, Hyderabad, Mumbai",
+  //       package: "₹12-18 LPA",
+  //     },
+  //     createdAt: "2024-01-15T10:30:00Z",
+  //     job_roles: [
+  //       { _id: "1", role: "Software Development Engineer" },
+  //       { _id: "2", role: "Data Scientist" },
+  //       { _id: "3", role: "Product Manager" },
+  //     ],
+  //   }
 
   const handleEdit = () => {
     // window.location.href = `/admin/jobs/edit/${jobData.company.name.toLowerCase().replace(/\s+/g, "-")}`
@@ -34,6 +35,10 @@ export default function UnpublishedJobCard({jobData}) {
       // Delete logic here
       console.log("Deleting job...")
     }
+  }
+
+  const handleViewDetails = () => {
+
   }
 
   return (
@@ -77,7 +82,7 @@ export default function UnpublishedJobCard({jobData}) {
                 <MapPin className="h-4 w-4 text-gray-400" />
                 <div>
                   <span className="text-gray-500">Location:</span>
-                  <div className="font-medium">{jobData.job_details.location}</div>
+                  <div className="font-medium">{jobData.job_details.job_location}</div>
                 </div>
               </div>
 
@@ -120,10 +125,13 @@ export default function UnpublishedJobCard({jobData}) {
           <div className="flex-shrink-0">
             <Separator orientation="vertical" className="hidden lg:block h-16 mx-4" />
             <div className="flex flex-col gap-1.5 w-full lg:w-auto">
-              <Button onClick={handleViewDetails} variant="outline" className="w-full lg:w-auto bg-transparent">
-                <Eye className="h-4 w-4 mr-2" />
-                View Details
-              </Button>
+              <Link href={`/job-description?jobId=${jobData._id}`} className="w-full lg:w-auto">
+                <Button onClick={handleViewDetails} variant="outline" className="w-full lg:w-auto bg-transparent">
+                  <Eye className="h-4 w-4 mr-2" />
+                  View Details
+                </Button>
+              </Link>
+
               <Button onClick={handleEdit} className="w-full lg:w-auto bg-blue-600 hover:bg-blue-700">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit Job

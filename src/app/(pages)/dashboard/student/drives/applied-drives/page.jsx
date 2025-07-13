@@ -1,23 +1,10 @@
 'use client'
 import AppliedJobCard from '@/components/student/appliedJobCard'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import axios from "axios"
-import { useEffect, useState } from "react"
+import { useInfiniteScroll } from '@/hooks/infiniteScrollHook'
 
 function page() {
-  const [appliedJobs, setAppliedJobs] = useState([])
-
-  useEffect(() => {
-    const fetchAppliedJobs = async () => {
-      try {
-        const response = await axios.get('/api/student/jobs/applied-jobs')
-        setAppliedJobs(response.data.data)
-      } catch (error) {
-        console.error("Error fetching applied jobs:", error.response?.data?.message || error.message)
-      }
-    }
-    fetchAppliedJobs()
-  }, [])
+  const { data: appliedJobs, lastElementRef, hasMore, isLoading } = useInfiniteScroll('/api/student/jobs/applied-jobs')
 
   return (
     <div className="w-full p-4">
@@ -29,11 +16,14 @@ function page() {
           </CardHeader>
           <CardContent className="w-full space-y-2 sm:space-y-4 p-0">
             {appliedJobs.map((job, index) => (
-              <div key={index}>
-                <AppliedJobCard jobData={job} />
-              </div>
+                <AppliedJobCard key={job._id} jobData={job} />
             ))}
           </CardContent>
+          {hasMore && (
+            <div ref={lastElementRef} className="text-center p-4">
+              {isLoading && <LoaderCircle className="inline-block animate-spin h-6 w-6" />}
+            </div>
+          )}
         </Card>
       </div>
     </div>

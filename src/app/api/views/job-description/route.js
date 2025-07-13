@@ -9,7 +9,7 @@ export const GET = withDB(async (req, res) => {
     try {
         const jobId = req.nextUrl.searchParams.get('jobId');
 
-        const job = await Job.findById(jobId);
+        const job = await Job.findById(jobId).populate('assigned_to');
 
         if (!job) {
             return NextResponse.json({

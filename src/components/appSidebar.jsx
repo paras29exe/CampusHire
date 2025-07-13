@@ -52,7 +52,7 @@ export const AppSidebar = ({ role }) => {
                     <SidebarCollapsibleItem key={index} item={item} pathname={pathname} />
                   ) : (
                     <SidebarMenuButton key={index}
-                      className={"text-gray-700 text-base font-semibold"}
+                      className={"text-gray-700 font-semibold"}
                       asChild
                       isActive={pathname.endsWith(item.href)}
                       tooltip={item.title}>

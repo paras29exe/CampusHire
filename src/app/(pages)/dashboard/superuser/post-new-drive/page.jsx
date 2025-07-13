@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { Upload, FileText, Check, Users, Plus, X, RefreshCw, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -10,28 +10,26 @@ import { Badge } from "@/components/ui/badge"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Command, CommandList, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
 import { toast } from "sonner"
-
-const ADMIN_LIST = [
-  { id: "1", name: "Dr. Rajesh Kumar", email: "rajesh.kumar@college.edu" },
-  { id: "2", name: "Prof. Priya Sharma", email: "priya.sharma@college.edu" },
-  { id: "3", name: "Dr. Amit Singh", email: "amit.singh@college.edu" },
-  { id: "4", name: "Prof. Neha Gupta", email: "neha.gupta@college.edu" },
-  { id: "5", name: "Dr. Vikram Patel", email: "vikram.patel@college.edu" },
-]
+import axios from "axios"
+import { useRouter } from "next/navigation"
 
 export default function PostJobPage() {
   const { control, handleSubmit, watch, setValue, formState: { isSubmitting }, reset } = useForm({
     defaultValues: {
       pdfFile: null,
-      isParsed: false,
-      isParsing: false,
       selectedAdmins: [],
       assignLater: false,
     },
     mode: "onChange",
   })
 
-  const { pdfFile, isParsed, isParsing, selectedAdmins, assignLater } = watch()
+  const { pdfFile, selectedAdmins, assignLater } = watch()
+  const [jobId, setJobId] = useState(null)
+  const [isParsing, setIsParsing] = useState(false)
+  const [isParsed, setIsParsed] = useState(false)
+  const [adminsList, setAdminsList] = useState([])
+
+  const router = useRouter()
 
   const handleFileSelect = (file) => {
     if (!file || file.type !== "application/pdf") {
@@ -39,35 +37,54 @@ export default function PostJobPage() {
       return
     }
     setValue("pdfFile", file)
-    setValue("isParsed", false)
-    setValue("isParsing", false)
+    setIsParsed(false)
+    setIsParsing(false)
   }
 
   const handleRemoveFile = () => {
     setValue("pdfFile", null)
-    setValue("isParsed", false)
-    setValue("isParsing", false)
     setValue("selectedAdmins", [])
     setValue("assignLater", false)
+    setJobId(null)
+    setIsParsed(false)
+    setIsParsing(false)
   }
 
+  // Function to handle PDF parsing
   const handleParsePDF = async () => {
     if (!pdfFile) {
-      toast.error("Please select a PDF file first")
+      toast("Please upload a PDF file first", { variant: "destructive" })
+      return
+    }
+    if (isParsing) {
+      toast("PDF is already being parsed", { variant: "info" })
       return
     }
 
-    setValue("isParsing", true)
-    setValue("isParsed", false)
-
+    const formdata = new FormData()
+    formdata.append("file", pdfFile)
+    setIsParsing(true)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 3000))
-      setValue("isParsed", true)
-      toast.success("PDF parsed successfully!")
+      // Simulate PDF parsing
+      const response = await axios.post('/api/superuser/jobs/parse-pdf', formdata, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      if (adminsList.length === 0) {
+        const adminsResponse = await axios.get('/api/superuser/get-admins-list')
+        setAdminsList(() => adminsResponse.data.data || [])
+      }
+
+      setJobId(response.data.jobId)
+      setIsParsed(true)
+      toast("PDF parsed successfully", { variant: "success", description: 'You can now assign this job to admins.', action: { label: 'ok' } })
     } catch (error) {
-      toast.error("Failed to parse PDF")
+      setJobId(null)
+      setIsParsed(false)
+      toast("Failed to parse PDF", { variant: "destructive", action: { label: 'Close' } })
     } finally {
-      setValue("isParsing", false)
+      setIsParsing(false)
     }
   }
 
@@ -80,8 +97,8 @@ export default function PostJobPage() {
 
   const toggleAdmin = (admin) => {
     const current = selectedAdmins || []
-    const exists = current.find((a) => a.id === admin.id)
-    setValue("selectedAdmins", exists ? current.filter((a) => a.id !== admin.id) : [...current, admin])
+    const exists = current.find((a) => a._id === admin._id)
+    setValue("selectedAdmins", exists ? current.filter((a) => a._id !== admin._id) : [...current, admin])
     setValue("assignLater", false)
   }
 
@@ -90,23 +107,43 @@ export default function PostJobPage() {
     setValue("selectedAdmins", [])
   }
 
+  // final onSubmit function to post the job
   const onSubmit = async (data) => {
-    if (!data.pdfFile || !data.isParsed) {
-      toast.error("Please upload and parse a PDF first")
-      return
-    }
-
-    if (!data.assignLater && (!data.selectedAdmins || data.selectedAdmins.length === 0)) {
-      toast.error("Please assign admins or choose 'Assign Later'")
-      return
-    }
-
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      toast.success("Job posted successfully!")
-      reset()
+      if (assignLater) {
+        toast("Job posted without admin assignment", { variant: "info" })
+        router.push('/dashboard/superuser/drives/unassigned-drives')
+        return
+      }
+      if (!jobId) {
+        toast("Please parse the PDF file first", { variant: "destructive" })
+        return
+      }
+      if (isSubmitting) {
+        toast("Pdf is being Parsed", { variant: "info" })
+        return
+      }
+
+
+      const response = await axios.post('/api/superuser/jobs/assign-job-to-admin', {
+        adminIds: selectedAdmins?.map(admin => admin._id) || [],
+      },
+        {
+          params: { jobId }
+        }
+      )
+      const { message } = response.data
+      toast(`${message}`, { variant: "success" })
+      router.push('/dashboard/superuser/drives/unpublished-drives')
     } catch (error) {
-      toast.error("Failed to post job")
+      console.error('Error posting job:', error)
+      toast(error?.response?.data?.message || "Failed to post job", { variant: "destructive" })
+    } finally {
+      reset();
+      setJobId(null);
+      setValue("pdfFile", null);
+      setValue("selectedAdmins", []);
+      setValue("assignLater", false);
     }
   }
 
@@ -255,12 +292,11 @@ export default function PostJobPage() {
                             <CommandList>
                               <CommandEmpty>No admins found.</CommandEmpty>
                               <CommandGroup className="max-h-64 overflow-auto">
-                                {ADMIN_LIST.map((admin) => (
-                                  <CommandItem key={admin.id} onSelect={() => toggleAdmin(admin)}>
+                                {adminsList.map((admin) => (
+                                  <CommandItem key={admin._id} onSelect={() => toggleAdmin(admin)}>
                                     <Check
-                                      className={`mr-2 h-4 w-4 ${
-                                        selectedAdmins?.find((a) => a.id === admin.id) ? "opacity-100" : "opacity-0"
-                                      }`}
+                                      className={`mr-2 h-4 w-4 ${selectedAdmins?.find((a) => a._id === admin._id) ? "opacity-100" : "opacity-0"
+                                        }`}
                                     />
                                     <div>
                                       <div className="font-medium">{admin.name}</div>
@@ -294,7 +330,7 @@ export default function PostJobPage() {
                         </div>
                         <button
                           type="button"
-                          onClick={() =>  setValue("selectedAdmins", selectedAdmins.filter((a) => a.id !== admin.id))}
+                          onClick={() => setValue("selectedAdmins", selectedAdmins.filter((a) => a.id !== admin.id))}
                           className="ml-1 hover:text-red-600 p-1"
                         >
                           <X className="h-3 w-3" />

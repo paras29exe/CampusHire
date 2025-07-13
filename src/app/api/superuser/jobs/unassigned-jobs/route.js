@@ -19,17 +19,17 @@ export const GET = withDB(async (req) => {
     }
 
     try {
-        // Fetch jobs in latest-first order with pagination
-        const jobs = await Job.find({status: 'active'})
+        // Fetch unassigned jobs in latest-first order with pagination
+        const jobs = await Job.find({ status: 'unassigned' })
             .sort({ createdAt: -1 }) // Sort by creation date in descending order
             .skip((page - 1) * limit)
             .limit(limit);
 
         // Count total jobs for pagination metadata
-        const totalJobs = await Job.countDocuments();
+        const totalJobs = await Job.countDocuments({ status: 'unassigned' });
 
         return NextResponse.json({
-            message: "Active jobs fetched successfully",
+            message: "Unassigned jobs fetched successfully",
             data: jobs,
             pagination: {
                 totalJobs,
@@ -40,7 +40,7 @@ export const GET = withDB(async (req) => {
     } catch (err) {
         return NextResponse.json({
             message: err.message || "Unexpected error occurred",
-            error: "An error occurred while fetching jobs",
+            error: "An error occurred while fetching unassigned jobs",
         }, { status: 500 });
     }
 });

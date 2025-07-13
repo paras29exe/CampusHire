@@ -1,10 +1,38 @@
 'use client'
 
-import JobDescriptionPage from "@/components/JobDescriptionPage"
-import ExpiredDrivesDemo from "@/components/expiredJobs"
+import ExpiredDriveCard from "@/components/expiredJobs"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
+import { Clock } from "lucide-react"
 
 export default function page() {
+  const {data: expiredDrives, lastElementRef, hasMore, isLoading} = useInfiniteScroll('/api/student/jobs/expired-jobs')
+
   return (
-    <JobDescriptionPage />
+    <div className="min-h-screen">
+      <div className=" mx-auto space-y-6">
+        <Card className="border-none bg-transparent rounded-none shadow-none p-0">
+          <CardHeader className="text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Clock className="h-6 w-6 text-red-600" />
+            </div>
+            <CardTitle className="text-2xl font-bold text-red-700">Expired Drives</CardTitle>
+            <p className="text-red-600">These opportunities have closed for applications</p>
+          </CardHeader>
+          <CardContent className={"max-sm:p-0"}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {expiredDrives.map((job, index) => (
+                  <ExpiredDriveCard key={job._id} jobData={job} />
+              ))}
+            </div>
+          </CardContent>
+          {hasMore && (
+            <div ref={lastElementRef} className="text-center p-4">
+              {isLoading && <LoaderCircle className="inline-block animate-spin h-6 w-6" />}
+            </div>
+          )}
+        </Card>
+      </div>
+    </div>
   )
 }

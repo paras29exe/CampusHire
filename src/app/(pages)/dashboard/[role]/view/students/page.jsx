@@ -14,27 +14,12 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import FiltersComponent from '@/components/filtersComponent';
 import axios from 'axios';
-import { useDataStore } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
 
-// Sample student data
-// const studentsData = [
-//   { rollNo: 'CS2021001', name: 'John Doe', email: 'john.doe@example.com', course: 'B.Tech', branch: 'Computer Science', batch: '2021-2025' },
-//   { rollNo: 'CS2021002', name: 'Jane Smith', email: 'jane.smith@example.com', course: 'B.Tech', branch: 'Computer Science', batch: '2021-2025' },
-//   { rollNo: 'ME2021001', name: 'Mike Johnson', email: 'mike.johnson@example.com', course: 'B.Tech', branch: 'Mechanical Engineering', batch: '2021-2025' },
-//   { rollNo: 'EE2021001', name: 'Sarah Wilson', email: 'sarah.wilson@example.com', course: 'B.Tech', branch: 'Electrical Engineering', batch: '2021-2025' },
-//   { rollNo: 'CS2022001', name: 'David Brown', email: 'david.brown@example.com', course: 'B.Tech', branch: 'Computer Science', batch: '2022-2026' },
-//   { rollNo: 'CE2021001', name: 'Lisa Davis', email: 'lisa.davis@example.com', course: 'B.Tech', branch: 'Civil Engineering', batch: '2021-2025' },
-//   { rollNo: 'CS2021003', name: 'Tom Anderson', email: 'tom.anderson@example.com', course: 'B.Tech', branch: 'Computer Science', batch: '2021-2025' },
-//   { rollNo: 'ME2022001', name: 'Emma Thompson', email: 'emma.thompson@example.com', course: 'B.Tech', branch: 'Mechanical Engineering', batch: '2022-2026' },
-//   { rollNo: 'EE2022001', name: 'James Wilson', email: 'james.wilson@example.com', course: 'B.Tech', branch: 'Electrical Engineering', batch: '2022-2026' },
-//   { rollNo: 'CS2023001', name: 'Sophie Taylor', email: 'sophie.taylor@example.com', course: 'B.Tech', branch: 'Computer Science', batch: '2023-2027' }
-// ];
 
 export default function StudentDataTable() {
-  const { studentsData, setStudentsData } = useDataStore();
+  const [studentsData, setStudentsData] = useState([]);
   const [pageNum, setPageNum] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -54,7 +39,7 @@ export default function StudentDataTable() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/shared/view/view-students', {
+      const response = await axios.get('/api/shared/views/view-students', {
         params: {
           page: pageNum,
           search: searchTerm,
@@ -73,6 +58,11 @@ export default function StudentDataTable() {
     }
   }
 
+  // fetch data when component mounts or pageNum changes or any filter changes
+  useEffect(() => {
+    fetchData();
+  }, [pageNum, course, branch, department, searchQuery]);
+
   // my custom debounce search effect that waits for 500ms before making the API call
   const debounceTimeoutRef = useRef(null);
 
@@ -83,20 +73,20 @@ export default function StudentDataTable() {
     if (searchTerm) {
       existingParams.set('search', searchTerm);
     } else {
-      existingParams.delete('search'); // optional: remove when empty
+      existingParams.delete('search');
     }
-    
-    setLoading(true); // Set loading state when search term changes
-    setStudentsData([]); // Reset students data on new search
-    
+
+    setLoading(true); 
+    setStudentsData([]); 
+
     debounceTimeoutRef.current = setTimeout(() => {
-      setPageNum(1); // Reset page number on new search
+      setPageNum(1);
       router.push(`?${existingParams.toString()}`, { scroll: false });
     }, 1500);
 
   }, [searchTerm])
 
-  // stores the last record reference for infinite scroll
+  // stores the last record reference for infinite scroll and changes the page number when the last record is visible
   // this will be used to trigger the next page fetch when the last record is visible
   const lastRecordReference = useCallback((node) => {
     if (loading || !hasMore) return; // Prevent multiple fetches
@@ -111,12 +101,6 @@ export default function StudentDataTable() {
 
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
-
-  // fetch data when component mounts or pageNum changes or any filter changes
-  useEffect(() => {
-    fetchData();
-  }, [pageNum, course, branch, department, searchQuery]);
-
 
   return (
     <div className="min-h-screen bg-background sm:p-4 py-4">
@@ -135,18 +119,15 @@ export default function StudentDataTable() {
           </CardHeader>
           <CardContent  >
             <div>
-              <div className="flex">
-                <div className="relative max-w-md">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                  <Input
-                    type="text"
-                    placeholder="Search by roll number/Name....."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                {/* <Button className="ml-2" onClick={handleSearch}> Search</Button> */}
+              <div className="relative max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Input
+                  type="text"
+                  placeholder="Search by roll number/Name....."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
               </div>
 
               {searchTerm && (
@@ -156,7 +137,7 @@ export default function StudentDataTable() {
               )}
             </div>
             {/* from the components */}
-            <FiltersComponent loading={loading} setLoading={setLoading} />
+            <FiltersComponent setLoading={setLoading} setStudentsData={setStudentsData} />
           </CardContent>
         </Card>
 

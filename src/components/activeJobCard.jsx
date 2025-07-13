@@ -1,25 +1,16 @@
 "use client"
 
-import { Calendar, MapPin, Globe, Users, IndianRupee, Group, ListChecks } from "lucide-react"
+import { Calendar, MapPin, Users, IndianRupee, Group, ListChecks, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"
+import Link from "next/link"
+import { useAuthStore } from "@/store/store"
 
 function ActiveJobCard({ jobData }) {
-  const handleApplyNow = () => {
-    // Redirect to application page
-    window.location.href = `/apply/${jobData.companyName.toLowerCase().replace(/\s+/g, "-")}`
-  }
-
-   jobData = {
-    ...jobData,
-    job_details: {
-      ...jobData.job_details,
-      package: "Not Disclosed",
-    }
-  }
+  const { role } = useAuthStore()
 
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-300 flex flex-col">
@@ -30,8 +21,9 @@ function ActiveJobCard({ jobData }) {
               {jobData.company.name}
             </CardTitle>
             <Button variant="link" className="flex p-0! m-0! h-fit items-center gap-1 text-sm text-blue-600">
-              <Globe className="h-4 w-4 flex-shrink-0" />
-              {jobData.company.website}
+              <ExternalLink className="h-4 w-4 flex-shrink-0" />
+              Visit Website
+              {/* icon */}
             </Button>
           </div>
           <Badge variant="secondary" className="flex bg-green-600 text-white items-center gap-1 ml-2 flex-shrink-0">
@@ -40,11 +32,10 @@ function ActiveJobCard({ jobData }) {
           </Badge>
         </div>
       </CardHeader>
-
       <CardContent className="space-y-4 flex-1">
         <div className="grid grid-cols-1 gap-3">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <MapPin className="h-4 w-4 text-gray-400 flex-shrink-0" />
+          <div className="flex items-center gap-2 text-sm ">
+            <MapPin className="h-4 w-4  flex-shrink-0" />
             <span className="truncate">{jobData.job_details?.job_location}</span>
           </div>
 
@@ -91,10 +82,11 @@ function ActiveJobCard({ jobData }) {
       </CardContent>
 
       <CardFooter className="pt-4 mt-auto">
-        
-        <Button onClick={handleApplyNow} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-          Apply Now
-        </Button>
+        <Link href={`/job-description?jobId=${jobData._id}`} className="w-full">
+          <Button className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white">
+            {role === 'student' ? 'Apply Now' : 'View Details'}
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   )

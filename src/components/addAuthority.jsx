@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge"
 
 const DEPARTMENTS = [
     "Computer Science",
-    "Information Technology", 
+    "Information Technology",
     "Electronics",
     "Mechanical",
     "Civil",
@@ -43,36 +43,38 @@ export default function AddAuthority({ onSubmit, role = "teacher" }) {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
             {/* Header Section */}
             <div className="border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-10">
-                <div className="container mx-auto px-4 py-6">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <Button variant="ghost" size="icon" className="h-10 w-10">
-                                <ArrowLeft className="h-5 w-5" />
-                            </Button>
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                                    <UserPlus className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <h1 className="text-2xl font-bold text-foreground">
-                                        Add New {roleTitle}
-                                    </h1>
-                                    <p className="text-sm text-muted-foreground">
-                                        Create a new {role} account with complete details
-                                    </p>
-                                </div>
+                <div className="container mx-auto px-4 py-4">
+                    <div className="flex flex-col sm:pr-6 sm:pl-12 sm:flex-row sm:items-center sm:justify-between gap-4">
+
+                        {/* Left Section: Back Button + Icon + Title */}
+                        <div className="flex items-start sm:items-center gap-3">
+                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                                <UserPlus className="h-6 w-6" />
+                            </div>
+                            <div>
+                                <h1 className="text-xl sm:text-2xl font-bold text-foreground">
+                                    Add New {roleTitle}
+                                </h1>
+                                <p className="text-sm text-muted-foreground leading-tight">
+                                    Create a new {role} account with complete details
+                                </p>
                             </div>
                         </div>
-                        <Badge variant="secondary" className="text-sm px-3 py-1">
-                            {roleTitle} Registration
-                        </Badge>
+
+                        {/* Right Section: Badge */}
+                        <div className="sm:ml-auto">
+                            <Badge variant="secondary" className="text-sm px-3 py-1 w-fit">
+                                {roleTitle} Registration
+                            </Badge>
+                        </div>
                     </div>
                 </div>
             </div>
 
+
             {/* Main Content */}
             <div className="container mx-auto px-4 py-8">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-6xl mx-auto">
                     <Card className="shadow-lg border-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm">
                         <CardHeader className="space-y-4 pb-8">
                             <div className="flex items-center justify-between">
@@ -86,7 +88,7 @@ export default function AddAuthority({ onSubmit, role = "teacher" }) {
                             </div>
                             <Separator />
                         </CardHeader>
-                        
+
                         <CardContent className="space-y-8">
                             {/* Role Display */}
                             <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4 border border-dashed border-slate-200 dark:border-slate-700">
@@ -109,8 +111,8 @@ export default function AddAuthority({ onSubmit, role = "teacher" }) {
                                                 Employee ID
                                                 <span className="text-red-500">*</span>
                                             </Label>
-                                            <Input 
-                                                {...register("employee_id", { required: "Employee ID is required" })} 
+                                            <Input
+                                                {...register("employee_id", { required: "Employee ID is required" })}
                                                 placeholder="Enter employee ID"
                                                 className="h-11"
                                             />
@@ -127,8 +129,8 @@ export default function AddAuthority({ onSubmit, role = "teacher" }) {
                                                 Full Name
                                                 <span className="text-red-500">*</span>
                                             </Label>
-                                            <Input 
-                                                {...register("name", { required: "Name is required" })} 
+                                            <Input
+                                                {...register("name", { required: "Name is required" })}
                                                 placeholder="Enter full name"
                                                 className="h-11"
                                             />
@@ -169,8 +171,8 @@ export default function AddAuthority({ onSubmit, role = "teacher" }) {
                                                 Phone Number
                                                 <span className="text-red-500">*</span>
                                             </Label>
-                                            <Input 
-                                                {...register("phone", { required: "Phone is required" })} 
+                                            <Input
+                                                {...register("phone", { required: "Phone is required" })}
                                                 placeholder="Enter phone number"
                                                 className="h-11"
                                             />
@@ -214,16 +216,16 @@ export default function AddAuthority({ onSubmit, role = "teacher" }) {
 
                                 {/* Submit Button */}
                                 <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                                    <Button 
-                                        type="button" 
-                                        variant="outline" 
+                                    <Button
+                                        type="button"
+                                        variant="outline"
                                         className="flex-1 h-11"
                                     >
                                         Cancel
                                     </Button>
-                                    <Button 
-                                        type="submit" 
-                                        disabled={isSubmitting} 
+                                    <Button
+                                        type="submit"
+                                        disabled={isSubmitting}
                                         className="flex-1 h-11"
                                     >
                                         {isSubmitting ? (

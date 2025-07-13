@@ -1,25 +1,12 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import axios from "axios"
-import { useEffect, useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import ShortlistedDriveCard from "@/components/student/shortlistedJobCard"
 import { Trophy } from "lucide-react"
+import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
 
 function page() {
-  const [shortlistedDrives, setShortlistedDrives] = useState([])
-
-  useEffect(() => {
-    const fetchShortlistedDrives = async () => {
-      try {
-        const response = await axios.get('/api/student/jobs/shortlisted-jobs')
-        setShortlistedDrives(response.data.data)
-      } catch (error) {
-        console.error("Error fetching shortlisted drives:", error.response?.data?.message || error.message)
-      }
-    }
-    fetchShortlistedDrives()
-  }, [])
+  const { data: shortlistedDrives, lastElementRef, hasMore, isLoading } = useInfiniteScroll('/api/student/jobs/shortlisted-jobs')
 
 
   return (
@@ -37,12 +24,15 @@ function page() {
             <p className="text-gray-600 text-lg">Amazing work! You've been selected for these exciting opportunities</p>
           </CardHeader>
           <CardContent className="space-y-4 ">
-            {shortlistedDrives.map((jobData, index) => (
-              <div key={index}>
-                <ShortlistedDriveCard shortlistedData={jobData}/>
-              </div>
+            {shortlistedDrives.map((job, index) => (
+                <ShortlistedDriveCard key={job._id} jobData={job} />
             ))}
           </CardContent>
+          {hasMore && (
+            <div ref={lastElementRef} className="text-center p-4">
+              {isLoading && <LoaderCircle className="inline-block animate-spin h-6 w-6" />}
+            </div>
+          )}
         </Card>
       </div>
     </div>

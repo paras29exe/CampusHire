@@ -45,6 +45,11 @@ export const GET = withDB(async (req) => {
                     }
                 }
 
+            },{
+                $sort: { createdAt: -1 } // Sort by job creation date
+            },
+            {
+                $limit: 50 
             },
             {
                 $project: {

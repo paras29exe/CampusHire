@@ -9,13 +9,12 @@ import { useState, useEffect } from 'react';
 import { useDataStore } from '@/store/store';
 
 
-export default function FiltersComponent({ setLoading }) {
+export default function FiltersComponent({ setLoading, setStudentsData }) {
     const [courses, setCourses] = useState([...new Set(COURSE_OPTIONS.map(c => c.split("-")[0]))])
     const [branches, setBranches] = useState([])
     const searchParams = useSearchParams()
     const router = useRouter();
 
-    const { setStudentsData } = useDataStore();
 
     const { watch, setValue } = useForm({
         defaultValues: {

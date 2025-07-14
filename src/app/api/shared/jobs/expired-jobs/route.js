@@ -19,17 +19,29 @@ export const GET = withDB(async (req) => {
 
     try {
         // Fetch expired jobs in latest-first order with pagination
-        const jobs = await Job.find({ status: 'expired' })
-            .sort({ createdAt: -1 }) // Sort by creation date in descending order
-            .skip(skip)
-            .limit(limit);
+        const jobs = await Job.aggregate([
+            {
+                $match: { status: 'expired' }
+            }, {
+                $sort: { createdAt: -1 }
+            },
+            {
+                $skip: skip
+            },
+            {
+                $limit: limit
+            },
+            {
+                $project: {
+                    _id: 1,
+                    company: 1,
+                    job_details: 1,
+                    last_date_to_apply: 1,
+                    total_roles: { $size: "$job_roles" }
+                }
+            }
+        ])
 
-        if ((!jobs || jobs.length === 0) && page === 1) {
-            return NextResponse.json({
-                message: "No active jobs found.",
-                data: [],
-            }, { status: 404 });
-        }
 
         // Count total expired jobs for pagination metadata
         const totalJobs = await Job.countDocuments({ status: 'expired' });

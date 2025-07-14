@@ -4,11 +4,13 @@ import { cn } from "@/lib/utils"
 
 function Card({
   className,
+  onClick,
   ...props
 }) {
   return (
     (<div
       data-slot="card"
+      onClick={onClick}
       className={cn(
         "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
         className

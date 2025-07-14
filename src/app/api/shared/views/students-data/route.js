@@ -1,3 +1,5 @@
+'use server';
+
 import { Student } from "@/db/models/studentModel";
 import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
@@ -60,6 +62,3 @@ export const GET = withDB(async (req) => {
         }, { status: 500 });
     }
 });
-
-export const dynamic = 'force-dynamic'; // Ensure this route is always fresh
-export const revalidate = 0; // Disable caching for this route

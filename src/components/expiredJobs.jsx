@@ -53,7 +53,6 @@ export default function ExpiredDriveCard({ jobData }) {
 
         <Link href={`/job-description?jobId=${jobData._id}`} className="w-full">
           <Button
-            onClick={handleViewDescription}
             variant="outline"
             className="w-full text-gray-600 border-gray-300 bg-transparent"
           >

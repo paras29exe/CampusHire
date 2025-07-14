@@ -21,7 +21,7 @@ export default function page() {
             const fetchUser = async () => {
                 setLoading(true);
                 try {
-                    const response = await axios.get(`/api/views/view-user?id=${userId}&role=${role}`);
+                    const response = await axios.get(`/api/views/view-user?uid=${userId}&role=${role}`);
                     setUser(response.data.user);
                 } catch (error) {
                     toast.error(error.response?.data?.message || "Failed to fetch user data");

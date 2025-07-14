@@ -54,5 +54,3 @@ export const POST = withDB(async (req, { params }) => {
     }
 }
 );
-
-export const dynamic = "force-dynamic"; // Ensure this route is always fresh

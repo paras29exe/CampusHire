@@ -10,7 +10,7 @@ import mongoose from 'mongoose';
 
 export const GET = withDB(async (req) => {
     const role = req.nextUrl.searchParams.get('role');
-    const userId = req.nextUrl.searchParams.get('id');
+    const userId = req.nextUrl.searchParams.get('uid');
 
     if (!role || !userId) {
         return NextResponse.json({ message: 'Role and User ID are required' }, { status: 400 });

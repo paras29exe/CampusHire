@@ -36,7 +36,7 @@ export const GET = withDB(async (req) => {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
 
-        const updatedToken = await userData.generateAuthToken();
+        // const updatedToken = await userData.generateAuthToken();
         userData.password = undefined; // Remove password from the response
 
         const res = NextResponse.json({
@@ -45,7 +45,7 @@ export const GET = withDB(async (req) => {
             role: user.role,
         }, { status: 200 });
 
-        res.cookies.set('accessToken', updatedToken, options);
+        // res.cookies.set('accessToken', updatedToken, options);
 
         return res;
     } catch (error) {

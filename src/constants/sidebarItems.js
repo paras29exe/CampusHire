@@ -60,7 +60,7 @@ const ROUTES = {
             UNPUBLISHED: '/dashboard/superuser/drives/unpublished-drives',
             EXPIRED: '/dashboard/superuser/drives/expired-drives',
             UNASSIGNED: '/dashboard/superuser/drives/unassigned-drives',
-            ANALYTICS: '/dashboard/superuser/drives/job-analytics'
+            ANALYTICS: '/dashboard/superuser/analytics'
         },
         JOB_MANAGEMENT: {
             POST_FROM_PDF: '/dashboard/superuser/post-new-drive',

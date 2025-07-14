@@ -51,3 +51,31 @@ export const COURSE_OPTIONS = [
   "M.Sc-IT",
   "M.Com"
 ];
+
+const temp = COURSE_OPTIONS.map(item => item.split("-")[0]);
+
+COURSE_OPTIONS.forEach(item => {
+  if (!item.includes("-")) {
+    temp.push(item);
+  }
+})
+
+export const COURSES = [...new Set(temp)];
+
+export const BRANCHES = (course) => {
+  return COURSE_OPTIONS
+    .filter(item => item.startsWith(course) && item.includes("-"))
+    .map(item => item.split("-")[1])
+    .filter(Boolean); // Filter out any empty branches
+}
+
+export const DEPARTMENTS = [
+  'Computer Applications',
+  'Engineering',
+  'Management',
+  'Commerce',
+  'Law',
+  'Pharmacy',
+  'Administration',
+  'Fashion Designing',
+];

@@ -6,21 +6,26 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"
-import Link from "next/link"
 import { useAuthStore } from "@/store/store"
+import { useRouter } from "next/navigation"
 
 function ActiveJobCard({ jobData }) {
   const { role } = useAuthStore()
+  const router = useRouter()
 
   return (
-    <Card className="h-full hover:shadow-lg transition-shadow duration-300 flex flex-col">
+    <Card onClick={() => router.push(`/job-description?jobId=${jobData._id}`)} className="h-full hover:shadow-lg transition-shadow duration-300 flex flex-col">
       <CardHeader className="pb-3">
         <div className="flex flex-wrap items-start justify-between">
           <div className="space-y-1 flex-1 min-w-0">
             <CardTitle className="text-xl text-wrap font-bold text-gray-900 truncate">
               {jobData.company.name}
             </CardTitle>
-            <Button variant="link" className="flex p-0! m-0! h-fit items-center gap-1 text-sm text-blue-600">
+            <Button onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              window.open(jobData.company.website, '_blank');
+            }} variant="link" className="flex p-0! m-0! h-fit items-center gap-1 text-sm text-blue-600">
               <ExternalLink className="h-4 w-4 flex-shrink-0" />
               Visit Website
               {/* icon */}
@@ -82,11 +87,9 @@ function ActiveJobCard({ jobData }) {
       </CardContent>
 
       <CardFooter className="pt-4 mt-auto">
-        <Link href={`/job-description?jobId=${jobData._id}`} className="w-full">
-          <Button className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white">
-            {role === 'student' ? 'Apply Now' : 'View Details'}
-          </Button>
-        </Link>
+        <Button className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white">
+          {role === 'student' ? 'Apply Now' : 'View Details'}
+        </Button>
       </CardFooter>
     </Card>
   )

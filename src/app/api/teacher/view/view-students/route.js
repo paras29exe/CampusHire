@@ -1,3 +1,5 @@
+'use server';
+
 import { Teacher } from "@/db/models/teacherModel";
 import { Student } from "@/db/models/studentModel";
 import { withDB } from "@/utils/server/dbHandler";
@@ -48,6 +50,3 @@ export const GET = withDB(async (req) => {
         }, { status: 500 });
     }
 })
-
-export const dynamic = 'force-dynamic'; // Ensure this route is always fresh
-export const revalidate = 0; // Disable caching for this route

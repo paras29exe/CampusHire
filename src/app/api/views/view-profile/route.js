@@ -40,6 +40,3 @@ export const GET = withDB(async (req) => {
          }, { status: 500 });
     }
 });
-
-export const dynamic = 'force-dynamic'; // Ensures the route is always fresh
-export const revalidate = 0; // Disables static caching for this route

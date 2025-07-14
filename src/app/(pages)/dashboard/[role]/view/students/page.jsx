@@ -16,91 +16,26 @@ import FiltersComponent from '@/components/filtersComponent';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import { useInfiniteScroll } from '@/hooks/infiniteScrollHook';
 
 
 export default function StudentDataTable() {
-  const [studentsData, setStudentsData] = useState([]);
-  const [pageNum, setPageNum] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
-
   const params = useSearchParams();
-  const router = useRouter();
 
-  const course = params.get('course') || '';
-  const branch = params.get('branch') || '';
-  const department = params.get('department') || '';
-  const searchQuery = params.get('search') || '';
+  const [course, setCourse] = useState(params.get('course') || '');
+  const [branch, setBranch] = useState(params.get('branch') || '');
+  const [department, setDepartment] = useState(params.get('department') || '');
+  const [searchQuery, setSearchQuery] = useState(params.get('search') || '');
 
   const [searchTerm, setSearchTerm] = useState(params.get('search') || '');
-  const observer = useRef(null);
 
-  // Function to fetch data from the API
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get('/api/shared/views/view-students', {
-        params: {
-          page: pageNum,
-          search: searchTerm,
-          course,
-          branch,
-          department,
-        },
-      });
-      const { data, pagination } = response.data;
-      setStudentsData([...studentsData, ...data]);
-      setHasMore(pagination.currentPage < pagination.totalPages);
-    } catch (error) {
-      console.error('Error fetching students:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // fetch data when component mounts or pageNum changes or any filter changes
-  useEffect(() => {
-    fetchData();
-  }, [pageNum, course, branch, department, searchQuery]);
-
-  // my custom debounce search effect that waits for 500ms before making the API call
-  const debounceTimeoutRef = useRef(null);
-
-  useEffect(() => {
-    if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
-
-    const existingParams = new URLSearchParams(params.toString())
-    if (searchTerm) {
-      existingParams.set('search', searchTerm);
-    } else {
-      existingParams.delete('search');
-    }
-
-    setLoading(true); 
-    setStudentsData([]); 
-
-    debounceTimeoutRef.current = setTimeout(() => {
-      setPageNum(1);
-      router.push(`?${existingParams.toString()}`, { scroll: false });
-    }, 1500);
-
-  }, [searchTerm])
-
-  // stores the last record reference for infinite scroll and changes the page number when the last record is visible
-  // this will be used to trigger the next page fetch when the last record is visible
-  const lastRecordReference = useCallback((node) => {
-    if (loading || !hasMore) return; // Prevent multiple fetches
-
-    if (observer.current) observer.current.disconnect();
-
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setPageNum((prev) => prev + 1);
-      }
-    })
-
-    if (node) observer.current.observe(node);
-  }, [loading, hasMore]);
+  const { data: studentsData, hasMore, isLoading, lastElementRef } = useInfiniteScroll(
+    '/api/shared/views/students-data',
+    searchTerm,
+    setSearchQuery,
+    { course, branch, department, search: searchQuery },
+    [course, branch, department, searchQuery]
+  )
 
   return (
     <div className="min-h-screen bg-background sm:p-4 py-4">
@@ -137,7 +72,14 @@ export default function StudentDataTable() {
               )}
             </div>
             {/* from the components */}
-            <FiltersComponent setLoading={setLoading} setStudentsData={setStudentsData} />
+            <FiltersComponent
+              course={course}
+              setCourse={setCourse}
+              branch={branch}
+              setBranch={setBranch}
+              department={department}
+              setDepartment={setDepartment}
+            />
           </CardContent>
         </Card>
 
@@ -175,7 +117,7 @@ export default function StudentDataTable() {
                       </TableRow>
                     ))
                   ) : (
-                    !loading && <TableRow>
+                    !isLoading && <TableRow>
                       <TableCell colSpan={6} className="text-center text-muted-foreground">
                         No students found matching your search criteria
                       </TableCell>
@@ -183,9 +125,11 @@ export default function StudentDataTable() {
                   )}
                 </TableBody>
               </Table>
-              <div ref={lastRecordReference} className='h-4 my-4 w-full flex justify-center items-center'>
-                {loading && (<LoaderCircle className="animate-spin h-6 w-6 mx-auto" />)}
-              </div>
+              {
+                <div ref={lastElementRef} className="text-center p-4">
+                  {isLoading && <LoaderCircle className="inline-block animate-spin h-6 w-6" />}
+                </div>
+              }
             </div>
           </CardContent>
         </Card>

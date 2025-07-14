@@ -10,36 +10,27 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
-import { COURSE_OPTIONS } from "@/constants/courses"
-
-const COURSES = [...new Set(COURSE_OPTIONS.map(c => c.split("-")[0]))]
-const DEPARTMENTS = ["Computer Applications", "Information Technology", "Electronics", "Mechanical", "Civil"]
-const BATCHES = ["2024", "2025", "2026", "2027", "2028", "2029", "2030"]
+import { COURSES, BRANCHES, DEPARTMENTS } from "@/constants/courses"
 
 export default function AddStudent() {
     const [branches, setBranches] = useState([])
+    const [courses, setCourses] = useState(COURSES)
 
     const {
         register,
         handleSubmit,
         setValue,
-        watch,
         formState: { errors, isSubmitting },
         reset,
     } = useForm()
 
     const handleCourseChange = (value) => {
         setValue("course", value)
-        // Reset branch, department, and batch when course changes
         setValue("branch", "")
         setValue("department", "")
         setValue("batch", "")
 
-        const branches = COURSE_OPTIONS
-            .filter(c => c.startsWith(value + "-")) // only match if it's like "B.Tech-XYZ"
-            .map(c => c.split("-")[1])
-
-        setBranches(branches);
+        setBranches(BRANCHES(value));
     }
 
     const onSubmit = async (data) => { }
@@ -47,25 +38,20 @@ export default function AddStudent() {
     return (
         <div className="">
             {/* Header Section */}
-            <div className="border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-10">
+            <div className="border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm  z-10">
                 <div className="mx-auto px-4 py-6 ">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="icon" className="h-10 w-10">
-                                <ArrowLeft className="h-5 w-5" />
-                            </Button>
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400">
-                                    <GraduationCap className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <h1 className=" text-lg sm:text-2xl font-bold text-foreground">
-                                        Add New Student
-                                    </h1>
-                                    <p className="text-xs sm:text-sm text-muted-foreground">
-                                        Register a new student with complete academic details
-                                    </p>
-                                </div>
+                        <div className="flex items-center gap-3 pl-12">
+                            <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400">
+                                <GraduationCap className="h-6 w-6" />
+                            </div>
+                            <div>
+                                <h1 className=" text-lg sm:text-2xl font-bold text-foreground">
+                                    Add New Student
+                                </h1>
+                                <p className="text-xs sm:text-sm text-muted-foreground">
+                                    Register a new student with complete academic details
+                                </p>
                             </div>
                         </div>
                         <Badge variant="secondary" className="text-sm max-md:hidden px-3 py-1">
@@ -225,7 +211,7 @@ export default function AddStudent() {
                                                     <SelectValue placeholder="Select course" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {COURSES.filter(Boolean).map((course) => (
+                                                    {courses.filter(Boolean).map((course) => (
                                                         <SelectItem key={course} value={course}>
                                                             {course}
                                                         </SelectItem>
@@ -285,18 +271,12 @@ export default function AddStudent() {
                                                 Batch
                                                 <span className="text-red-500">*</span>
                                             </Label>
-                                            <Select onValueChange={(value) => setValue("batch", value)}>
-                                                <SelectTrigger className="h-11">
-                                                    <SelectValue placeholder="Select batch" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {BATCHES.map((batch) => (
-                                                        <SelectItem key={batch} value={batch}>
-                                                            {batch}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
+                                            <Input
+                                                type="Number"
+                                                {...register("batch", { required: "Batch is required" })}
+                                                placeholder="Enter Passing batch (e.g., 2026, 2027)"
+                                                className="h-9"
+                                            />
                                             {errors.batch && (
                                                 <p className="text-sm text-red-600">{errors.batch.message}</p>
                                             )}

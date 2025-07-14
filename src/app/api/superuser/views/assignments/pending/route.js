@@ -1,3 +1,5 @@
+'use server';
+
 import { Assignment } from "@/db/models/assignmentsModel";
 import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
@@ -61,5 +63,3 @@ export const GET = withDB(async (req) => {
         );
     }
 });
-
-export const dynamic = "force-dynamic";

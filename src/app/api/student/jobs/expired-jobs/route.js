@@ -9,6 +9,8 @@ import { Types } from "mongoose";
 export const GET = withDB(async (req) => {
     try {
         const reqUser = JSON.parse(req.headers.get("user") || "{}");
+        const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
+        const limit = 50; // Number of jobs per page
 
         const appliedJobs = await Application.find({ applicant: reqUser._id })
 
@@ -31,7 +33,10 @@ export const GET = withDB(async (req) => {
                 $sort: { createdAt: -1 } 
             },
             {
-                $limit: 50 // Limit to 50 expired jobs
+                $skip: (page - 1) * limit
+            },
+            {
+                $limit: limit // Limit to 50 expired jobs
             },
             {
                 $project: {

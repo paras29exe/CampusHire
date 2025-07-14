@@ -66,5 +66,3 @@ export const GET = withDB(async (req) => {
     }
 }
 );
-
-export const dynamic = "force-dynamic";

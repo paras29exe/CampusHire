@@ -2,6 +2,7 @@
 
 import { Teacher } from "@/db/models/teacherModel";
 import { withDB } from "@/utils/server/dbHandler";
+import { generatePassword } from "@/utils/server/generatePassword";
 import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
@@ -15,27 +16,12 @@ export const POST = withDB(async (req) => {
             }, { status: 400 });
         }
 
-        // // Validate email format
-        // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        // if (!emailRegex.test(email)) {
-        //     return NextResponse.json({
-        //         error: "Invalid email format",
-        //     }, { status: 400 });
-        // }
-
         // // Validate phone number format (10 digits)
-        // if (!/^\d{10}$/.test(phone)) {
-        //     return NextResponse.json({
-        //         error: "Phone number must be 10 digits",
-        //     }, { status: 400 });
-        // }
-
-        // // Validate employee ID format (alphanumeric)
-        // if (!/^[a-zA-Z0-9]+$/.test(employee_id)) {
-        //     return NextResponse.json({
-        //         error: "Employee ID must be alphanumeric",
-        //     }, { status: 400 });
-        // }
+        if (!/^\d{10}$/.test(phone)) {
+            return NextResponse.json({
+                error: "Phone number must be 10 digits",
+            }, { status: 400 });
+        }
 
         // Check if teacher already exists
        
@@ -46,13 +32,13 @@ export const POST = withDB(async (req) => {
             }, { status: 409 });
         }
 
-
+        const randomPassword = generatePassword();
         // Create new teacher
         const newTeacher = new Teacher({
             employee_id,
             name,
             email,
-            password,
+            password: randomPassword,
             phone,
             department,
         });
@@ -60,7 +46,7 @@ export const POST = withDB(async (req) => {
 
         return NextResponse.json({
             message: "Teacher added successfully",
-            data: newTeacher,
+            password: randomPassword,
         }, { status: 201 });
     } catch (err) {
         return NextResponse.json({

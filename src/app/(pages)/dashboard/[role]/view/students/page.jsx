@@ -107,8 +107,8 @@ export default function StudentDataTable() {
                 <TableBody>
                   {studentsData.length > 0 ? (
                     studentsData.map((student) => (
-                      <TableRow key={student.rollno}>
-                        <TableCell className="font-medium">{student.rollno}</TableCell>
+                      <TableRow key={student.roll_number}>
+                        <TableCell className="font-medium">{student.roll_number}</TableCell>
                         <TableCell>{student.name}</TableCell>
                         <TableCell>{student.email}</TableCell>
                         <TableCell>{student.course}</TableCell>

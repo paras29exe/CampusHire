@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 export const GET = withDB(async (req) => {
     try {
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
-        const limit = 200; // Number of students per page
+        const limit = 1; // Number of students per page
         const skip = (page - 1) * limit;
 
         const course = req.nextUrl.searchParams.get("course");
@@ -33,7 +33,7 @@ export const GET = withDB(async (req) => {
             const searchRegex = new RegExp(search, 'i'); // Case insensitive search
             query.$or = [
                 { name: searchRegex },
-                { rollno: searchRegex },
+                { roll_number: searchRegex },
             ]
         }
 

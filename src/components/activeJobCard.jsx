@@ -58,7 +58,7 @@ function ActiveJobCard({ jobData }) {
             <Users className="h-4 w-4 flex-shrink-0" />
             <span>Batch:</span>
             {
-              jobData.eligibility_criteria.batch.map((batch, index) => (
+              jobData.eligibility_criteria.batches.map((batch, index) => (
                 <Badge key={index} variant="outline" className="text-xs">
                   {batch}
                 </Badge>

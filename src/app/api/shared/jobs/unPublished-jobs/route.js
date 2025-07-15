@@ -14,7 +14,8 @@ export const GET = withDB(async (req) => {
         const jobs = await Job.find({ status: 'unpublished' })
             .sort({ createdAt: -1 }) // Sort by creation date in descending order
             .skip(skip)
-            .limit(limit);
+            .limit(limit)
+            .populate('assigned_to')
 
         // Count total unpublished jobs for pagination metadata
         const totalJobs = await Job.countDocuments({ status: 'unpublished' });

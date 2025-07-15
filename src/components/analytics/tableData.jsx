@@ -52,7 +52,7 @@ export default function AnalyticsTable({ data, showApplicants, selectedCourse, s
                   <TableCell className="font-medium">{index + 1}</TableCell>
                   <TableCell className="font-medium">{student.name}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{student.rollno}</Badge>
+                    <Badge variant="outline">{student.roll_number}</Badge>
                   </TableCell>
                   <TableCell>{student.course}</TableCell>
                   <TableCell className="uppercase">{student.branch || "N/A"}</TableCell>

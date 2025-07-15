@@ -169,7 +169,8 @@ export default function PostJobPage() {
 
                 {!pdfFile ? (
                   <div
-                    className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors"
+                    className="border-2 cursor-pointer border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors"
+                    onClick={() => document.querySelector('input[type="file"]').click()}
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
                   >

@@ -39,10 +39,10 @@ export default async function formatSheet(file, requiredFields) {
         const duplicates = [];
 
         jsonData.forEach((item, index) => {
-            const roll = item.rollno?.toString().trim();
+            const roll = item.roll_number?.toString().trim();
             if (roll) {
                 if (rollSet.has(roll)) {
-                    duplicates.push({ rollno: roll, index: index + 1 });
+                    duplicates.push({ roll_number: roll, index: index + 1 });
                 }
                 rollSet.add(roll);
             }

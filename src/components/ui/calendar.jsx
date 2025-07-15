@@ -14,6 +14,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 function Calendar({
   className,
   classNames,
+  required = false,
   showOutsideDays = true,
   captionLayout = "label",
   buttonVariant = "ghost",
@@ -25,6 +26,7 @@ function Calendar({
 
   return (
     (<DayPicker
+      required={required}
       showOutsideDays={showOutsideDays}
       className={cn(
         "bg-background group/calendar p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",

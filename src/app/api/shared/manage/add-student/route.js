@@ -7,14 +7,14 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     try {
-        const { rollno, name, email, college_email, phone, course, branch, department, batch, backlogs, tenth_percentage, twelfth_percentage } = await req.json();
+        const { roll_number, name, email, college_email, phone, course, branch, department, batch, backlogs, tenth_percentage, twelfth_percentage } = await req.json();
     
-        if (!rollno || !name || !email || !college_email || !phone || !course || !branch || !department || !batch || !tenth_percentage || !twelfth_percentage) {
+        if (!roll_number || !name || !email || !college_email || !phone || !course || !branch || !department || !batch || !tenth_percentage || !twelfth_percentage) {
             return NextResponse.json({ message: "All fields are required" }, { status: 400 });
         }
     
-        // Validate rollno format only numbers 
-        if (!/^\d+$/.test(rollno)) {
+        // Validate roll_number format only numbers 
+        if (!/^\d+$/.test(roll_number)) {
             return NextResponse.json({ message: "Roll number must contain only numbers" }, { status: 400 });
         }
     
@@ -40,16 +40,17 @@ export const POST = withDB(async (req) => {
         }
     
         // Check if student already exists
-        const existingStudent = await Student.findOne({ rollno });
+        const existingStudent = await Student.findOne({ roll_number });
         if (existingStudent) {
             return NextResponse.json({ message: "Student with this roll number already exists" }, { status: 400 });
         }
+        const randomPassword = generatePassword();
         // Create new student
         const newStudent = new Student({
-            rollno,
+            roll_number,
             name,
             email,
-            password: generatePassword(),
+            password: randomPassword,
             college_email,
             phone,
             course,
@@ -61,9 +62,10 @@ export const POST = withDB(async (req) => {
             twelfth_percentage: parseFloat(twelfth_percentage),
         });
         await newStudent.save();
+
         return NextResponse.json({
             message: "Student added successfully",
-            data: newStudent,
+            password: randomPassword,
         }, { status: 201 });
 
     } catch (err) {

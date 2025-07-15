@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { useEffect, useState } from "react"
 import { Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,50 +9,67 @@ import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { format } from "date-fns"
-// import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
+import axios from "axios"
 
-export default function LinksDateSection({ jobId, onValidationChange, initialData }) {
-//   const { toast } = useToast()
+export default function LinksDateSection({ jobId, initialData, onValidationChange }) {
+  const [companyLink, setCompanyLink] = useState(initialData?.company_link || "")
+  const [collegeLink, setCollegeLink] = useState(initialData?.college_link || "")
+  const [lastDateToApply, setLastDateToApply] = useState(initialData?.last_date_to_apply ? new Date(initialData.last_date_to_apply) : null)
+  const [loading, setLoading] = useState(false)
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors, isValid },
-  } = useForm({
-    defaultValues: {
-      companyLink: initialData?.companyLink || "",
-      collegeLink: initialData?.collegeLink || "",
-      lastDateToApply: initialData?.lastDateToApply ? new Date(initialData.lastDateToApply) : null,
-    },
-    mode: "onChange",
+  const [errors, setErrors] = useState({
+    companyLink: "",
+    collegeLink: "",
+    lastDateToApply: "",
   })
 
-  const watchedValues = watch()
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    const errs = {
+      companyLink: "",
+      collegeLink: "",
+      lastDateToApply: "",
+    }
 
-  useEffect(() => {
-    const isFormValid =
-      watchedValues.companyLink?.trim() &&
-      watchedValues.collegeLink?.trim() &&
-      watchedValues.lastDateToApply !== null
-    onValidationChange?.(isFormValid)
-  }, [watchedValues, onValidationChange])
+    const urlRegex = /^https?:\/\/.+/
 
-  const onSubmit = async (data) => {
+    if (!urlRegex.test(companyLink.trim())) {
+      errs.companyLink = "Enter a valid URL"
+    }
+
+    if (!urlRegex.test(collegeLink.trim())) {
+      errs.collegeLink = "Enter a valid URL"
+    }
+    setErrors(errs)
+
+    const valid = !errs.companyLink && !errs.collegeLink && !errs.lastDateToApply
+    if (!valid) return
+
+    setLoading(true)
     try {
-      const res = await fetch(`/api/jobs/${jobId}/links-date`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          lastDateToApply: data.lastDateToApply?.toISOString(),
-        }),
+      const res = await axios.put(`/api/admin/jobs/${jobId}/modify-links-and-date`, {
+        company_link: companyLink,
+        college_link: collegeLink,
+        last_date_to_apply: lastDateToApply.toISOString(),
       })
-      if (!res.ok) throw new Error()
-    //   toast({ title: "Success", description: "Links and date updated" })
+      toast.success("Links and date updated", {
+        style: {
+          background: "#f0f4f8",
+          color: "#333",
+        }
+      })
+      onValidationChange(true)
     } catch {
-    //   toast({ title: "Error", description: "Failed to update", variant: "destructive" })
+      toast.error("Failed to update", {
+        style: {
+          background: "#f8d7da",
+          color: "#721c24",
+        },
+      })
+      onValidationChange(false)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -63,60 +79,46 @@ export default function LinksDateSection({ jobId, onValidationChange, initialDat
         <CardTitle>Links and Application Deadline</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label>Company Link *</Label>
             <Input
               type="url"
+              required
               placeholder="https://company.com/careers"
-              {...register("companyLink", {
-                required: "Company link is required",
-                pattern: { value: /^https?:\/\/.+/, message: "Enter a valid URL" },
-              })}
+              value={companyLink}
+              onChange={(e) => setCompanyLink(e.target.value)}
             />
-            {errors.companyLink && <p className="text-sm text-red-600">{errors.companyLink.message}</p>}
+            {errors.companyLink && <p className="text-sm text-red-600">{errors.companyLink}</p>}
           </div>
 
           <div className="space-y-2">
             <Label>College Link *</Label>
             <Input
               type="url"
+              required
               placeholder="https://college.edu/job"
-              {...register("collegeLink", {
-                required: "College link is required",
-                pattern: { value: /^https?:\/\/.+/, message: "Enter a valid URL" },
-              })}
+              value={collegeLink}
+              onChange={(e) => setCollegeLink(e.target.value)}
             />
-            {errors.collegeLink && <p className="text-sm text-red-600">{errors.collegeLink.message}</p>}
+            {errors.collegeLink && <p className="text-sm text-red-600">{errors.collegeLink}</p>}
           </div>
 
           <div className="space-y-2">
             <Label>Last Date to Apply *</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal bg-transparent"
-                >
-                  <Calendar className="mr-2 h-4 w-4" />
-                  {watchedValues.lastDateToApply ? format(watchedValues.lastDateToApply, "PPP") : "Pick a date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <CalendarComponent
-                  mode="single"
-                  selected={watchedValues.lastDateToApply}
-                  onSelect={(date) => setValue("lastDateToApply", date, { shouldValidate: true })}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            {errors.lastDateToApply && <p className="text-sm text-red-600">{errors.lastDateToApply.message}</p>}
+            <Input
+              type="date"
+              required
+              value={lastDateToApply ? format(lastDateToApply, "yyyy-MM-dd") : ""}
+              onChange={(e) => setLastDateToApply(new Date(e.target.value))}
+            />
+            {errors.lastDateToApply && <p className="text-sm text-red-600">{errors.lastDateToApply}</p>}
           </div>
 
-          <Button type="submit" disabled={!isValid} className="w-full">
-            Save Links and Date
+          <Button type="submit" className="w-full">
+            {
+              loading ? "Saving..." : "Save Links and Date"
+            }
           </Button>
         </form>
       </CardContent>

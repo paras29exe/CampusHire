@@ -15,7 +15,7 @@ export const sendCredentialsToTeacher = async (email, studentsData) => {
     try {
         // Pick required fields only
         const students = studentsData.map(student => ({
-            rollno: student.rollno,
+            roll_number: student.roll_number,
             name: student.name,
             email: student.email,
             password: student.password

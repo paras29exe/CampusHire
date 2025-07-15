@@ -40,7 +40,7 @@ export const POST = withDB(async (req, { params }) => {
         const Model = modelMap[role];
 
         const user = await Model.findOne({
-            $or: [{ rollno: identifier }, { email: identifier }, { employee_id: identifier }, { username: identifier }],
+            $or: [{ roll_number: identifier }, { email: identifier }, { employee_id: identifier }, { username: identifier }],
         }).select("+password");
 
         if (!user) {

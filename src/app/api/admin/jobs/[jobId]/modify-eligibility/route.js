@@ -5,7 +5,7 @@ import { withDB } from "@/utils/server/dbHandler";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-export const POST = withDB(async (req, { params }) => {
+export const PUT = withDB(async (req, { params }) => {
     try {
         const { jobId } = await params;
         
@@ -29,12 +29,12 @@ export const POST = withDB(async (req, { params }) => {
             }, { status: 403 });
         }
 
-        const { batch, courses, cgpa } = await req.json();
+        const { batches, courses, cgpa } = await req.json();
 
         // Update eligibility criteria
         job.eligibility_criteria = {
-            batch: batch ? (Array.isArray(batch) ? batch : [batch]) : job.eligibility_criteria.batch, 
-            courses: courses ? JSON.parse(courses) : job.eligibility_criteria.courses,
+            batches: batches ? (Array.isArray(batches) ? batches : [batches]) : job.eligibility_criteria.batches, 
+            courses: courses ? (Array.isArray(courses) ? courses : [courses]) : job.eligibility_criteria.courses,
             cgpa: cgpa ? parseFloat(cgpa) : job.eligibility_criteria.cgpa,
         }
         await job.save();

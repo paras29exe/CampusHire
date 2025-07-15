@@ -218,11 +218,6 @@ export function getSidebarItems(role) {
                         href: ROUTES.ADMIN.DRIVES.EXPIRED,
                         icon: <Clock className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Incomplete Drives', 
-                        href: ROUTES.ADMIN.DRIVES.INCOMPLETE,
-                        icon: <XCircle className="w-4 h-4" />
-                    }
                 ]
             },
             { 
@@ -236,12 +231,12 @@ export function getSidebarItems(role) {
                 icon: <ClipboardList className="w-5 h-5" />,
                 subItems: [
                     { 
-                        title: 'Pending Assignments', 
+                        title: 'Assigned Drives', 
                         href: ROUTES.ADMIN.ASSIGNMENTS.PENDING,
                         icon: <Clock className="w-4 h-4" />
                     },
                     { 
-                        title: 'Completed Assignments', 
+                        title: 'Completed', 
                         href: ROUTES.ADMIN.ASSIGNMENTS.COMPLETED,
                         icon: <CheckCircle className="w-4 h-4" />
                     }

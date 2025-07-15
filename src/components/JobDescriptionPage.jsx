@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { formatDate } from "@/utils/client/formatDate"
 import Link from "next/link"
+import { useMemo } from "react"
 
 export default function JobDescriptionPage({ jobData, role }) {
     console.log(jobData)
@@ -19,7 +20,7 @@ export default function JobDescriptionPage({ jobData, role }) {
     const isExpired = jobData.status === 'expired'
 
     const formatTime = (timeString) => {
-        if (!timeString) return 'To be announced'
+        if (!timeString) return 'To be Updated'
         const [hours, minutes] = timeString.split(":")
         const hour = Number.parseInt(hours)
         const ampm = hour >= 12 ? "PM" : "AM"
@@ -154,7 +155,7 @@ export default function JobDescriptionPage({ jobData, role }) {
                                 <div className="space-y-2">
                                     <h4 className="font-semibold text-sm text-gray-900">Eligible Batches</h4>
                                     <div className="flex flex-wrap gap-2">
-                                        {jobData.eligibility_criteria.batch?.map((batch, index) => (
+                                        {jobData.eligibility_criteria.batches?.map((batch, index) => (
                                             <Badge key={batch + index} variant="outline" className="text-sm">
                                                 {batch}
                                             </Badge>
@@ -164,7 +165,7 @@ export default function JobDescriptionPage({ jobData, role }) {
                                 <div className="space-y-2">
                                     <h4 className="font-semibold text-sm text-gray-900">Minimum CGPA</h4>
                                     <Badge variant="outline" className="text-sm">
-                                        {jobData.eligibility_criteria.cgpa || 'To be announced'}
+                                        {jobData.eligibility_criteria.cgpa || 0}
                                     </Badge>
                                 </div>
                             </div>
@@ -176,10 +177,10 @@ export default function JobDescriptionPage({ jobData, role }) {
                                         {jobData.eligibility_criteria?.courses.length ? (
 
                                             jobData.eligibility_criteria.courses.map((course) => (
-                                                    <Badge key={course} variant="secondary" className="text-xs">
-                                                        {course}
-                                                    </Badge>
-                                                )
+                                                <Badge key={course} variant="secondary" className="text-xs">
+                                                    {course}
+                                                </Badge>
+                                            )
                                             )
                                         ) : (
                                             <span className="text-sm text-gray-500">To be announced</span>
@@ -236,7 +237,7 @@ export default function JobDescriptionPage({ jobData, role }) {
                         <CardContent>
                             <div className="text-center py-8">
                                 <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                                <p className="text-gray-500">No mentors assigned yet. {isSuperuser ? "Please Assign someone to handle the Proceedings": "Contact the placement officer for assigning someone"}</p>
+                                <p className="text-gray-500">No mentors assigned yet. {isSuperuser ? "Please Assign someone to handle the Proceedings" : "Contact the placement officer for assigning someone"}</p>
                             </div>
                         </CardContent>
                     </Card>
@@ -299,7 +300,9 @@ export default function JobDescriptionPage({ jobData, role }) {
                                                                         </div>
                                                                         {role.package_details.conditions && (
                                                                             <div className="pt-2 border-t border-green-200">
-                                                                                <span className="text-xs text-green-600">{role.package_details.conditions}</span>
+                                                                                <span className="text-xs text-red-600">
+                                                                                    <strong>Condition:</strong> {role.package_details.conditions}
+                                                                                </span>
                                                                             </div>
                                                                         )}
                                                                     </div>
@@ -326,9 +329,15 @@ export default function JobDescriptionPage({ jobData, role }) {
                                                                             </Badge>
                                                                         </div>
                                                                         <div className="flex justify-between">
-                                                                            <span className="text-sm text-gray-600">Date & Time:</span>
+                                                                            <span className="text-sm text-gray-600">Date</span>
                                                                             <span className="font-medium">
-                                                                                {role.round_details.date ? formatDate(role.round_details.date) : 'To be announced'} at {formatTime(role.round_details.time)}
+                                                                                {formatDate(role?.round_details.date) || 'To be Updated'}
+                                                                            </span>
+                                                                        </div>
+                                                                        <div className="flex justify-between">
+                                                                            <span className="text-sm text-gray-600">Time</span>
+                                                                            <span className="font-medium">
+                                                                                {formatTime(role?.round_details.time) || 'To be Updated'}
                                                                             </span>
                                                                         </div>
                                                                         <div className="flex justify-between">

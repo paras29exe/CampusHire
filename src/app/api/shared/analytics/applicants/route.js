@@ -16,8 +16,7 @@ export const GET = withDB(async (req) => {
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
         const limit = 500; // Number of applicants per page
 
-        const course = paramCourse?.split('-')[0];
-        const branch = paramCourse?.includes('-') ? paramCourse.split('-')[1] : '';
+        const [course, branch] = paramCourse?.split('-') || [null, null];
 
         if (!jobId) {
             return NextResponse.json({ message: "Job ID is required" }, { status: 400 });
@@ -40,7 +39,7 @@ export const GET = withDB(async (req) => {
             return NextResponse.json({ message: "Job is either missing or is not published yet" }, { status: 404 });
         }
 
-        if (!job.eligibility_criteria.batch.length || !job.eligibility_criteria.courses.length) {
+        if (!job.eligibility_criteria.batches.length || !job.eligibility_criteria.courses.length) {
             return NextResponse.json({ message: "Data for this job is incomplete" }, { status: 404 });
         }
 
@@ -61,7 +60,7 @@ export const GET = withDB(async (req) => {
             query.roleId = Types.ObjectId.createFromHexString(roleId);
         }
 
-        const eligibleBatches = paramBatch ? [paramBatch] : job.eligibility_criteria.batch;
+        const eligibleBatches = paramBatch ? [paramBatch] : job.eligibility_criteria.batches;
 
         const pipeline = [
             { $match: query },

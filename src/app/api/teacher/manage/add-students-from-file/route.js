@@ -32,7 +32,7 @@ export const POST = withDB(async (req) => {
             return NextResponse.json({ error: "File size exceeds the limit of 16 MB." }, { status: 400 });
         }
 
-        const requiredFields = ["name", "rollno", "email", "college_email", "phone", "batch", "backlogs", "tenth_percentage", "twelfth_percentage", "graduation_percentage"];
+        const requiredFields = ["name", "roll_number", "email", "college_email", "phone", "batch", "backlogs", "tenth_percentage", "twelfth_percentage", "graduation_percentage"];
 
         const formattedData = await formatSheet(file, requiredFields);
 
@@ -54,15 +54,7 @@ export const POST = withDB(async (req) => {
         }
 
         // save the course and branch from the form data
-        let course = null;
-        let branch = null;
-
-        if (courseAndBranch.includes("-")) {
-            [course, branch] = courseAndBranch.split("-"); //B.Tech-CSE
-        } else {
-            course = courseAndBranch;
-            branch = null; // If no branch is specified, set it to null
-        }
+        const [course, branch] = courseAndBranch.split('-')
 
         const newStudents = filteredStudents.forEach(student => {
             student.course = course.toUpperCase(); // Set the course and branch from the form data

@@ -11,10 +11,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { COURSES, BRANCHES, DEPARTMENTS } from "@/constants/courses"
+import { PasswordRevealModal } from "@/components/passwordRevealModal"
 
 export default function AddStudent() {
     const [branches, setBranches] = useState([])
     const [courses, setCourses] = useState(COURSES)
+
+    const [password, setPassword] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
 
     const {
         register,
@@ -37,6 +41,11 @@ export default function AddStudent() {
 
     return (
         <div className="">
+            <PasswordRevealModal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                password={password}
+            />
             {/* Header Section */}
             <div className="border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm  z-10">
                 <div className="mx-auto px-4 py-6 ">
@@ -111,12 +120,12 @@ export default function AddStudent() {
                                                 <span className="text-red-500">*</span>
                                             </Label>
                                             <Input
-                                                {...register("rollno", { required: "Roll number is required" })}
+                                                {...register("roll_number", { required: "Roll number is required" })}
                                                 placeholder="Enter roll number"
                                                 className="h-11"
                                             />
-                                            {errors.rollno && (
-                                                <p className="text-sm text-red-600">{errors.rollno.message}</p>
+                                            {errors.roll_number && (
+                                                <p className="text-sm text-red-600">{errors.roll_number.message}</p>
                                             )}
                                         </div>
                                     </div>

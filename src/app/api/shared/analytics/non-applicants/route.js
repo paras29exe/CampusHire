@@ -34,15 +34,15 @@ export const GET = withDB(async (req) => {
             return NextResponse.json({ message: "Job is either missing or is not published yet" }, { status: 404 });
         }
 
-        if(!job.eligibility_criteria.batch.length || !job.eligibility_criteria.courses.length) {
+        if(!job.eligibility_criteria.batches.length || !job.eligibility_criteria.courses.length) {
             return NextResponse.json({ message: "Data for this job is incomplete" }, { status: 404 });
         }
 
-        const isValidBatch = job.eligibility_criteria.batch.some(b => b == paramBatch);
+        const isValidBatch = job.eligibility_criteria.batches.some(b => b == paramBatch);
         if (paramBatch && !isValidBatch) {
             return NextResponse.json({ message: "Specified batch was not eligible for this Job" }, { status: 400 });
         }
-        const eligibleBatches = paramBatch ? [paramBatch] : job.eligibility_criteria.batch;
+        const eligibleBatches = paramBatch ? [paramBatch] : job.eligibility_criteria.batches;
 
         let eligibleConditions = job.eligibility_criteria.courses.map(c => {
             const [course, branch] = c.split('-');

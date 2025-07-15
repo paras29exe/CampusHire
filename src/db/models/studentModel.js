@@ -1,4 +1,4 @@
-// const requiredFields = ["name", "rollno", "email", college_email, "phone", "course", "branch", "batch", "backlogs", "10th_percentage", "12th_percentage", "graduation_percentage"];
+// const requiredFields = ["name", "roll_number", "email", college_email, "phone", "course", "branch", "batch", "backlogs", "10th_percentage", "12th_percentage", "graduation_percentage"];
 
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
@@ -14,7 +14,7 @@ const studentSchema = new mongoose.Schema({
         type: String,
         default: "student", 
     },
-    rollno: {
+    roll_number: {
         type: String,
         required: true,
         unique: true,

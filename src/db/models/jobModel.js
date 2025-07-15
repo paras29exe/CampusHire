@@ -7,7 +7,7 @@ const JobSchema = new mongoose.Schema({
     },
 
     eligibility_criteria: {
-        batch: { type: [String] , default: [] }, // e.g., ["2025", "2026"]
+        batches: { type: [String] , default: [] }, // e.g., ["2025", "2026"]
         // to be entered by admin
         courses: {
             type: [String], // e.g., ["B.Tech-CSE", "M.Tech-AIML", "MBA"]
@@ -31,13 +31,12 @@ const JobSchema = new mongoose.Schema({
 
             // manually entered by admin
             round_details: {
-                name: { type: String }, // e.g., "Technical Interview", "HR Round"
-                type: { type: String, enum: ['online', 'offline'] }, // e.g., "online", "offline"
-                date: { type: Date,  }, // date of the round
-                time: { type: String }, // time of the round in HH:MM format
-                duration: { type: String }, // duration of the round in minutes
-                link: { type: String }, // link for online rounds, can be null for offline rounds
-                default: {},
+                name: { type: String, default: "To be Updated" }, // e.g., "Technical Interview", "HR Round"
+                type: { type: String, enum: ['online', 'offline'], default: "online" }, // e.g., "online", "offline"
+                date: { type: Date, default: null}, // date of the round
+                time: { type: String, default: null }, // time of the round in HH:MM format
+                duration: { type: String, default: "No available" }, // duration of the round in minutes
+                link: { type: String, default: "Not available" }, // link for online rounds, can be null for offline rounds
             },
             shortlisted_candidates: {
                 type: [String], // array of roll numbers
@@ -59,20 +58,21 @@ const JobSchema = new mongoose.Schema({
     assigned_to: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'admins',
+        default: []
         // required: true
     }],
 
     // manual details to enter by admin
     links: {
-        company_link: { type: String },
-        college_link: { type: String },
+        company_link: { type: String, default: "" },
+        college_link: { type: String, default: "" },
     },
     drive_type: {
         type: String,
         enum: ['online', 'offline'],
         default: 'online' // default to online drive
     },
-    last_date_to_apply: { type: Date },
+    last_date_to_apply: { type: Date, default: null }, // date when applications close
     status: {
         type: String,
         enum: ['active', 'unpublished', 'expired', "unassigned"],

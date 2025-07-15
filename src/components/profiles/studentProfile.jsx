@@ -104,7 +104,7 @@ export default function StudentProfilePage({ userData , onSubmit, handleCancel, 
                 <h1 className="text-3xl font-bold text-foreground">{userData.name}</h1>
                 <div className="flex flex-wrap justify-center sm:justify-start gap-2">
                   <Badge variant="default"><User className="h-3 w-3 mr-1" />{userData.role}</Badge>
-                  <Badge variant="outline">{userData.rollno}</Badge>
+                  <Badge variant="outline">{userData.roll_number}</Badge>
                   {userData.backlogs > 0 && (
                     <Badge variant="destructive"><AlertTriangle className="h-3 w-3 mr-1" />{userData.backlogs} Backlog{userData.backlogs > 1 ? "s" : ""}</Badge>
                   )}

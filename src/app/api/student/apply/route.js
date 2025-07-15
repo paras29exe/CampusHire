@@ -3,6 +3,7 @@ import { Job } from "@/db/models/jobModel";
 import { NextResponse } from "next/server";
 import { withDB } from "@/utils/server/dbHandler";
 import mongoose from "mongoose";
+import { Student } from "@/db/models/studentModel";
 
 
 export const POST = withDB(async (req, {params}) => {
@@ -44,9 +45,13 @@ export const POST = withDB(async (req, {params}) => {
             return NextResponse.json({ error: "Role not found in the job" }, { status: 404 });
         }
 
+        const applicant = await Student.findById(student._id)
+            .select('roll_number')
+
         // Create a new application
         const newApplication = new Application({
             applicant: student._id,
+            applicantRollNumber: applicant.roll_number,
             jobId,
             roleId
         });

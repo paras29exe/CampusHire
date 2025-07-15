@@ -4,8 +4,10 @@ import UnpublishedJobCard from "@/components/unpublishedJobCard";
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle, LoaderCircle } from "lucide-react";
+import { useAuthStore } from "@/store/store";
 
 export default function page() {
+    const {userData } = useAuthStore()
     const { data: unpublishedJobs, isLoading, hasMore, lastElementRef } = useInfiniteScroll('/api/shared/jobs/unpublished-jobs');
 
     return (
@@ -25,7 +27,7 @@ export default function page() {
                         <CardContent className="space-y-4">
                             {unpublishedJobs?.length !== 0 && !isLoading ? (
                                 unpublishedJobs?.map((job) => (
-                                    <UnpublishedJobCard key={job._id} jobData={job} />
+                                    <UnpublishedJobCard key={job._id} userData={userData} jobData={job} />
                                 ))
                             ) : (
                                 <div className="text-center text-gray-500">

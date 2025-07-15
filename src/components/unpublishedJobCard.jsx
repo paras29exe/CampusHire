@@ -1,33 +1,23 @@
 "use client"
 
-import { Calendar, MapPin, IndianRupee, Globe, Users, Eye, Edit, Trash2 } from "lucide-react"
+import { Calendar, MapPin, IndianRupee, Globe, Users, Eye, Edit, ChevronDown, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { formatDate } from "@/utils/client/formatDate"
 import Link from "next/link"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
-export default function UnpublishedJobCard({ jobData }) {
-  //   const jobData = {
-  //     company: {
-  //       name: "Microsoft India",
-  //       website: "https://careers.microsoft.com",
-  //     },
-  //     job_details: {
-  //       location: "Bangalore, Hyderabad, Mumbai",
-  //       package: "₹12-18 LPA",
-  //     },
-  //     createdAt: "2024-01-15T10:30:00Z",
-  //     job_roles: [
-  //       { _id: "1", role: "Software Development Engineer" },
-  //       { _id: "2", role: "Data Scientist" },
-  //       { _id: "3", role: "Product Manager" },
-  //     ],
-  //   }
+export default function UnpublishedJobCard({ jobData, userData }) {
+  const [isAdminsOpen, setIsAdminsOpen] = useState(false)
+  const router = useRouter();
 
   const handleEdit = () => {
-    // window.location.href = `/admin/jobs/edit/${jobData.company.name.toLowerCase().replace(/\s+/g, "-")}`
+    router.push(`/dashboard/admin/modify-job?jobId=${jobData._id}`);
   }
 
   const handleDelete = () => {
@@ -37,12 +27,13 @@ export default function UnpublishedJobCard({ jobData }) {
     }
   }
 
-  const handleViewDetails = () => {
+  const handleViewDetails = () => { }
 
-  }
+  // Mock assigned admins data - replace with actual data from jobData.assigned_to
+
 
   return (
-    <Card className="w-full hover:shadow-md transition-shadow duration-300 border-l-4 border-l-orange-500 bg-orange-50/30">
+    <Card className="w-full hover:shadow-md transition-shadow outline-2 duration-300 border-l-4 border-l-orange-500 bg-orange-50/50 ">
       <CardContent className="p-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           {/* Left Section - Company and Job Info */}
@@ -54,15 +45,15 @@ export default function UnpublishedJobCard({ jobData }) {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gray-900">{jobData.company.name}</h3>
-                  <a
-                    href={jobData.company.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors"
-                  >
-                    <Globe className="h-3 w-3" />
+                  <Button onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    window.open(jobData.company.website, '_blank');
+                  }} variant="link" className="flex p-0! m-0! h-fit items-center gap-1 text-sm text-blue-600">
+                    <ExternalLink className="h-4 w-4 flex-shrink-0" />
                     Visit Website
-                  </a>
+                    {/* icon */}
+                  </Button>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -119,6 +110,48 @@ export default function UnpublishedJobCard({ jobData }) {
                 )}
               </div>
             </div>
+
+            {/* Assigned Admins Collapsible Section */}
+            <Collapsible open={isAdminsOpen} onOpenChange={setIsAdminsOpen}>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" className=" bg-background justify-between p-2 h-auto">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    <span className="text-sm font-medium">Show Assigned Admins</span>
+                    <Badge variant="secondary" className="ml-1">
+                      {jobData.assigned_to?.length}
+                    </Badge>
+                  </div>
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform duration-200 ${isAdminsOpen ? "rotate-180" : ""}`}
+                  />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="space-y-2 pt-2">
+                <div className="text-xs text-gray-600 mb-2">Any assigned admin can publish this job</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {jobData.assigned_to?.map((admin) => (
+                    <Card key={admin._id} className="p-3 bg-white/50">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="bg-blue-100 text-blue-600 text-xs">
+                            {admin.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-gray-900 truncate">{admin.name}</div>
+                          <div className="text-xs text-gray-500">{admin.employee_id}</div>
+                          <div className="text-xs text-gray-600 truncate">{admin.email}</div>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
           </div>
 
           {/* Right Section - Action Buttons */}
@@ -126,20 +159,17 @@ export default function UnpublishedJobCard({ jobData }) {
             <Separator orientation="vertical" className="hidden lg:block h-16 mx-4" />
             <div className="flex flex-col gap-1.5 w-full lg:w-auto">
               <Link href={`/job-description?jobId=${jobData._id}`} className="w-full lg:w-auto">
-                <Button onClick={handleViewDetails} variant="outline" className="w-full lg:w-auto bg-transparent">
+                <Button onClick={() => router.push(`job-description/?jobId=${jobData._id}`)} variant="outline" className="w-full lg:w-auto bg-background">
                   <Eye className="h-4 w-4 mr-2" />
                   View Details
                 </Button>
               </Link>
-
-              <Button onClick={handleEdit} className="w-full lg:w-auto bg-blue-600 hover:bg-blue-700">
-                <Edit className="h-4 w-4 mr-2" />
-                Edit Job
-              </Button>
-              <Button onClick={handleDelete} variant="destructive" className="w-full lg:w-auto">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
+              {jobData.assigned_to.some((item) => userData._id == item._id) && (
+                <Button onClick={handleEdit} className="w-full lg:w-auto bg-blue-600 hover:bg-blue-700">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Publish
+                </Button>
+              )}
             </div>
           </div>
         </div>

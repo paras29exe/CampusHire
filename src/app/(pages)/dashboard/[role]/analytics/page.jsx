@@ -7,11 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/utils/client/formatDate"
 import axios from "axios"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function page() {
     const [jobs, setJobs] = useState([])
     const [loading, setLoading] = useState(true)
+    const router = useRouter()
 
     useEffect(() => {
         const fetchJobs = async () => {
@@ -106,24 +107,22 @@ export default function page() {
 
                                 {/* Action Buttons */}
                                 <div className="flex flex-col gap-y-2 pt-2">
-                                    <Link href={`analytics/${job.company.name.toLowerCase()}?jobId=${job._id}`} className="w-full">
-                                        <Button
-                                            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
-                                        >
-                                            <TrendingUp className="h-4 w-4 mr-2" />
-                                            View Analytics
-                                        </Button>
-                                    </Link>
+                                    <Button
+                                        onClick={() => router.push(`analytics/${job.company.name.toLowerCase()}?jobId=${job._id}`)}
+                                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
+                                    >
+                                        <TrendingUp className="h-4 w-4 mr-2" />
+                                        View Analytics
+                                    </Button>
 
-                                    <Link href={`/job-description/?jobId=${job._id}`} className="w-full">
-                                        <Button
-                                            variant="outline"
-                                            className="w-full bg-transparent"
-                                        >
-                                            <Eye className="h-4 w-4 mr-2" />
-                                            Full Description
-                                        </Button>
-                                    </Link>
+                                    <Button
+                                        onClick={() => `/job-description/?jobId=${job._id}`}
+                                        variant="outline"
+                                        className="w-full bg-transparent"
+                                    >
+                                        <Eye className="h-4 w-4 mr-2" />
+                                        Full Description
+                                    </Button>
                                 </div>
                             </CardContent>
                         </Card>

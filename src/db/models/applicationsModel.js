@@ -6,6 +6,11 @@ const applicationSchema = new mongoose.Schema({
     ref: 'students',
     required: true
   },
+  applicantRollNumber: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   jobId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'jobs',
@@ -14,6 +19,11 @@ const applicationSchema = new mongoose.Schema({
   roleId: {
     type: mongoose.Schema.Types.ObjectId, // from job.job_roles[x]._id
     required: true
+  },
+  round_number: {
+    type: Number,
+    required: true,
+    default: 0 // Default to first round
   },
   status: {
     type: String,

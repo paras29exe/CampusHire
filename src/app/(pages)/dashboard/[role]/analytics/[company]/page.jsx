@@ -162,7 +162,7 @@ export default function JobAnalyticsDetailPage() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">All Batches</SelectItem>
-                                {jobData.eligibility_criteria.batch.map((batch) => (
+                                {jobData.eligibility_criteria.batches.map((batch) => (
                                     <SelectItem key={batch} value={batch}>
                                         {batch}
                                     </SelectItem>

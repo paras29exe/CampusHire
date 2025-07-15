@@ -43,7 +43,7 @@ export default function ViewStudent({ student, loading, setLoading }) {
             <CardTitle className="text-2xl">{student.name}</CardTitle>
             <div className="flex items-center justify-center gap-2 mt-2">
               <Badge>{student.role}</Badge>
-              <Badge variant="outline">{student.rollno}</Badge>
+              <Badge variant="outline">{student.roll_number}</Badge>
               {student.backlogs > 0 && (
                 <Badge variant="destructive" className="flex items-center gap-1">
                   <AlertTriangle className="h-3 w-3" />

@@ -5,7 +5,7 @@ import { withDB } from "@/utils/server/dbHandler";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-export const POST = withDB(async (req, { params }) => {
+export const PUT = withDB(async (req, { params }) => {
     try {
         const { jobId } = await params;
 
@@ -32,26 +32,27 @@ export const POST = withDB(async (req, { params }) => {
             }, { status: 403 });
         }
         
-        
-        const { collegeLink, companyLink, lastDate } = await req.json();
+        const { college_link, company_link, last_date_to_apply } = await req.json();
 
         // Validate links and last date
-        if (collegeLink && typeof collegeLink !== 'string') {
+        if (college_link && typeof college_link !== 'string') {
             return NextResponse.json({ message: "Invalid college link format" }, { status: 400 });
         }
-        if (companyLink && typeof companyLink !== 'string') {
+        if (company_link && typeof company_link !== 'string') {
             return NextResponse.json({ message: "Invalid company link format" }, { status: 400 });
         }   
-        if (lastDate && isNaN(new Date(lastDate).getTime())) {
+        if (last_date_to_apply && isNaN(new Date(last_date_to_apply).getTime())) {
             return NextResponse.json({ message: "Invalid last date format" }, { status: 400 });
         }
 
         // Update job links and last date to apply
         job.links = {
-            collegeLink: collegeLink ? collegeLink.trim() : job.links.collegeLink,
-            companyLink: companyLink ? companyLink.trim() : job.links.companyLink,
+            college_link: college_link ? college_link.trim() : job.links.college_link,
+            company_link: company_link ? company_link.trim() : job.links.company_link,
         };
-        job.last_date_to_apply = lastDate ? new Date(lastDate) : job.last_date_to_apply;
+        job.last_date_to_apply = last_date_to_apply ? new Date(last_date_to_apply) : job.last_date_to_apply;
+
+        await job.save();
 
         return NextResponse.json({
             message: "Job updated successfully",

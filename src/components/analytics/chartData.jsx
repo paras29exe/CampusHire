@@ -43,11 +43,13 @@ export default function AnalyticsChart({ applicantsData, nonApplicantsData }) {
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="h-80 w-full">
+                <div className="h-100 w-full ">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart
                             data={chartData}
-                            margin={{ top: 20, right: 10, left: 10, bottom: 10 }}   
+                            margin={{ top: 20, right: 10, left: 10, bottom: 10 }}
+                            barSize={50} 
+                            barGap={0}
                             barCategoryGap="10%"
                         >
                             <CartesianGrid strokeDasharray="3 3" />
@@ -58,8 +60,8 @@ export default function AnalyticsChart({ applicantsData, nonApplicantsData }) {
                                 cursor={{ fill: 'transparent' }}
                             />
                             <Legend />
-                            <Bar dataKey="applicants" fill="#3b82f6" name="Applicants" radius={[2, 2, 0, 0]} maxBarSize={40} />
-                            <Bar dataKey="non_applicants" fill="#ef4444" name="Non-Applicants" radius={[2, 2, 0, 0]} maxBarSize={40} />
+                            <Bar dataKey="applicants" fill="#3b82f6" name="Applicants" radius={[4, 4, 0, 0]} maxBarSize={25} />
+                            <Bar dataKey="non_applicants" fill="#ef4444" name="Non-Applicants" radius={[4, 4, 0, 0]} maxBarSize={25} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

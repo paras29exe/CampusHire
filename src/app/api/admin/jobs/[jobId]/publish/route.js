@@ -5,7 +5,7 @@ import { Job } from "@/db/models/jobModel";
 import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
 
-export const POST = withDB(async (req, { params }) => {
+export const PUT = withDB(async (req, { params }) => {
     const { jobId } = await params;
 
     try {
@@ -24,15 +24,7 @@ export const POST = withDB(async (req, { params }) => {
             }, { status: 404 });
         }
 
-        // Check if the job is already published
-        if (job.status === 'active') { // Assuming 'active' is the status for published jobs
-            return NextResponse.json({
-                message: "Job is already published",
-                data: job,
-            }, { status: 200 });
-        }
-
-        if(job.eligibility_criteria.batch == [] || job.eligibility_criteria.courses == {}){
+        if(job.eligibility_criteria.batches == [] || job.eligibility_criteria.courses == {}){
             return NextResponse.json({
                 error: "Job cannot be published without eligibility criteria",
             }, { status: 400 });

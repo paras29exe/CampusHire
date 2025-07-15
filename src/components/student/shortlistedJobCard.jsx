@@ -1,25 +1,22 @@
 "use client"
 
-import { Calendar, MapPin, IndianRupee, Monitor, Users, Trophy, Star, ArrowRight, Sparkles } from "lucide-react"
+import { Calendar, MapPin, IndianRupee, Monitor, Users, Trophy, ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/utils/client/formatDate"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function ShortlistedDriveCard({ jobData }) {
 
-    const handleViewDetails = () => {
-        // Redirect to full job description page
-        window.location.href = `/shortlisted/${jobData.companyName.toLowerCase().replace(/\s+/g, "-")}`
-    }
+    const router = useRouter()
 
     const getDriveTypeIcon = (type) => {
         return type === "online" ? <Monitor className="h-4 w-4" /> : <Users className="h-4 w-4" />
     }
 
     return (
-        <Card className="w-full transition-all duration-300 border-0 relative overflow-hidden group">
+        <Card onClick={() => router.push(`/job-description?jobId=${jobData._id}`)} className="w-full transition-all duration-300 border-0 relative overflow-hidden group">
             {/* Decorative elements */}
 
 
@@ -124,19 +121,16 @@ export default function ShortlistedDriveCard({ jobData }) {
                 {/* CTA Button */}
                 <CardFooter className="p-0 mt-6  flex-col gap-0">
                     <h4 className="text-xs font-bold">Next Step Awaiting : <span className="text-red-500">{jobData.nextRoundName || "To be Announced"}</span> </h4>
-                    <Link href={`/job-description?jobId=${jobData._id}`} className="w-full">
-                        <Button
-                            size={'lg'}
-                            variant={'outline'}
-                            onClick={handleViewDetails}
-                            className="w-full bg-blue-600 text-white font-semibold  hover:shadow-xl transition-all duration-300 group"
-                        >
-                            <span className="flex items-center justify-center gap-2">
-                                View Description
-                                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
-                            </span>
-                        </Button>
-                    </Link>
+                    <Button
+                        size={'lg'}
+                        variant={'outline'}
+                        className="w-full bg-blue-600 text-white font-semibold  hover:shadow-xl transition-all duration-300 group"
+                    >
+                        <span className="flex items-center justify-center gap-2">
+                            View Description
+                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
+                        </span>
+                    </Button>
                 </CardFooter>
             </CardContent>
         </Card>

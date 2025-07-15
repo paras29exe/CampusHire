@@ -17,7 +17,6 @@ export default function page() {
 
     useEffect(() => {
         if (userId && role) {
-
             const fetchUser = async () => {
                 setLoading(true);
                 try {

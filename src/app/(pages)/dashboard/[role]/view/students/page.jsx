@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import React, { useState } from 'react';
 import { LoaderCircle, Search } from 'lucide-react';
 import {
   Table,
@@ -13,8 +13,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import FiltersComponent from '@/components/filtersComponent';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useInfiniteScroll } from '@/hooks/infiniteScrollHook';
 
@@ -29,7 +27,7 @@ export default function StudentDataTable() {
 
   const [searchTerm, setSearchTerm] = useState(params.get('search') || '');
 
-  const { data: studentsData, hasMore, isLoading, lastElementRef } = useInfiniteScroll(
+  const { data: studentsData, isLoading, lastElementRef } = useInfiniteScroll(
     '/api/shared/views/students-data',
     searchTerm,
     setSearchQuery,

@@ -7,19 +7,19 @@ const assignmentSchema = new mongoose.Schema({
         required: true
     },
     // multiple admins can be assigned to a job
-    assigned_to: {
+    assigned_to: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'admins',
         required: true
-    },
+    }],
     assigned_by: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'superusers',
         required: true
-    },
+    },  
     status: {
         type: String,
-        enum: ['pending', 'completed'],
+        enum: ['pending', 'in-progress', 'completed'],
         default: 'pending'
     }
 }, {

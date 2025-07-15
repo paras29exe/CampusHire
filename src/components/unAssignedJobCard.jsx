@@ -4,23 +4,23 @@ import { Calendar, MapPin, IndianRupee, Globe, Users, UserPlus, Eye, Trash2, Ale
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function UnassignedJobCard({ jobData }) {
+  const router = useRouter()
 
   const handleViewDetails = () => {
-    // window.location.href = `/superuser/jobs/${jobData.company.name.toLowerCase().replace(/\s+/g, "-")}`
+    router.push(`/job-description?jobId=${jobData._id}`)
   }
 
   const handleAssignToAdmin = () => {
-    // window.location.href = `/superuser/jobs/assign/${jobData.company.name.toLowerCase().replace(/\s+/g, "-")}`
+    router.push(`/dashboard/superuser/assignments/assign-to-admin?jobId=${jobData._id}`)
   }
 
   const handleDelete = () => {
     if (confirm("Are you sure you want to delete this unassigned job?")) {
-      // Delete logic here
       console.log("Deleting unassigned job...")
     }
   }
@@ -130,18 +130,29 @@ export default function UnassignedJobCard({ jobData }) {
           </div>
 
           {/* Right Side: Actions */}
-          <div className="flex flex-col gap-2 lg:items-end w-full lg:w-auto">
-            <Link href={`/job-description?jobId=${jobData._id}`} className="w-full lg:w-auto">
-              <Button onClick={handleViewDetails} variant="outline" className="w-full lg:w-auto">
-                <Eye className="h-4 w-4 mr-2" />
-                View Details
-              </Button>
-            </Link>
-            <Button onClick={handleAssignToAdmin} className="w-full lg:w-auto bg-green-600 hover:bg-green-700">
+          <div className="flex flex-col self-center sm:flex-row lg:flex-col gap-3 sm:gap-4 lg:gap-3 w-full lg:w-auto">
+            <Button
+              onClick={handleViewDetails}
+              variant="outline"
+              className="flex-1 sm:flex-none lg:w-full justify-center"
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              View Details
+            </Button>
+
+            <Button
+              onClick={handleAssignToAdmin}
+              className="flex-1 sm:flex-none lg:w-full bg-green-600 hover:bg-green-700 justify-center"
+            >
               <UserPlus className="h-4 w-4 mr-2" />
               Assign to Admin
             </Button>
-            <Button onClick={handleDelete} variant="destructive" className="w-full lg:w-auto">
+
+            <Button
+              onClick={handleDelete}
+              variant="destructive"
+              className="flex-1 sm:flex-none lg:w-full justify-center"
+            >
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
             </Button>

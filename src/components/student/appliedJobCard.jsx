@@ -6,20 +6,17 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function AppliedJobCard({ jobData }) {
-  const handleViewDescription = () => {
-    // Redirect to full job description page
-    window.location.href = `/applied-jobs/${jobData.companyName.toLowerCase().replace(/\s+/g, "-")}`
-  }
+  const router = useRouter();
 
   const getDriveTypeIcon = (type) => {
     return type === "online" ? <Monitor className="h-3 w-3 sm:h-4 sm:w-4" /> : <Users className="h-3 w-3 sm:h-4 sm:w-4" />
   }
 
   return (
-    <Card className="w-full py-0.5 hover:shadow-md transition-shadow duration-300 ">
+    <Card onClick={() => router.push(`/job-description?jobId=${jobData._id}`)} className="w-full py-0.5 hover:shadow-md transition-shadow duration-300 ">
       <CardContent className="p-4 sm:p-6 relative">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           {/* Left Section - Company and Role Info */}
@@ -86,15 +83,12 @@ export default function AppliedJobCard({ jobData }) {
           {/* Right Section - CTA Button */}
           <div className="flex-shrink-0">
             <Separator orientation="vertical" className="hidden lg:block h-24 mx-4" />
-            <Link href={`/job-description?jobId=${jobData._id}`} className="w-full">
-              <Button
-                onClick={handleViewDescription}
-                className="w-full whitespace-break-spaces lg:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 text-sm"
-              >
-                <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                View Description
-              </Button>
-            </Link>
+            <Button
+              className="w-full whitespace-break-spaces lg:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 text-sm"
+            >
+              <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+              View Description
+            </Button>
           </div>
         </div>
       </CardContent>

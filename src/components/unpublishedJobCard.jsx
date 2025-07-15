@@ -20,15 +20,6 @@ export default function UnpublishedJobCard({ jobData, userData }) {
     router.push(`/dashboard/admin/modify-job?jobId=${jobData._id}`);
   }
 
-  const handleDelete = () => {
-    if (confirm("Are you sure you want to delete this job?")) {
-      // Delete logic here
-      console.log("Deleting job...")
-    }
-  }
-
-  const handleViewDetails = () => { }
-
   // Mock assigned admins data - replace with actual data from jobData.assigned_to
 
 
@@ -165,7 +156,7 @@ export default function UnpublishedJobCard({ jobData, userData }) {
                 </Button>
               </Link>
               {jobData.assigned_to.some((item) => userData._id == item._id) && (
-                <Button onClick={handleEdit} className="w-full lg:w-auto bg-blue-600 hover:bg-blue-700">
+                <Button onClick={handleEdit} className="w-full cursor-pointer lg:w-auto bg-blue-600 hover:bg-blue-700">
                   <Edit className="h-4 w-4 mr-2" />
                   Publish
                 </Button>

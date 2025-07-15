@@ -6,11 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/utils/client/formatDate"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function ExpiredDriveCard({ jobData }) {
-
+  const router = useRouter();
   return (
-    <Card className="w-full max-w-md relative overflow-hidden opacity-75 hover:opacity-90 transition-opacity">
+    <Card onClick={() => router.push(`/job-description?jobId=${jobData._id}`)} className="w-full max-w-md relative overflow-hidden opacity-75 hover:opacity-90 transition-opacity">
       {/* Diagonal Ribbon */}
       <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden">
         <div className="absolute top-3 right-[-32px] bg-red-500 text-white text-xs font-bold py-1 px-8 rotate-45 shadow-md">
@@ -51,15 +52,13 @@ export default function ExpiredDriveCard({ jobData }) {
           Applications Closed
         </Badge>
 
-        <Link href={`/job-description?jobId=${jobData._id}`} className="w-full">
-          <Button
-            variant="outline"
-            className="w-full text-gray-600 border-gray-300 bg-transparent"
-          >
-            <ExternalLink className="h-4 w-4 mr-2" />
-            See Full Description
-          </Button>
-        </Link>
+        <Button
+          variant="outline"
+          className="w-full text-gray-600 border-gray-300 bg-transparent"
+        >
+          <ExternalLink className="h-4 w-4 mr-2" />
+          See Full Description
+        </Button>
       </CardContent>
     </Card>
   )

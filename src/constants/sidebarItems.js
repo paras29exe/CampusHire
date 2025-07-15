@@ -35,8 +35,7 @@ const ROUTES = {
             ACTIVE: '/dashboard/admin/drives/active-drives',
             UNPUBLISHED: '/dashboard/admin/drives/unpublished-drives',
             EXPIRED: '/dashboard/admin/drives/expired-drives',
-            INCOMPLETE: '/dashboard/admin/drives/incomplete-drives',
-            ANALYTICS: '/dashboard/admin/drives/job-analytics'
+            ANALYTICS: '/dashboard/admin/analytics'
         },
         STUDENTS: {
             ADD: '/dashboard/admin/students/add-student',
@@ -49,8 +48,8 @@ const ROUTES = {
             ALL_ADMINS: '/dashboard/admin/view/admins'
         },
         ASSIGNMENTS: {
-            PENDING: '/dashboard/admin/assignments/pending-assignments',
-            COMPLETED: '/dashboard/admin/assignments/completed-assignments'
+            PENDING: '/dashboard/admin/assignments/assigned-drives',
+            COMPLETED: '/dashboard/admin/assignments/completed-drives'
         }
     },
     SUPERUSER: {
@@ -83,8 +82,8 @@ const ROUTES = {
             VIEW_ALL: '/dashboard/superuser/view/superusers'
         },
         ASSIGNMENTS: {
-            PENDING: '/dashboard/superuser/assignments/pending-assignments',
-            COMPLETED: '/dashboard/superuser/assignments/completed-assignments'
+            PENDING: '/dashboard/superuser/assignments/assigned',
+            COMPLETED: '/dashboard/superuser/assignments/completed'
         }
     }
 };

@@ -2,10 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import ShortlistedDriveCard from "@/components/student/shortlistedJobCard"
-import { Trophy } from "lucide-react"
+import { AlertCircle, LoaderCircle, Trophy } from "lucide-react"
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
 
-function page() {
+function Page() {
   const { data: shortlistedDrives, lastElementRef, hasMore, isLoading } = useInfiniteScroll('/api/student/jobs/shortlisted-jobs')
 
 
@@ -24,8 +24,8 @@ function page() {
             <p className="text-gray-600 text-lg">Amazing work! You've been selected for these exciting opportunities</p>
           </CardHeader>
           <CardContent className="space-y-4 ">
-            {shortlistedDrives.map((job, index) => (
-                <ShortlistedDriveCard key={job._id} jobData={job} />
+            {shortlistedDrives.map((job) => (
+              <ShortlistedDriveCard key={job._id} jobData={job} />
             ))}
           </CardContent>
           {hasMore && (
@@ -34,9 +34,16 @@ function page() {
             </div>
           )}
         </Card>
+        {shortlistedDrives.length === 0 && !isLoading && (
+          <div className="text-center py-12">
+            <AlertCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No shortlisted data Found</h3>
+            <p className="text-gray-600">Work hard, Grind more.</p>
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
-export default page
+export default Page()

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from "react";
+import React from "react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter } from "@/components/ui/sidebar";
-import { User, Settings, LogOut, GraduationCap, AlertTriangle } from "lucide-react";
+import { User, GraduationCap } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -36,7 +36,7 @@ export const AppSidebar = ({ role }) => {
               <SidebarMenuButton className={"bg-transparent hover:bg-transparent"}>
                 <div className="flex flex-col">
                   <p className="text-sm font-semibold">CampusHire</p>
-                  <p className="text-xs text-muted-foreground">Student Portal</p>
+                  <p className="text-xs text-muted-foreground">{role?.[0]?.toUpperCase() + role.slice(1)} Portal</p>
                 </div>
               </SidebarMenuButton>
               {/* )} */}
@@ -81,7 +81,7 @@ export const AppSidebar = ({ role }) => {
                   </SheetTrigger>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Settings">
                   <SheetTrigger asChild>
                     <Link href="/settings">
@@ -90,7 +90,7 @@ export const AppSidebar = ({ role }) => {
                     </Link>
                   </SheetTrigger>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
               <SidebarMenuItem>
                 <SheetTrigger asChild>
                   <LogoutDialog />

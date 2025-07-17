@@ -7,12 +7,12 @@ import axios from "axios";
 import ViewAuthority from "@/components/viewAuthority";
 import ViewStudent from "@/components/viewStudent";
 
-export default function page() {
+export default function Page() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const searchParams = useSearchParams();
-    const userId = searchParams.get("id");
+    const userId = searchParams.get("uid");
     const role = searchParams.get("role");
 
     useEffect(() => {
@@ -20,10 +20,11 @@ export default function page() {
             const fetchUser = async () => {
                 setLoading(true);
                 try {
-                    const response = await axios.get(`/api/views/view-user?uid=${userId}&role=${role}`);
+                    const response = await axios.get(`/api/views/view-user?userId=${userId}&role=${role}`);
                     setUser(response.data.user);
                 } catch (error) {
                     toast.error(error.response?.data?.message || "Failed to fetch user data");
+                    
                 } finally {
                     setLoading(false);
                 }
@@ -39,9 +40,9 @@ export default function page() {
 
     return (
         role === "student" ? (
-            <ViewStudent student={user} loading={loading} setLoading={setLoading} />
+            <ViewStudent student={user} loading={loading} />
         ) : (
-            <ViewAuthority authority={user} loading={loading} setLoading={setLoading} />
+            <ViewAuthority authority={user} loading={loading} />
         )
     )
 }

@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import { Student } from "@/db/models/studentModel";
 
 
-export const POST = withDB(async (req, {params}) => {
+export const POST = withDB(async (req) => {
     try {
         const student = JSON.parse(req.headers.get('user') || '{}');
         const jobId = await req.nextUrl.searchParams.get('jobId');

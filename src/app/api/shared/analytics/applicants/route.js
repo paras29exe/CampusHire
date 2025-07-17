@@ -44,7 +44,7 @@ export const GET = withDB(async (req) => {
         }
 
         // if specific batch is provided, filter by that batch
-        const isValidBatch = job.eligibility_criteria?.batch.some(b => b == paramBatch);
+        const isValidBatch = job.eligibility_criteria.batches.some(b => b == paramBatch);
         if (paramBatch && !isValidBatch) {
             return NextResponse.json({ message: "Specified batch was not eligible for this Job" }, { status: 400 });
         }
@@ -116,7 +116,7 @@ export const GET = withDB(async (req) => {
                     ]
                 }
             },
-
+            
         ];
 
         const data = await Application.aggregate(pipeline);

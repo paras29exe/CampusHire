@@ -18,9 +18,6 @@ export default function UnauthorizedPage() {
     window.location.href = "/login"
   }
 
-  const handleContactAdmin = () => {
-    window.location.href = "mailto:admin@campushire.edu?subject=Access Request"
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 flex items-center justify-center p-6">

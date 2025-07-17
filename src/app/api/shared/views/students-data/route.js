@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 export const GET = withDB(async (req) => {
     try {
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
-        const limit = 1; // Number of students per page
+        const limit = 300; // Number of students per page
         const skip = (page - 1) * limit;
 
         const course = req.nextUrl.searchParams.get("course");
@@ -39,7 +39,7 @@ export const GET = withDB(async (req) => {
 
         // Fetch all students with pagination
         const students = await Student.find(query)
-            .sort({ department: 1, course: 1, branch: 1, name: 1 }) // Sort by name in ascending order
+            .sort({  name: 1, department: 1, course: 1, branch: 1, }) // Sort by name in ascending order
             .skip(skip)
             .limit(limit)
 

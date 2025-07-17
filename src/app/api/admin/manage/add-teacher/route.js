@@ -10,16 +10,16 @@ export const POST = withDB(async (req) => {
         // Validate required fields
         const { employee_id, name, email, phone, department } = await req.json();
 
-        if (!employee_id || !name || !email || !phone || department) {
+        if (!employee_id || !name || !email || !phone || !department) {
             return NextResponse.json({
-                error: "All fields are required",
+                message: "All fields are required",
             }, { status: 400 });
         }
 
         // // Validate phone number format (10 digits)
         if (!/^\d{10}$/.test(phone)) {
             return NextResponse.json({
-                error: "Phone number must be 10 digits",
+                message: "Phone number must be 10 digits",
             }, { status: 400 });
         }
 
@@ -28,7 +28,7 @@ export const POST = withDB(async (req) => {
         const existingTeacher = await Teacher.findOne({ $or: [{ email }, { phone }, { employee_id }] });
         if (existingTeacher) {
             return NextResponse.json({
-                error: "Teacher with the provided email, phone, or employee ID already exists",
+                message: "Teacher with the same email/phone/employee ID already exists",
             }, { status: 409 });
         }
 

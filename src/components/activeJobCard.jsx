@@ -1,8 +1,8 @@
 "use client"
 
-import { Calendar, MapPin, Users, IndianRupee, Group, ListChecks, ExternalLink } from "lucide-react"
+import { Calendar, MapPin, Users, IndianRupee, ListChecks, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"

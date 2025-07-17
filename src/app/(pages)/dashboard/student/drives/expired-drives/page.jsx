@@ -3,25 +3,22 @@
 import ExpiredDriveCard from "@/components/expiredJobs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
-import { Clock, LoaderCircle } from "lucide-react"
+import { AlertCircle, LoaderCircle } from "lucide-react"
 
-export default function page() {
+export default function Page() {
   const {data: expiredDrives, lastElementRef, hasMore, isLoading} = useInfiniteScroll('/api/student/jobs/expired-jobs')
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-4">
       <div className=" mx-auto space-y-6">
         <Card className="border-none bg-transparent rounded-none shadow-none p-0">
-          <CardHeader className="text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Clock className="h-6 w-6 text-red-600" />
-            </div>
-            <CardTitle className="text-2xl font-bold text-red-700">Expired Drives</CardTitle>
-            <p className="text-red-600">These opportunities have closed for applications</p>
+          <CardHeader >
+            <CardTitle className="text-3xl font-bold text-gray-900 text-center">Expired Drives</CardTitle>
+            <CardDescription className="text-sm text-center sm:text-base text-gray-700">These opportunities are closed for application</CardDescription>
           </CardHeader>
           <CardContent className={"max-sm:p-0"}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {expiredDrives.map((job, index) => (
+              {expiredDrives.map((job) => (
                   <ExpiredDriveCard key={job._id} jobData={job} />
               ))}
             </div>
@@ -32,6 +29,12 @@ export default function page() {
             </div>
           )}
         </Card>
+        {expiredDrives.length === 0 && !isLoading && (
+          <div className="text-center py-12">
+            <AlertCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Expired Drives Found</h3>
+          </div>
+        )}
       </div>
     </div>
   )

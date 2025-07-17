@@ -1,11 +1,10 @@
 "use client"
 
-import { Calendar, Clock, MapPin, IndianRupee, ExternalLink, Users } from "lucide-react"
+import { Calendar, MapPin, IndianRupee, ExternalLink, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/utils/client/formatDate"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export default function ExpiredDriveCard({ jobData }) {

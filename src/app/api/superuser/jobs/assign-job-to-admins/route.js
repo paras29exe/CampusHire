@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     const jobId = req.nextUrl.searchParams.get("jobId");
-    const {adminIds} = await req.json()
+    const { adminIds } = await req.json()
     const currUser = JSON.parse(req.headers.get("user"));
 
     if (!jobId || !adminIds) {
@@ -25,23 +25,19 @@ export const POST = withDB(async (req) => {
         const adminIdsArray = Array.isArray(adminIds) ? adminIds : [adminIds];
 
         // Assign the job to the specified admins
-        // create assignments for each admin
-        for (const adminId of adminIdsArray) {
-            if (!adminId) continue; // Skip if adminId is empty
 
-            const assignment = new Assignment({
-                company: job._id,
-                assigned_to: adminId,
-                assigned_by: currUser._id, // Assuming currUser is the user making the request
-                status: 'pending', // Set initial status to pending
-            });
+        const assignment = new Assignment({
+            company: job._id,
+            assigned_to: adminIdsArray,
+            assigned_by: currUser._id, // Assuming currUser is the user making the request
+            status: 'pending', // Set initial status to pending
+        });
 
-            await assignment.save();
-        }
+        await assignment.save();
 
         job.assigned_to = adminIdsArray;
-        job.status = 'unpublished'; 
-        
+        job.status = 'unpublished';
+
         await job.save();
 
         return NextResponse.json({ message: "Job assigned to admins successfully", job }, { status: 200 });

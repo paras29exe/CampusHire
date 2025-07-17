@@ -2,7 +2,7 @@
 
 import { NextResponse } from "next/server";
 
-export async function POST(request) {
+export async function POST(req) {
     try {
         // Clear the session or token here
         // This is a placeholder, actual implementation may vary

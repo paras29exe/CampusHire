@@ -13,12 +13,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import FiltersComponent from '@/components/filtersComponent';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useInfiniteScroll } from '@/hooks/infiniteScrollHook';
 
 
 export default function StudentDataTable() {
   const params = useSearchParams();
+  const router = useRouter()
 
   const [course, setCourse] = useState(params.get('course') || '');
   const [branch, setBranch] = useState(params.get('branch') || '');
@@ -105,7 +106,7 @@ export default function StudentDataTable() {
                 <TableBody>
                   {studentsData.length > 0 ? (
                     studentsData.map((student) => (
-                      <TableRow key={student.roll_number}>
+                      <TableRow className="cursor-default" onClick={() => router.push(`/view-user?uid=${student._id}&role=student`)} key={student.roll_number || index}>
                         <TableCell className="font-medium">{student.roll_number}</TableCell>
                         <TableCell>{student.name}</TableCell>
                         <TableCell>{student.email}</TableCell>

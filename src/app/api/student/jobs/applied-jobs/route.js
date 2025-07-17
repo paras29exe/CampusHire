@@ -1,13 +1,14 @@
 'use server'
 
 import { Application } from "@/db/models/applicationsModel";
-import { Job } from "@/db/models/jobModel";
 import { NextResponse } from "next/server";
 import { withDB } from "@/utils/server/dbHandler";
 import mongoose from "mongoose";
 
 export const GET = withDB(async (req) => {
     try {
+        const page = parseInt(req.nextUrl.searchParams.get('page')) || 1;
+        const limit = 50; // Number of jobs per page
         const student = JSON.parse(req.headers.get('user') || '{}');
 
         // Find all applications by the student
@@ -46,7 +47,10 @@ export const GET = withDB(async (req) => {
                 $sort: { "jobData.createdAt": -1 } // Sort by job creation date
             },
             {
-                $limit: 50 // Limit to 50 applied jobs
+                $skip: (page - 1) * 50 // Pagination
+            },
+            {
+                $limit: limit // Limit to 50 applied jobs
             },
             {
                 $project: {
@@ -66,10 +70,20 @@ export const GET = withDB(async (req) => {
             }
         ])
 
+        // count for pagination
+        const totalAppliedJobs = await Application.countDocuments({
+            applicant: mongoose.Types.ObjectId.createFromHexString(student._id),
+            status: { $in: ["applied", "rejected"] }
+        });
 
         return NextResponse.json({
             message: "Applied jobs fetched successfully",
             data: appliedJobs,
+            pagination: {
+                totalJobs: totalAppliedJobs,
+                currentPage: page,
+                totalPages: Math.ceil(totalAppliedJobs / limit),
+            }
         }, { status: 200 });
     } catch (error) {
         return NextResponse.json({

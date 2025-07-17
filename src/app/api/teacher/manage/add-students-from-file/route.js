@@ -12,12 +12,12 @@ export const POST = withDB(async (req) => {
         // array of courses with branches .... B.tech-CSE, B.Tech-IT, M.Tech-CSE, MCA
         const formData = await req.formData();
         const courseAndBranch = formData.get("course_and_branch");
+        const file = formData.get("file");
+        const reqUser = JSON.parse(req.headers.get("user") || "{}");
 
         if (!courseAndBranch) {
             return NextResponse.json({ error: "Course Selection is required" }, { status: 400 });
         }
-
-        const file = formData.get("file");
         
         if (!file) {
             return NextResponse.json({ error: "File is required" }, { status: 400 });
@@ -45,6 +45,7 @@ export const POST = withDB(async (req) => {
             return NextResponse.json({ error: "Too many students. Please upload a file with less than 500 students." }, { status: 400 });
         }
 
+        // filtering those who dont exist in the database
         const filteredStudents = await filterOnlyUniqueStudents(formattedData);
 
         if (filteredStudents.length === 0) {
@@ -52,19 +53,21 @@ export const POST = withDB(async (req) => {
                 status: 400
             });
         }
-
+        
+        
         // save the course and branch from the form data
         const [course, branch] = courseAndBranch.split('-')
 
         const newStudents = filteredStudents.forEach(student => {
             student.course = course.toUpperCase(); // Set the course and branch from the form data
+            student.added_by = reqUser._id; // Set the added_by field to the teacher's ID
             if (branch) {
                 student.branch = branch.toUpperCase(); // Set the branch if provided
             }
         })
-
+        
+        
         const teacher = await Teacher.findById(reqUser._id, "email");
-
         // Send credentials to teacher
         const emailSent = await sendCredentialsToTeacher(teacher.email, newStudents);
 

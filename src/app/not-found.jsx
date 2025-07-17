@@ -1,9 +1,7 @@
 "use client"
 
-import { Search, Home, ArrowLeft, FileQuestion } from "lucide-react"
+import { Home, ArrowLeft, FileQuestion } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/store/store"
 
@@ -17,14 +15,6 @@ export default function NotFoundPage() {
 
   const handleGoBack = () => {
     window.history.back()
-  }
-
-  const handleSearch = (e) => {
-    e.preventDefault()
-    const searchTerm = e.target.search.value
-    if (searchTerm.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`
-    }
   }
 
   return (

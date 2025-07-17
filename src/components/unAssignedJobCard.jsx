@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/utils/client/formatDate"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export default function UnassignedJobCard({ jobData }) {
@@ -20,9 +19,7 @@ export default function UnassignedJobCard({ jobData }) {
   }
 
   const handleDelete = () => {
-    if (confirm("Are you sure you want to delete this unassigned job?")) {
-      console.log("Deleting unassigned job...")
-    }
+    
   }
 
   const getDaysAgo = (dateString) => {

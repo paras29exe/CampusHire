@@ -1,12 +1,11 @@
 'use client'
 
 import ExpiredDriveCard from "@/components/expiredJobs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
-import { Separator } from "@radix-ui/react-dropdown-menu"
 import { AlertCircle, Clock, LoaderCircle } from "lucide-react"
 
-export default function page() {
+export default function Page() {
   const { data: expiredDrives, lastElementRef, hasMore, isLoading } = useInfiniteScroll('/api/shared/jobs/expired-jobs')
 
   return (
@@ -23,7 +22,7 @@ export default function page() {
           {/* <Separator className=" bg-border h-0.5" /> */}
           <CardContent className={"max-sm:p-0"}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {expiredDrives.map((job, index) => (
+              {expiredDrives.map((job) => (
                 <ExpiredDriveCard key={job._id} jobData={job} />
               ))}
             </div>

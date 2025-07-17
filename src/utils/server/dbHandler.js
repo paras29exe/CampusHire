@@ -7,7 +7,8 @@ export const withDB = (handler) => {
       await connectDB();
       return handler(req, ...args);
     } catch (error) {
-      return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+      console.error("Database connection error:", error);
+      return NextResponse.json({ message: error.message || "Database connection failed" }, { status: 500 });
     }
   };
 }

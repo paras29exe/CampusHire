@@ -73,8 +73,11 @@ const studentSchema = new mongoose.Schema({
     },
     graduation_percentage: {
         type: Number, // Percentage in graduation (if applicable)
-        default: null
-    }
+    },
+    added_by: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'teachers', // Reference to the teacher who added the student
+    },
 }, {
     timestamps: true,
 })

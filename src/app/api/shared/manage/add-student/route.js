@@ -7,9 +7,9 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     try {
-        const { roll_number, name, email, college_email, phone, course, branch, department, batch, backlogs, tenth_percentage, twelfth_percentage } = await req.json();
+        const { roll_number, name, email, college_email, phone, course, branch, department, batch, backlogs, tenth_percentage, twelfth_percentage, graduation_percentage } = await req.json();
     
-        if (!roll_number || !name || !email || !college_email || !phone || !course || !branch || !department || !batch || !tenth_percentage || !twelfth_percentage) {
+        if (!roll_number || !name || !email || !college_email || !phone || !course || !department || !batch || !tenth_percentage || !twelfth_percentage) {
             return NextResponse.json({ message: "All fields are required" }, { status: 400 });
         }
     
@@ -46,7 +46,7 @@ export const POST = withDB(async (req) => {
         }
         const randomPassword = generatePassword();
         // Create new student
-        const newStudent = new Student({
+        const newStudent = await Student.create({
             roll_number,
             name,
             email,
@@ -60,8 +60,9 @@ export const POST = withDB(async (req) => {
             backlogs: backlogs ? parseInt(backlogs) : 0, // Default to 0 if not provided
             tenth_percentage: parseFloat(tenth_percentage),
             twelfth_percentage: parseFloat(twelfth_percentage),
+            graduation_percentage,
+            added_by: JSON.parse(req.headers.get('user') || '{}')._id 
         });
-        await newStudent.save();
 
         return NextResponse.json({
             message: "Student added successfully",

@@ -7,8 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 // Helper to format date (assuming it exists or will be created)
 const formatDate = (dateString) => {
@@ -19,8 +18,13 @@ const formatDate = (dateString) => {
 
 export default function AssignedDriveCard({ driveData, userRole }) {
     const [isAdminsOpen, setIsAdminsOpen] = React.useState(false)
-
     const isSuperuser = React.useMemo(() =>  userRole === "superuser", [userRole])
+    const router = useRouter();
+
+    const handleManage = () => {
+        router.push(`/dashboard/admin/modify-job?jobId=${driveData.company._id}`);
+    }
+
 
     return (
         <Card className="w-full p-2 pt-4 max-w-4xl mx-auto hover:shadow-md transition-shadow duration-300">
@@ -28,12 +32,12 @@ export default function AssignedDriveCard({ driveData, userRole }) {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-orange-600 to-red-700 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                            {driveData.company.name.charAt(0)}
+                            {driveData.company.company.name?.[0]?.toUpperCase() || 'N/A'}
                         </div>
                         <div>
-                            <CardTitle className="text-xl font-bold text-gray-900">{driveData.company.name}</CardTitle>
+                            <CardTitle className="text-xl font-bold text-gray-900">{driveData.company.company.name}</CardTitle>
                             <a
-                                href={driveData.company.website}
+                                href={driveData.company.company.website}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors"
@@ -57,7 +61,7 @@ export default function AssignedDriveCard({ driveData, userRole }) {
                         <Calendar className="h-4 w-4 text-gray-400" />
                         <div>
                             <span className="text-gray-500">Assigned On:</span>
-                            <div className="font-medium">{formatDate(driveData.assignedDate)}</div>
+                            <div className="font-medium">{formatDate(driveData.createdAt)}</div>
                         </div>
                     </div>
                     {isSuperuser ? (
@@ -84,7 +88,7 @@ export default function AssignedDriveCard({ driveData, userRole }) {
                         <Button variant="ghost" className="w-full justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
                             <div className="flex items-center gap-2">
                                 <Users className="h-4 w-4" />
-                                <span>Show Admins ({driveData.assignedAdmins.length})</span>
+                                <span>Show Admins ({driveData.assigned_to.length})</span>
                             </div>
                             <ChevronDown className={`h-4 w-4 transition-transform ${isAdminsOpen ? "rotate-180" : ""}`} />
                         </Button>
@@ -92,8 +96,8 @@ export default function AssignedDriveCard({ driveData, userRole }) {
                     <CollapsibleContent className="mt-3 space-y-3">
                         <Separator />
                         <div className="flex flex-wrap gap-3">
-                            {driveData.assignedAdmins.map((admin) => (
-                                <Card key={admin.employee_id} className="px-2 py-1 rounded-sm flex items-center gap-3 bg-gray-50">
+                            {driveData.assigned_to.map((admin, index) => (
+                                <Card key={admin.employee_id || index} className="px-2 py-1 rounded-sm flex items-center gap-3 bg-gray-50">
                                     <div className="flex flex-col">
                                         <span className="font-medium text-gray-900">{admin.name}</span>
                                         <span className="text-xs text-gray-600">ID: {admin.employee_id}</span>
@@ -111,7 +115,7 @@ export default function AssignedDriveCard({ driveData, userRole }) {
                        <Bell className="w-3 m-auto" /> Notify Admins
                     </Button>
                 ) : (
-                    <Button className="max-sm:w-full"><Edit className="w-4 h-4" /> Manage</Button>
+                    <Button onClick={handleManage} className="max-sm:w-full"><Edit className="w-4 h-4" /> Manage</Button>
                 )}
                     <Button variant="outline" className="max-sm:w-full bg-transparent">
                         View Drive Details

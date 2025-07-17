@@ -3,7 +3,7 @@
 import { Application } from "@/db/models/applicationsModel";
 import { NextResponse } from "next/server";
 import { withDB } from "@/utils/server/dbHandler";
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 import { Job } from "@/db/models/jobModel";
 import { Student } from "@/db/models/studentModel";
 

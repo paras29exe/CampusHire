@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, MapPin, IndianRupee, Globe, Users, Eye, Edit, ChevronDown, ExternalLink } from "lucide-react"
+import { Calendar, MapPin, IndianRupee, Users, Eye, Edit, ChevronDown, ExternalLink, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -16,8 +16,12 @@ export default function UnpublishedJobCard({ jobData, userData }) {
   const [isAdminsOpen, setIsAdminsOpen] = useState(false)
   const router = useRouter();
 
-  const handleEdit = () => {
+  const handlePublish = () => {
     router.push(`/dashboard/admin/modify-job?jobId=${jobData._id}`);
+  }
+
+  const handleManageAdmins = () => {
+    router.push(`/dashboard/superuser/assignments/assign-to-admin?jobId=${jobData._id}`);
   }
 
   // Mock assigned admins data - replace with actual data from jobData.assigned_to
@@ -89,7 +93,7 @@ export default function UnpublishedJobCard({ jobData, userData }) {
             <div className="space-y-1">
               <h4 className="text-sm font-medium text-gray-900">Available Roles:</h4>
               <div className="flex flex-wrap gap-2">
-                {jobData.job_roles.slice(0, 3).map((role, index) => (
+                {jobData.job_roles.slice(0, 3).map((role) => (
                   <Badge key={role._id} variant="outline" className="text-xs">
                     {role.role}
                   </Badge>
@@ -155,12 +159,26 @@ export default function UnpublishedJobCard({ jobData, userData }) {
                   View Details
                 </Button>
               </Link>
-              {jobData.assigned_to.some((item) => userData._id == item._id) && (
-                <Button onClick={handleEdit} className="w-full cursor-pointer lg:w-auto bg-blue-600 hover:bg-blue-700">
+              {userData.role === 'admin' && jobData.assigned_to.some((item) => userData._id == item._id) && (
+                <Button onClick={handlePublish} className="w-full cursor-pointer lg:w-auto bg-blue-600 hover:bg-blue-700">
                   <Edit className="h-4 w-4 mr-2" />
                   Publish
                 </Button>
               )}
+              {
+                userData.role === 'superuser' && (
+                  <>
+                  <Button onClick={handleManageAdmins} className="w-full cursor-pointer lg:w-auto bg-blue-600 hover:bg-blue-700">
+                    <Users className="h-4 w-4 mr-2" />
+                    Manage Admins
+                  </Button>
+                  <Button onClick={handleNotify} className="w-full cursor-pointer lg:w-auto bg-blue-600 hover:bg-blue-700">
+                    <Mail className="h-4 w-4 mr-2" />
+                    Notify Admins
+                  </Button>
+                  </>
+                )
+              }
             </div>
           </div>
         </div>

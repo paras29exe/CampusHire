@@ -25,6 +25,9 @@ export function useInfiniteScroll(
         )
     ), [params]);
 
+    // to prevent eslint warning about array spreding in dependecies of useEffect
+    const joinedDependencies = Dependencies.join(',');
+
     // this will help us to stop the All useEffect from running on the first render because in some components we only want to use infinite scroll and not any other functionality
     const firstRender = useRef(true);
     const fetchedPages = useRef(new Set());
@@ -57,7 +60,7 @@ export function useInfiniteScroll(
         } finally {
             setIsLoading(false);
         }
-    }, [apiToFetch, page, hasMore, filteredParams, triggerFetch, ...Dependencies]);
+    }, [apiToFetch, page, hasMore, filteredParams, triggerFetch, joinedDependencies]);
 
     // This effect runs on every change of page, hasMore, on any dependency change we make the hasMore = true and page = 1
     useEffect(() => {
@@ -92,10 +95,9 @@ export function useInfiniteScroll(
         // if we are on the first page and hasMore is true, then we cannot trigger fetchData by changing the state of page to 1 and hasMore to true
         // so we will trigger fetchData manually
         if (prevPage.current === 1 && prevHasMore.current === true) {
-            console.log("Triggering fetchData due to dependency change");
             setTriggerFetch(prev => !prev); // Trigger fetch if you want to
         }
-    }, [...Dependencies]);
+    }, [joinedDependencies]);
 
     // This effect will handle the search term debouncing and updating the searchQuery
     const debounceTimeoutRef = useRef(null);

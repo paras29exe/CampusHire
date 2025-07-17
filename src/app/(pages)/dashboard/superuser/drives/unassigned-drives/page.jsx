@@ -2,7 +2,7 @@
 
 import UnassignedJobCard from "@/components/unAssignedJobCard"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertTriangle, LoaderCircle, Plus, UserPlus } from "lucide-react"
+import { AlertTriangle, LoaderCircle, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
@@ -53,8 +53,8 @@ export default function UnassignedJobsDemo() {
 
                 <CardContent className="space-y-4">
                     {unassignedJobs.length > 0 ? (
-                        unassignedJobs.map((job, index) => (
-                            <UnassignedJobCard key={index} jobData={job} />
+                        unassignedJobs.map((job) => (
+                            <UnassignedJobCard key={job._id} jobData={job} />
                         ))
                     ) : (
                         <div className="text-center py-8 space-y-2">

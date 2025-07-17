@@ -2,8 +2,9 @@
 import AppliedJobCard from '@/components/student/appliedJobCard'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useInfiniteScroll } from '@/hooks/infiniteScrollHook'
+import { AlertCircle, LoaderCircle } from 'lucide-react'
 
-function page() {
+function Page() {
   const { data: appliedJobs, lastElementRef, hasMore, isLoading } = useInfiniteScroll('/api/student/jobs/applied-jobs')
 
   return (
@@ -15,8 +16,8 @@ function page() {
             <CardDescription className="text-sm text-center sm:text-base text-gray-700">Track your job applications and Start Preparing</CardDescription>
           </CardHeader>
           <CardContent className="w-full space-y-2 sm:space-y-4 p-0">
-            {appliedJobs.map((job, index) => (
-                <AppliedJobCard key={job._id} jobData={job} />
+            {appliedJobs.map((job) => (
+              <AppliedJobCard key={job._id} jobData={job} />
             ))}
           </CardContent>
           {hasMore && (
@@ -25,9 +26,16 @@ function page() {
             </div>
           )}
         </Card>
+        {appliedJobs.length === 0 && !isLoading && (
+          <div className="text-center py-12">
+            <AlertCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Applied Data</h3>
+            <p className="text-gray-600">Seems like you haven't applied yet or maybe you got shortlisted.</p>
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
-export default page
+export default Page()

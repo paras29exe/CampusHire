@@ -1,12 +1,9 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
 import { COURSE_OPTIONS } from '@/constants/courses';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
-import { useDataStore } from '@/store/store';
+import { useState } from 'react';
 
 
 export default function FiltersComponent({ course, setCourse, branch, setBranch, department, setDepartment }) {
@@ -14,16 +11,17 @@ export default function FiltersComponent({ course, setCourse, branch, setBranch,
     const [branches, setBranches] = useState([])
 
     function handleCourseChange(c) {
+        
         setCourse(c);
         setBranch(''); // reset branch when course changes
         setDepartment(''); // reset department when course changes
-
         const branches = COURSE_OPTIONS
-            .filter(c => c.startsWith(course + "-")) // only match if it's like "B.Tech-XYZ"
-            .map(c => c.split("-")[1])
+            .filter(item => item.startsWith(c + "-")) // only match if it's like "B.Tech-XYZ"
+            .map(item => item.split("-")[1])
 
-        setBranches(() => branches); // could be [] for plain courses like BCA/MBA
+        setBranches(branches); // could be [] for plain courses like BCA/MBA
     }
+
 
     return (
         <form className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">

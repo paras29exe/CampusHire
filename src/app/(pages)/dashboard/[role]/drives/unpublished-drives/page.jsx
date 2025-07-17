@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle, LoaderCircle } from "lucide-react";
 import { useAuthStore } from "@/store/store";
 
-export default function page() {
+export default function Page() {
     const {userData } = useAuthStore()
     const { data: unpublishedJobs, isLoading, hasMore, lastElementRef } = useInfiniteScroll('/api/shared/jobs/unpublished-jobs');
 

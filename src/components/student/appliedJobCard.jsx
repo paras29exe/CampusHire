@@ -2,7 +2,7 @@
 
 import { Calendar, MapPin, IndianRupee, Monitor, Users, Clock, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Card, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { formatDate } from "@/utils/client/formatDate"
@@ -94,40 +94,4 @@ export default function AppliedJobCard({ jobData }) {
       </CardContent>
     </Card>
   )
-}
-
-function AppliedJobsDemo() {
-  const appliedJobs = [
-    {
-      companyName: "Microsoft India",
-      roleApplied: "Software Development Engineer",
-      appliedOn: "2024-01-10",
-      nextRound: "Technical Interview",
-      package: "₹15-20 LPA",
-      location: "Hyderabad, Telangana",
-      driveType: "online",
-      status: "in-progress",
-    },
-    {
-      companyName: "Google",
-      roleApplied: "Frontend Developer",
-      appliedOn: "2024-01-08",
-      nextRound: "HR Round",
-      package: "₹18-25 LPA",
-      location: "Bangalore, Karnataka",
-      driveType: "offline",
-      status: "selected",
-    },
-    {
-      companyName: "Amazon",
-      roleApplied: "Data Scientist",
-      appliedOn: "2024-01-05",
-      nextRound: "Final Round",
-      package: "₹12-18 LPA",
-      location: "Mumbai, Maharashtra",
-      driveType: "online",
-      status: "in-progress",
-    },
-  ]
-
 }

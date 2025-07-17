@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
-export default function ViewAuthorityPag({ authority, loading, setLoading }) {
+export default function ViewAuthorityPage({ authority, loading }) {
 
   if (loading) {
     return (
@@ -23,12 +23,9 @@ export default function ViewAuthorityPag({ authority, loading, setLoading }) {
     )
   }
 
-  const getInitials = (name) =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
+  const getInitials = (name) => name?.split(" ").map((n) => n[0])
+    .join("")
+    .toUpperCase()
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -36,9 +33,9 @@ export default function ViewAuthorityPag({ authority, loading, setLoading }) {
         <Card>
           <CardHeader className="text-center">
             <Avatar className="w-20 h-20 mx-auto mb-4">
-              <AvatarFallback className="text-2xl bg-blue-600 text-white">{getInitials(authority.name)}</AvatarFallback>
+              <AvatarFallback className="text-2xl bg-blue-600 text-white">{getInitials(authority.name) || 'N/A'}</AvatarFallback>
             </Avatar>
-            <CardTitle className="text-2xl">{authority.name}</CardTitle>
+            <CardTitle className="text-2xl">{authority.name || 'N/A'}</CardTitle>
             <Badge className="w-fit mx-auto">{authority.role.toUpperCase()}</Badge>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -55,7 +52,7 @@ export default function ViewAuthorityPag({ authority, loading, setLoading }) {
                 <Building className="h-5 w-5 text-gray-600" />
                 <div>
                   <p className="text-sm text-gray-600">Department</p>
-                  <p className="font-medium">{authority.department}</p>
+                  <p className="font-medium">{authority.department || 'N/A'}</p>
                 </div>
               </div>
 
@@ -71,7 +68,7 @@ export default function ViewAuthorityPag({ authority, loading, setLoading }) {
                 <Phone className="h-5 w-5 text-gray-600" />
                 <div>
                   <p className="text-sm text-gray-600">Phone</p>
-                  <p className="font-medium">{authority.phone}</p>
+                  <p className="font-medium">{authority.phone || 'N/A'}</p>
                 </div>
               </div>
 

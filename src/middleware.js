@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server';
 
 export const middleware = async (req) => {
     const { pathname } = req.nextUrl;
-    const validRoles = ['admin', 'student', 'teacher', 'superuser'];
 
     // Skip all `/api/auth` paths
     if (pathname.endsWith('/login')) {

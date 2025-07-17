@@ -1,28 +1,26 @@
-import { Briefcase, PersonStanding, ShieldHalf, Crown, Users, UserRoundCheck, Upload, BarChart2, ClipboardList, FolderPlus, UserPlus, Database, Settings, FileText, TrendingUp, Clock, CheckCircle, XCircle, AlertCircle, GraduationCap, Building } from "lucide-react";
+import { Briefcase, PersonStanding, ShieldHalf, Crown, Users, UserRoundCheck, Upload, BarChart2, ClipboardList, UserPlus, Database, FileText, TrendingUp, Clock, CheckCircle, XCircle, AlertCircle, GraduationCap } from "lucide-react";
 
 const ROUTES = {
     STUDENT: {
-        DASHBOARD: '/dashboard/student',
         DRIVES: {
             ACTIVE: '/dashboard/student/drives/active-drives',
             APPLIED: '/dashboard/student/drives/applied-drives',
+            SHORTLISTED: '/dashboard/student/drives/shortlisted-drives',
             EXPIRED: '/dashboard/student/drives/expired-drives',
-            SHORTLISTED: '/dashboard/student/drives/shortlisted-drives'
         },
         MENTOR: '/dashboard/student/mentor'
     },
     TEACHER: {
-        DASHBOARD: '/dashboard/teacher',
         DRIVES: {
             ACTIVE: '/dashboard/teacher/drives/active-drives',
             UNPUBLISHED: '/dashboard/teacher/drives/unpublished-drives',
             EXPIRED: '/dashboard/teacher/drives/expired-drives',
-            ANALYTICS: '/dashboard/teacher/drives/job-analytics'
+            ANALYTICS: '/dashboard/teacher/analytics'
         },
         STUDENTS: {
-            ADD: '/dashboard/teacher/students/add-student',
+            ADD: '/dashboard/teacher/manage/add-student',
             MY_STUDENTS: '/dashboard/teacher/view/my-students',
-            BULK_UPLOAD: '/dashboard/teacher/bulk-upload'
+            BULK_UPLOAD: '/dashboard/teacher/onboard/bulk-upload'
         },
         FACULTY: {
             ADMINS: '/dashboard/teacher/view/admins',
@@ -30,7 +28,6 @@ const ROUTES = {
         }
     },
     ADMIN: {
-        DASHBOARD: '/dashboard/admin',
         DRIVES: {
             ACTIVE: '/dashboard/admin/drives/active-drives',
             UNPUBLISHED: '/dashboard/admin/drives/unpublished-drives',
@@ -38,12 +35,12 @@ const ROUTES = {
             ANALYTICS: '/dashboard/admin/analytics'
         },
         STUDENTS: {
-            ADD: '/dashboard/admin/students/add-student',
+            ADD: '/dashboard/admin/manage/add-student',
             VIEW_ALL: '/dashboard/admin/view/students',
-            BULK_UPLOAD: '/dashboard/admin/students/bulk-upload'
+            BULK_UPLOAD: '/dashboard/admin/onboard/bulk-upload'
         },
         FACULTY: {
-            ADD_TEACHER: '/dashboard/admin/faculty/add-teacher',
+            ADD_TEACHER: '/dashboard/admin/manage/add-teacher',
             ALL_TEACHERS: '/dashboard/admin/view/teachers',
             ALL_ADMINS: '/dashboard/admin/view/admins'
         },
@@ -53,7 +50,6 @@ const ROUTES = {
         }
     },
     SUPERUSER: {
-        DASHBOARD: '/dashboard/superuser',
         DRIVES: {
             ACTIVE: '/dashboard/superuser/drives/active-drives',
             UNPUBLISHED: '/dashboard/superuser/drives/unpublished-drives',
@@ -184,7 +180,7 @@ export function getSidebarItems(role) {
                 ]
             },
             { 
-                title: 'Bulk Upload', 
+                title: 'Bulk Register', 
                 icon: <Upload className="w-5 h-5" />, 
                 href: ROUTES.TEACHER.STUDENTS.BULK_UPLOAD,
                 description: 'Upload multiple students at once'
@@ -279,7 +275,7 @@ export function getSidebarItems(role) {
                 ]
             },
             { 
-                title: 'Bulk Operations', 
+                title: 'Bulk Register', 
                 icon: <Upload className="w-5 h-5" />, 
                 href: ROUTES.ADMIN.STUDENTS.BULK_UPLOAD,
                 description: 'Bulk upload students and data'

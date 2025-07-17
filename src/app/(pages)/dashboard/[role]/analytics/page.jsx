@@ -9,7 +9,7 @@ import { formatDate } from "@/utils/client/formatDate"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 
-export default function page() {
+export default function Page() {
     const [jobs, setJobs] = useState([])
     const [loading, setLoading] = useState(true)
     const router = useRouter()

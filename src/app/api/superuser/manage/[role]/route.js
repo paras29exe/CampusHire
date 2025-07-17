@@ -11,8 +11,6 @@ export const POST = withDB(async (req, { params }) => {
     try {
         const role = await params.role?.split('-')?.[1]?.toLowerCase();
 
-        console.log("Role:", role);
-
         if (!role || !['admin', 'teacher', 'superuser'].includes(role.toLowerCase())) {
             return NextResponse.json({
                 error: "Invalid role specified",

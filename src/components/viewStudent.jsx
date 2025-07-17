@@ -1,12 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { Mail, Phone, GraduationCap, Calendar, Award, AlertTriangle } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
-export default function ViewStudent({ student, loading, setLoading }) {
+export default function ViewStudent({ student, loading }) {
 
   if (loading) {
     return (

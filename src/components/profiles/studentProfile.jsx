@@ -40,7 +40,7 @@ const PasswordField = ({ label, show, onToggle, register, errors, name, ...props
   </div>
 )
 
-export default function StudentProfilePage({ userData , onSubmit, handleCancel, isChangingPassword, setIsChangingPassword }) {
+export default function StudentProfilePage({ userData , isChangingPassword, setIsChangingPassword }) {
   const [showOldPassword, setShowOldPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
@@ -96,14 +96,14 @@ export default function StudentProfilePage({ userData , onSubmit, handleCancel, 
           <div className="bg-gradient-to-r from-primary/5 to-primary/10 px-6 py-8">
             <div className="flex flex-col sm:flex-row items-center gap-6">
               <Avatar className="w-24 h-24 ring-4 ring-background shadow-lg">
-                <AvatarFallback className="text-2xl bg-primary text-primary-foreground font-semibold">
+                <AvatarFallback className="text-2xl bg-blue-700 text-primary-foreground font-semibold">
                   {getInitials(userData.name)}
                 </AvatarFallback>
               </Avatar>
               <div className="text-center sm:text-left space-y-2">
                 <h1 className="text-3xl font-bold text-foreground">{userData.name}</h1>
                 <div className="flex flex-wrap justify-center sm:justify-start gap-2">
-                  <Badge variant="default"><User className="h-3 w-3 mr-1" />{userData.role}</Badge>
+                  <Badge variant="default"><User className="h-3 w-3 mr-1" />{userData.role.toUpperCase()}</Badge>
                   <Badge variant="outline">{userData.roll_number}</Badge>
                   {userData.backlogs > 0 && (
                     <Badge variant="destructive"><AlertTriangle className="h-3 w-3 mr-1" />{userData.backlogs} Backlog{userData.backlogs > 1 ? "s" : ""}</Badge>

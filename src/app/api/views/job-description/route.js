@@ -3,9 +3,8 @@
 import { NextResponse } from 'next/server';
 import { withDB } from '@/utils/server/dbHandler';
 import { Job } from '@/db/models/jobModel';
-import mongoose from 'mongoose';
 
-export const GET = withDB(async (req, res) => {
+export const GET = withDB(async (req) => {
     try {
         const jobId = req.nextUrl.searchParams.get('jobId');
 

@@ -74,7 +74,6 @@ export const POST = withDB(async (req, { params }) => {
 
         return res;
     } catch (error) {
-        console.log("Error during login:", error);
         return NextResponse.json({
             message: error.message || "Internal Server Error",
             error: "An unexpected error occurred",

@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import Link from "next/link"
 
 // Helper to format date (assuming it exists or will be created)
@@ -28,12 +27,12 @@ export default function CompletedDriveCard({ driveData, userRole }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-700 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-              {driveData.company.name.charAt(0)}
+              {driveData.company.company.name.charAt(0)}
             </div>
             <div>
-              <CardTitle className="text-xl font-bold text-gray-900">{driveData.company.name}</CardTitle>
+              <CardTitle className="text-xl font-bold text-gray-900">{driveData.company.company.name}</CardTitle>
               <a
-                href={driveData.company.website}
+                href={driveData.company.company.website}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors"
@@ -58,14 +57,14 @@ export default function CompletedDriveCard({ driveData, userRole }) {
             <Calendar className="h-4 w-4 text-gray-400" />
             <div>
               <span className="text-gray-500">Assigned On:</span>
-              <div className="font-medium">{formatDate(driveData.assignedDate)}</div>
+              <div className="font-medium">{formatDate(driveData.createdAt)}</div>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-gray-400" />
             <div>
               <span className="text-gray-500">Completed On:</span>
-              <div className="font-medium">{formatDate(driveData.completedDate)}</div>
+              <div className="font-medium">{formatDate(driveData.updatedAt)}</div>
             </div>
           </div>
           {isSuperuser ? (
@@ -73,7 +72,7 @@ export default function CompletedDriveCard({ driveData, userRole }) {
               <Users className="h-4 w-4 text-gray-400" />
               <div>
                 <span className="text-gray-500">Total Admins:</span>
-                <div className="font-medium">{driveData.assignedAdmins.length}</div>
+                <div className="font-medium">{driveData.assigned_to?.length}</div>
               </div>
             </div>
           ) : (
@@ -81,7 +80,7 @@ export default function CompletedDriveCard({ driveData, userRole }) {
               <Users className="h-4 w-4 text-gray-400" />
               <div>
                 <span className="text-gray-500">Assigned By:</span>
-                <div className="font-medium">{driveData.assignedBy?.name || "N/A"}</div>
+                <div className="font-medium">{driveData.assigned_by?.name || "N/A"}</div>
               </div>
             </div>
           )}
@@ -92,7 +91,7 @@ export default function CompletedDriveCard({ driveData, userRole }) {
             <Button variant="ghost" className="w-full justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
-                <span>Show Admins ({driveData.assignedAdmins.length})</span>
+                <span>Show Admins ({driveData.assigned_to?.length})</span>
               </div>
               <ChevronDown className={`h-4 w-4 transition-transform ${isAdminsOpen ? "rotate-180" : ""}`} />
             </Button>
@@ -100,7 +99,7 @@ export default function CompletedDriveCard({ driveData, userRole }) {
           <CollapsibleContent className="mt-3 space-y-3">
             <Separator />
             <div className="flex flex-wrap gap-3">
-              {driveData.assignedAdmins.map((admin) => (
+              {driveData.assigned_to?.map((admin) => (
                 <Card key={admin.employee_id} className="p-3 flex items-center gap-3 bg-gray-50">
                   <div className="flex flex-col">
                     <span className="font-medium text-gray-900">{admin.name}</span>

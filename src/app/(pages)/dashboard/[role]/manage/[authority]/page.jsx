@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import AddAuthority from '@/components/addAuthority';
 import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { notFound, redirect, useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/store';
 import { PasswordRevealModal } from '@/components/passwordRevealModal';
 
@@ -27,7 +26,6 @@ export default function Page() {
 
   const roleToAdd = params.authority?.split('-')?.[1]?.toLowerCase();
   const [apiEndpoint, setApiEndpoint] = useState(null);
-  const { reset } = useForm();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [password, setPassword] = useState('');
@@ -59,7 +57,7 @@ export default function Page() {
       reset();
     } catch (error) {
       console.error('Error adding authority:', error);
-      toast.error(error?.response?.data?.message || `Failed to add ${roleToAdd}`);
+      toast(error?.response?.data?.message || `Failed to add ${roleToAdd}`);
     }
   };
 
@@ -67,7 +65,10 @@ export default function Page() {
 
   return (
     <>
-      <AddAuthority onSubmit={onSubmit} role={roleToAdd} />
+      <AddAuthority 
+      onSubmit={onSubmit} 
+      role={roleToAdd} 
+      />
       <PasswordRevealModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}

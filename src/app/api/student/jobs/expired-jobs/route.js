@@ -49,7 +49,24 @@ export const GET = withDB(async (req) => {
             }
         ])
 
-        return NextResponse.json({ data: expiredJobs }, { status: 200 });
+        // Count total expired jobs for pagination metadata
+        const totalExpiredJobs = await Job.countDocuments({
+            _id: { $nin: uniqueJobIds },
+            $or: [
+                { last_date_to_apply: { $lt: new Date() } },
+                { status: 'expired' }
+            ]
+        });
+
+        return NextResponse.json({
+            message: "Expired jobs fetched successfully",
+            data: expiredJobs,
+            pagination: {
+                totalJobs: totalExpiredJobs,
+                currentPage: page,
+                totalPages: Math.ceil(totalExpiredJobs / limit),
+            }
+         }, { status: 200 });
     } catch (error) {
         console.error("Error fetching expired jobs:", error);
         return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });

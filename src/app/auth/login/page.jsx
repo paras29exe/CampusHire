@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Eye, EyeOff, GraduationCap, LogIn, Users } from "lucide-react"
+import { Eye, EyeOff, GraduationCap, LogIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { ArrowLeft, Briefcase, Building, CheckCircle } from "lucide-react"
+import { Briefcase, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import EligibilityCriteriaSection from "@/components/modify-job/eligibility"
@@ -9,7 +9,7 @@ import LinksDateSection from "@/components/modify-job/linksAndDate"
 import RoundDetailsSection from "@/components/modify-job/roundDetails"
 import { toast } from "sonner"
 import axios from "axios"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 // ✅ Import Dialog from ShadCN
 import {
@@ -33,6 +33,7 @@ export default function EditJobPage() {
 
   const params = useSearchParams()
   const jobId = params.get("jobId")
+  const router = useRouter()
 
   useEffect(() => {
     const fetchJobData = async () => {
@@ -71,6 +72,7 @@ export default function EditJobPage() {
       const response = await axios.put(`/api/admin/jobs/${jobId}/publish`)
       toast("Job published successfully!", { action: { label: "OK" } })
       setJobData(response.data.data)
+      router.back()
     } catch (error) {
       toast("Failed to publish job: " + (error.response?.data?.message || error.message))
     } finally {

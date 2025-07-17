@@ -82,7 +82,7 @@ export default function PostJobPage() {
     } catch (error) {
       setJobId(null)
       setIsParsed(false)
-      toast("Failed to parse PDF", { variant: "destructive", action: { label: 'Close' } })
+      toast(error.response?.data?.message || error.message, { variant: "destructive", action: { label: 'Close' } })
     } finally {
       setIsParsing(false)
     }
@@ -108,7 +108,7 @@ export default function PostJobPage() {
   }
 
   // final onSubmit function to post the job
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     try {
       if (assignLater) {
         toast("Job posted without admin assignment", { variant: "info" })
@@ -123,7 +123,6 @@ export default function PostJobPage() {
         toast("Pdf is being Parsed", { variant: "info" })
         return
       }
-
 
       const response = await axios.post('/api/superuser/jobs/assign-job-to-admin', {
         adminIds: selectedAdmins?.map(admin => admin._id) || [],
@@ -360,7 +359,7 @@ export default function PostJobPage() {
                 className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400"
                 size="lg"
               >
-                {isSubmitting ? "Posting Job..." : "Post Job"}
+                {isSubmitting ? "Processing..." : "Continue"}
               </Button>
             </CardContent>
           </Card>

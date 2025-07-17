@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Lock, Eye, EyeOff, Save, X, User, Mail, Phone, Calendar, Building, Hash } from "lucide-react"
+import { Lock, Eye, EyeOff, Save, X, Mail, Phone, Calendar, Building, Hash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -31,7 +31,7 @@ export default function AuthorityProfilePage({ userData, onSubmit, handleCancel,
 
   const profileFields = [
     { label: "Employee ID", value: userData.employee_id, icon: Hash },
-    { label: "Department", value: userData.department, icon: Building },
+    { label: "Department", value: userData.department || "N/A", icon: Building },
     { label: "Email", value: userData.email, icon: Mail },
     { label: "Phone", value: userData.phone, icon: Phone },
     { label: "Member Since", value: formatDate(userData.createdAt), icon: Calendar, span: true }

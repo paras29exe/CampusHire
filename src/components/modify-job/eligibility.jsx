@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { X, Check, ChevronsUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -80,7 +80,6 @@ export default function EligibilityCriteriaSection({ jobId, onValidationChange, 
     } finally {
       setIsLoading(false)
     }
-
   }
 
   return (

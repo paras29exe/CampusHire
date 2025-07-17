@@ -9,6 +9,8 @@ import mongoose from "mongoose";
 export const GET = withDB(async (req) => {
     try {
         const student = JSON.parse(req.headers.get('user') || '{}');
+        const page = parseInt(req.nextUrl.searchParams.get('page')) || 1;
+        const limit = parseInt(req.nextUrl.searchParams.get('limit')) || 50;
 
         // Find all active jobs the student has NOT applied to
         const activeJobs = await Job.aggregate([
@@ -49,7 +51,10 @@ export const GET = withDB(async (req) => {
                 $sort: { createdAt: -1 } // Sort by job creation date
             },
             {
-                $limit: 50 
+                $skip: (page - 1) * limit // Skip the number of jobs based on the page
+            },
+            {
+                $limit: limit
             },
             {
                 $project: {
@@ -62,10 +67,17 @@ export const GET = withDB(async (req) => {
                 }
             }
         ])
+
+        const totalJobs = await Job.countDocuments({status: 'active', last_date_to_apply: { $gt: new Date() }})
         
         return NextResponse.json({
             message: "Active jobs fetched successfully",
             data: activeJobs,
+            pagination: {
+                totalJobs,
+                currentPage: page,
+                totalPages: Math.ceil(totalJobs / limit),
+            }
         }, { status: 200 });
     } catch (error) {
         return NextResponse.json({

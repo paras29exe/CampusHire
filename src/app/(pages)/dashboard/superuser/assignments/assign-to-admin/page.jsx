@@ -20,13 +20,13 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command"
-import { ArrowLeft, Calendar, Globe, IndianRupee, Users } from "lucide-react"
+import { ArrowLeft, Calendar, Globe, IndianRupee, LoaderCircle, Users } from "lucide-react"
 import axios from "axios"
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader } from "@/components/ui/dialog"
 import { toast } from "sonner"
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog"
 
-export default function page() {
+export default function Page() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const jobId = searchParams.get("jobId")
@@ -36,6 +36,8 @@ export default function page() {
     const [loading, setLoading] = useState(true)
     const [dialogOpen, setDialogOpen] = useState(false)
 
+    const [assigning, setAssigning] = useState(false)
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -43,10 +45,9 @@ export default function page() {
                     axios.get(`/api/views/job-description?jobId=${jobId}`),
                     axios.get('/api/shared/views/admins-data')
                 ])
-                console.log("Job Data:", jobResponse.data.data)
-                console.log("Admins Data:", adminsResponse.data.data)
                 setJob(jobResponse.data.data)
                 setAdmins(adminsResponse.data.data)
+                setSelected(jobResponse.data.data.assigned_to.map(admin => admin._id))
             } catch (error) {
                 console.error("Error fetching job or admins data:", error)
             } finally {
@@ -56,6 +57,7 @@ export default function page() {
         fetchData()
     }, [jobId])
 
+
     const handleSelect = (id) => {
         setSelected(prev =>
             prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
@@ -64,9 +66,8 @@ export default function page() {
 
     const handleConfirm = () => {
         if (selected.length === 0) {
-            toast("Missing details.", {
-                description: "Please select at least one admin to assign this job.",
-                style: { backgroundColor: "#f8d7da", color: "#721c24" },
+            toast("Assign atleast One Admin", {
+                style: { backgroundColor: "red", color: "white" },
                 action: { label: "OK" }
             })
         }
@@ -78,25 +79,25 @@ export default function page() {
     const confirmAssignment = async () => {
         if (!selected.length)
             return toast("Please select at least one admin to assign this job.", {
-                style: { backgroundColor: "#f8d7da", color: "#721c24" },
+                style: { backgroundColor: "red", color: "white" },
                 action: { label: "OK" }
             })
 
-        setLoading(true)
+        setAssigning(true)
         try {
             await axios.post(`/api/superuser/jobs/assign-job-to-admins?jobId=${jobId}`, {
                 adminIds: selected
             })
             router.push(`/dashboard/superuser/assignments/assigned`)
-            toast("Job assigned successfully!")
+            toast("Job assigned successfully!", {style : { backgroundColor: "green", color: "white" }})
         } catch (error) {
             console.error("Error assigning job:", error)
             toast("Failed to assign job. Please try again.", {
-                style: { backgroundColor: "#f8d7da", color: "#721c24" },
+                style: { backgroundColor: "red", color: "white" },
                 action: { label: "OK" }
             })
         } finally {
-            setLoading(false)
+            setAssigning(false)
         }
 
     }
@@ -114,8 +115,8 @@ export default function page() {
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent className="max-w-md">
                     <DialogHeader>
-                        <DialogTitle>Are you sure you want to assign this drive?</DialogTitle>
-                        <DialogDescription>
+                        <DialogTitle className="text-lg! font-bold">Are you sure you want to assign this drive?</DialogTitle>
+                        <DialogDescription className="text-xs">
                             This action will assign the job to the selected admins. They will be able to manage this job and its applicants.
                         </DialogDescription>
                     </DialogHeader>
@@ -141,9 +142,7 @@ export default function page() {
                 <Button variant="ghost" onClick={() => router.back()} className="mb-6 flex items-center gap-2">
                     <ArrowLeft className="h-4 w-4" /> Back
                 </Button>
-
                 <h1 className="text-3xl font-bold mb-8">{`Assign Job: ${job.company.name}`}</h1>
-
             </div>
 
             <div className=" p-6 ">
@@ -204,7 +203,7 @@ export default function page() {
                     </DropdownMenu>
 
                     <Button onClick={handleConfirm} className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700">
-                        Confirm Assignment
+                       {assigning ? <LoaderCircle className="w-4 animate-spin" /> : "Confirm Assignment"}
                     </Button>
                 </div>
             </div>

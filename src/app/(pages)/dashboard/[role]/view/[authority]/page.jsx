@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useMemo } from 'react';
 import { LoaderCircle, Search } from 'lucide-react';
 import {
     Table,
@@ -35,11 +35,11 @@ export default function StudentDataTable() {
 
     const { role } = useAuthStore();
     const apiEndpoint = useMemo(() => {
-        if(role === 'student') router.replace('/unauthorized');
+        if (role === 'student') router.replace('/unauthorized');
 
         const endpoint = (role === 'superuser') ? superuserApiMap[authority.toLowerCase()] : otherApiMap[authority.toLowerCase()]
 
-        if(!endpoint) router.replace('/not-found');
+        if (!endpoint) router.replace('/not-found');
         return endpoint;
     }, [role, authority]);
 
@@ -117,7 +117,11 @@ export default function StudentDataTable() {
                                 <TableBody>
                                     {authorityData.length > 0 ? (
                                         authorityData.map((record) => (
-                                            <TableRow key={record.employee_id}>
+                                            <TableRow
+                                                key={record.employee_id}
+                                                className="cursor-default"
+                                                onClick={() => router.push(`/view-user?uid=${record._id}&role=${record.role}`, {scroll: true})}
+                                            >
                                                 <TableCell className="font-medium">{record.employee_id}</TableCell>
                                                 <TableCell>{record.name || 'N/A'}</TableCell>
                                                 <TableCell>{record.email || 'N/A'}</TableCell>

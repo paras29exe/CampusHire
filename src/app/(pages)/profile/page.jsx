@@ -8,11 +8,9 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-export default function page() {
-    const { userData, setUserData } = useAuthStore()
+export default function Page() {
+    const { userData } = useAuthStore()
     const [isChangingPassword, setIsChangingPassword] = useState(false)
-
-    console.log(userData)
 
     const { role } = useAuthStore()
     const { reset } = useForm()
@@ -47,8 +45,6 @@ export default function page() {
                 role == 'student' ? (
                     <StudentProfilePage
                         userData={userData}
-                        onSubmit={onSubmit}
-                        handleCancel={handleCancel}
                         isChangingPassword={isChangingPassword}
                         setIsChangingPassword={setIsChangingPassword}
                     />

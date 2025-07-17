@@ -84,7 +84,6 @@ export const PUT = withDB(async (req, { params }) => {
 
         if (!allStudents) {
             const shortlisted_candidates = await extractRollNumbersFromExcel(shortlisted_file);
-            console.log("Shortlisted candidates:", shortlisted_candidates);
             await Application.updateMany(
                 {
                     roleId: roleId,
@@ -104,7 +103,7 @@ export const PUT = withDB(async (req, { params }) => {
                 },
                 {
                     // update status to rejected for those not shortlisted
-                    $set: { status: "rejected" }
+                    $set: { status: "rejected", round_number: round_number}
                 }
             );
             role.shortlisted_candidates = ['Updated in Applications collection']; // Placeholder, as we don't store shortlisted candidates in the role directly

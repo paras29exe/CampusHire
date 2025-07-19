@@ -55,7 +55,6 @@ export default function LoginPage() {
     } catch (error) {
       console.error("Login error:", error)
       toast.error("Login failed. Please check your credentials and try again.")
-    }finally {
       setLoading(false)
     }
   }
@@ -85,7 +84,6 @@ export default function LoginPage() {
       } catch (error) {
         console.error('Error during auto-login:', error.response?.data?.message || error.message);
         // Optionally handle the error, e.g., redirect to login page
-      }finally{
         setLoading(false)
       }
     };

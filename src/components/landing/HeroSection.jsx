@@ -14,7 +14,7 @@ const heroContent = {
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-hidden pt-16">
+    <section className="relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-hidden max-sm:mt-20">
       {/* Background elements */}
       <div className="absolute inset-0 bg-grid-blue-100/25 bg-[size:20px_20px] opacity-30"></div>
       <div className="absolute top-20 right-10 w-72 h-72 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
@@ -85,7 +85,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative flex justify-center lg:justify-end"
+            className="relative flex justify-center mt-20 sm:mt-0 lg:justify-end"
           >
             {/* Main transformation card - Made smaller */}
             <div className="relative bg-white outline-2 rounded-xl shadow-xl p-4 sm:p-6 border border-gray-100 transform hover:scale-105 transition-transform duration-500 w-full max-w-sm lg:max-w-md">

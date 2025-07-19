@@ -39,7 +39,7 @@ export const GET = withDB(async (req) => {
             .limit(limit)
             .populate('assigned_to', ) 
             .populate('assigned_by') 
-            .populate('company', 'company');
+            .populate('company', 'company _id');
 
         // Count total assignments for pagination metadata
         const totalAssignments = await Assignment.countDocuments(query);

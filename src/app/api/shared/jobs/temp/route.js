@@ -5,11 +5,11 @@ import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
 
 export const GET = withDB(async (req) => {
-    const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
-    const limit = 30; // Number of jobs per page
-    const skip = (page - 1) * limit;
-
     try {
+        const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
+        const limit = 30; // Number of jobs per page
+        const skip = (page - 1) * limit;
+
         // Fetch unpublished jobs in latest-first order with pagination
         const jobs = await Job.find({ status: 'unpublished' })
             .sort({ createdAt: -1 }) // Sort by creation date in descending order

@@ -90,7 +90,7 @@ export const POST = withDB(async (req) => {
 
         return NextResponse.json({ message: "PDF file processed successfully", data: {}, jobId: job._id }, { status: 200 });
     } catch (err) {
-        console.log("Error in PDF processing:", err);
+        console.error("Error in PDF processing:", err);
         return NextResponse.json({
             error: err.error,
             message: err.response?.data.message || err.message || "An error occurred while processing the PDF file"

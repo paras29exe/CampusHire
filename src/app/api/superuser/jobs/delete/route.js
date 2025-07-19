@@ -1,5 +1,6 @@
 'use server';
 
+import { Assignment } from "@/db/models/assignmentsModel";
 import { Job } from "@/db/models/jobModel";
 import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
@@ -24,6 +25,8 @@ export const DELETE = withDB(async (req) => {
                 message: `No job found with ID ${jobId}.`
             }, { status: 404 });
         }
+
+        await Assignment.deleteMany({company: jobId})
 
         return NextResponse.json({
             message: "Job deleted successfully",

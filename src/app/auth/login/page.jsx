@@ -26,15 +26,15 @@ export default function LoginPage() {
   const { setUserData, setRole } = useAuthStore()
   const [loading, setLoading] = useState(true)
 
+  const [loginSelecedRole, setLoginSelecedRole] = useState("")
+
   const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm({
     defaultValues: {
       identifier: "",
       password: "",
-      role: "student",
+      role: "",
     },
   })
-
-  const selectedRole = watch("role")
 
   const onSubmit = async (data) => {
     if (!data.role) {
@@ -60,7 +60,7 @@ export default function LoginPage() {
   }
 
   const getPlaceholderText = () => {
-    switch (selectedRole) {
+    switch (loginSelecedRole) {
       case "student":
         return "Enter your roll number or email"
       case "teacher":
@@ -103,12 +103,19 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <GraduationCap className="h-8 w-8 text-white" />
+          <div className="w-16 h-16 overflow-hidden rounded-xl flex items-center justify-center mx-auto mb-4">
+            <img src="/logo.png" alt="logo" className="w-full h-full" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">CampusHire</h1>
-          <p className="text-gray-600 mt-2">Sign in to your account</p>
+          <p className="text-gray-600 ">Sign in to your account</p>
         </div>
+        <p className="text-sm text-center font-medium text-gray-600 my-2">
+          For Testing the product, You can contact on <span><a href="https://linkedin.com/in/paras29exe" target="_blank" className="text-blue-600 mr-1 hover:underline">LinkedIn</a></span>
+          or <a
+          target="_blank"
+            href="mailto:paras.webdev404@gmail.com?subject=Demo%20credentials%20request%20for%20CampusHire&body=Hi%20Paras,%0A%0AI%20came%20across%20your%20project%20CampusHire%20and%20I%E2%80%99m%20really%20impressed%20with%20its%20features%20and%20workflow.%0A%0AI%20would%20like%20to%20request%20demo%20credentials%20to%20explore%20the%20platform%20further.%0A%0APlease%20let%20me%20know%20if%20you%20need%20any%20additional%20information%20from%20my%20side.%0A%0ALooking%20forward%20to%20your%20response.%0A%0AThanks%20%26%20Regards,%0A[Your%20Name]%0A[Your%20Organization%20/%20College]" className="text-blue-600 hover:underline ml-1">Email</a> me
+          for demo credentials.
+        </p>
 
         {/* Login Card */}
         <Card className="shadow-sm border-1">
@@ -123,7 +130,7 @@ export default function LoginPage() {
               {/* Role Selection */}
               <div className="space-y-2">
                 <Label>Select Role *</Label>
-                <Select onValueChange={(value) => setValue("role", value)}>
+                <Select required onValueChange={(value) => {setLoginSelecedRole(value), setValue('role', value)}} value={loginSelecedRole} defaultValue="">
                   <SelectTrigger className="bg-transparent">
                     <SelectValue placeholder="Choose your role" />
                   </SelectTrigger>
@@ -153,17 +160,15 @@ export default function LoginPage() {
               {/* Username/Email/ID Field */}
               <div className="space-y-2">
                 <Label>
-                  {selectedRole === "student"
+                  {loginSelecedRole === "student"
                     ? "Roll Number / Email"
-                    : selectedRole === "teacher"
-                      ? "Employee ID / Email"
-                      : "Username / Email"}
+                    :  "Employee ID / Email"}
                   *
                 </Label>
-                <Input
+                <input
                   {...register("identifier", { required: "This field is required" })}
                   placeholder={getPlaceholderText()}
-                  className="bg-transparent"
+                  className="bg-transparent p-2 text-sm outline outline-border rounded-sm w-full focus-within:outline-blue-500 focus-within:outline-2"
                 />
                 {errors.identifier && <p className="text-sm text-red-600">{errors.identifier.message}</p>}
               </div>
@@ -172,11 +177,11 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <Label>Password *</Label>
                 <div className="relative">
-                  <Input
+                  <input
                     type={showPassword ? "text" : "password"}
                     {...register("password", { required: "Password is required" })}
                     placeholder="Enter your password"
-                    className="bg-transparent pr-10"
+                    className="bg-transparent p-2 pr-10 text-sm outline outline-border rounded-sm w-full focus-within:outline-blue-500 focus-within:outline-2"
                   />
                   <Button
                     type="button"
@@ -216,6 +221,7 @@ export default function LoginPage() {
               <p className="text-sm text-gray-600">
                 Don't have an account? <span className="text-gray-400">Contact your administrator</span>
               </p>
+
             </div>
           </CardContent>
         </Card>

@@ -13,7 +13,7 @@ export default function ChangePassword() {
     const { role } = useAuthStore();
     const [open, setOpen] = useState(false);
 
-    const { register, handleSubmit, watch, formState: { errors, isSubmitting }, reset } = useForm()
+    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm()
 
     const onSubmit = async (data) => {
         try {
@@ -43,6 +43,7 @@ export default function ChangePassword() {
         onCancel={() => { setOpen(false) }} 
         confirmText="Continue"
         cancelText="Cancel"
+        loading={isSubmitting}
       />
       {/* Card Header */}
       <div className="border-b px-6 py-4">

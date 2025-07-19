@@ -17,10 +17,10 @@ const DEPARTMENTS = [
   "Management",
 ]
 
-export default function AddAuthority({ onSubmit, role = "teacher" }) {
+export default function AddAuthority({ onSubmit, role = "teacher", form }) {
   const roleTitle = role.charAt(0).toUpperCase() + role.slice(1)
 
-  const {handleSubmit, register, reset, formState: { isSubmitting } } = useForm()
+  const {handleSubmit, register, reset, formState: { isSubmitting } } = form;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">

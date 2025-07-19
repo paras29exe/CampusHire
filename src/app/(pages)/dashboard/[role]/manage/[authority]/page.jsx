@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/store';
 import { PasswordRevealModal } from '@/components/passwordRevealModal';
+import { useForm } from 'react-hook-form';
 
 const superuserApiMap = {
   teacher: '/api/superuser/manage/add-teacher',
@@ -29,6 +30,7 @@ export default function Page() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [password, setPassword] = useState('');
+  const form = useForm();
 
   useEffect(() => {
     if (!loggedInUserRole || !roleToAdd) {
@@ -54,7 +56,7 @@ export default function Page() {
       const response = await axios.post(apiEndpoint, data);
       setPassword(response.data.password);
       setModalOpen(true);
-      reset();
+      form.reset();
     } catch (error) {
       console.error('Error adding authority:', error);
       toast(error?.response?.data?.message || `Failed to add ${roleToAdd}`);
@@ -65,9 +67,10 @@ export default function Page() {
 
   return (
     <>
-      <AddAuthority 
-      onSubmit={onSubmit} 
-      role={roleToAdd} 
+      <AddAuthority
+        onSubmit={onSubmit}
+        role={roleToAdd}
+        form={form}
       />
       <PasswordRevealModal
         open={modalOpen}

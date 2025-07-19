@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Eye, EyeOff, GraduationCap, LogIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -24,14 +24,9 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
   const { setUserData, setRole } = useAuthStore()
+  const [loading, setLoading] = useState(true)
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors, isSubmitting },
-  } = useForm({
+  const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm({
     defaultValues: {
       identifier: "",
       password: "",
@@ -47,6 +42,7 @@ export default function LoginPage() {
       return
     }
 
+    setLoading(true)
     try {
       const response = await axios.post(`/api/auth/${data.role}/login`, {
         identifier: data.identifier,
@@ -59,6 +55,8 @@ export default function LoginPage() {
     } catch (error) {
       console.error("Login error:", error)
       toast.error("Login failed. Please check your credentials and try again.")
+    }finally {
+      setLoading(false)
     }
   }
 
@@ -75,6 +73,32 @@ export default function LoginPage() {
         return "Enter your username/email/ID"
     }
   }
+
+  useEffect(() => {
+    const autoLogin = async () => {
+      setLoading(true)
+      try {
+        const response = await axios.get('/api/auth/auto-login');
+        setUserData(response.data.user);
+        setRole(response.data.role);
+        router.replace(`/dashboard/${response.data.role}/drives/active-drives`);
+      } catch (error) {
+        console.error('Error during auto-login:', error.response?.data?.message || error.message);
+        // Optionally handle the error, e.g., redirect to login page
+      }finally{
+        setLoading(false)
+      }
+    };
+
+    autoLogin();
+  }, [])
+
+  if (loading) return (
+    <div className="min-h-screen flex flex-col gap-y-3 items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-3 border-blue-600"></div>
+      <p>Please wait....</p>
+    </div>
+  )
 
   return (
     <div className="flex items-center justify-center p-4">

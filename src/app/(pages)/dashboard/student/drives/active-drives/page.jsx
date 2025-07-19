@@ -10,7 +10,7 @@ function Page() {
 
   return (
     <div className=" w-full p-4">
-      <div className=" mx-auto">
+      <div className="max-w-7xl mx-auto">
         <Card className="w-full p-0 shadow-none border-none bg-background">
           <CardHeader >
             <CardTitle className="text-3xl font-bold text-gray-900 text-center">Job Opportunities</CardTitle>

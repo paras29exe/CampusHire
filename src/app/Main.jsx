@@ -13,13 +13,13 @@ export default function Main({ children }) {
 
     useEffect(() => {
         const autoLogin = async () => {
-            const isLandingPage = pathname === '/' || pathname === '/auth/login';
+            const isLoginPage = pathname === '/auth/login';
             try {
                 const response = await axios.get('/api/auth/auto-login');
                 setUserData(response.data.user);
                 setRole(response.data.role);
 
-                if (isLandingPage) {
+                if (isLoginPage) {
                     router.replace(`/dashboard/${response.data.role}/drives/active-drives`);
                 }
             } catch (error) {
@@ -29,8 +29,8 @@ export default function Main({ children }) {
                 setLoading(false);
             }
         };
-
-        autoLogin();
+        if(pathname === '/' ) setLoading(false);
+        pathname !== '/' && autoLogin();
     }, []);
 
     if (loading) return (

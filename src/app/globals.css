@@ -119,3 +119,6 @@
   }
 }
 
+.landing-page {
+  scroll-behavior: smooth;
+}

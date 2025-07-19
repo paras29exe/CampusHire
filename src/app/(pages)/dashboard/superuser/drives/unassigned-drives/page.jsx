@@ -27,8 +27,8 @@ export default function UnassignedJobsDemo() {
     }
 
     return (
-        <div className="min-h-screen ">
-            <Card className="border-red-200 rounded-none bg-red-50">
+        <div className="min-h-screen  max-w-7xl">
+            <Card className="border-red-200  rounded-none bg-red-50">
                 <CardHeader>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex items-start gap-3">

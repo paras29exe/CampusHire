@@ -50,9 +50,8 @@ export default function WhyChooseSection() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: "easeInOut" }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="text-center p-6 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300"
+              viewport={{ once: true, amount:0.2 }}
+              className="text-center p-6 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-lg "
             >
               <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4">
                 <feature.icon className="h-6 w-6 text-blue-600" />

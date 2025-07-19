@@ -1,16 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { Lock, Eye, EyeOff, Save, X, Mail, GraduationCap, Award, AlertTriangle, User, Phone, Calendar, Building, BookOpen, TrendingUp } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Mail, GraduationCap, Award, AlertTriangle, User, Phone, Calendar, Building, BookOpen, TrendingUp } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { toast } from "sonner"
+import ChangePassword from "../changePassword"
 
 const FormField = ({ label, icon: Icon, value, className = "" }) => (
   <div className="space-y-1">
@@ -22,45 +18,10 @@ const FormField = ({ label, icon: Icon, value, className = "" }) => (
   </div>
 )
 
-const PasswordField = ({ label, show, onToggle, register, errors, name, ...props }) => (
-  <div className="space-y-2">
-    <Label className="text-sm font-medium text-foreground">{label}</Label>
-    <div className="relative">
-      <Input
-        type={show ? "text" : "password"}
-        {...register(name, props.validation)}
-        placeholder={props.placeholder}
-        className="pr-10 border-border focus-visible:ring-ring"
-      />
-      <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 hover:bg-transparent" onClick={onToggle}>
-        {show ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
-      </Button>
-    </div>
-    {errors[name] && <p className="text-sm text-destructive">{errors[name].message}</p>}
-  </div>
-)
-
-export default function StudentProfilePage({ userData , isChangingPassword, setIsChangingPassword }) {
-  const [showOldPassword, setShowOldPassword] = useState(false)
-  const [showNewPassword, setShowNewPassword] = useState(false)
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
-    defaultValues: { oldPassword: "", newPassword: "", confirmPassword: "" }
-  })
+export default function StudentProfilePage({ userData }) {
 
   const getInitials = (name) => name.split(" ").map(n => n[0]).join("").toUpperCase()
 
-  const handlePasswordSubmit = (data) => {
-    setTimeout(() => {
-      toast.success("Password changed successfully!")
-      setIsChangingPassword(false)
-      reset()
-    }, 1000)
-  }
-
-  const handlePasswordCancel = () => {
-    setIsChangingPassword(false)
-    reset()
-  }
 
   if (!userData) return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -148,75 +109,8 @@ export default function StudentProfilePage({ userData , isChangingPassword, setI
           </CardContent>
         </Card>
 
-        {/* Password Change */}
-        <Card className="border-border shadow-sm">
-          <CardHeader><CardTitle className="flex items-center gap-2"><Lock className="h-5 w-5 text-primary" />Security Settings</CardTitle></CardHeader>
-          <CardContent>
-            {!isChangingPassword ? (
-              <div className="text-center py-8">
-                <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                  <Lock className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Change Password</h3>
-                <p className="text-muted-foreground mb-6 max-w-md mx-auto">Keep your account secure by changing your password regularly.</p>
-                <Button onClick={() => setIsChangingPassword(true)} className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  <Lock className="h-4 w-4 mr-2" />Change Password
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <PasswordField
-                    label="Current Password *"
-                    show={showOldPassword}
-                    onToggle={() => setShowOldPassword(!showOldPassword)}
-                    register={register}
-                    errors={errors}
-                    name="oldPassword"
-                    placeholder="Enter your current password"
-                    validation={{ required: "Current password is required" }}
-                  />
-                  <PasswordField
-                    label="New Password *"
-                    show={showNewPassword}
-                    onToggle={() => setShowNewPassword(!showNewPassword)}
-                    register={register}
-                    errors={errors}
-                    name="newPassword"
-                    placeholder="Enter your new password"
-                    validation={{ required: "New password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } }}
-                  />
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-foreground">Confirm New Password *</Label>
-                    <Input
-                      type="password"
-                      {...register("confirmPassword", {
-                        required: "Please confirm your new password",
-                        validate: (value, formValues) => value === formValues.newPassword || "Passwords do not match"
-                      })}
-                      placeholder="Confirm your new password"
-                      className="border-border focus-visible:ring-ring"
-                    />
-                    {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>}
-                  </div>
-                </div>
-                <Separator className="bg-border" />
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button
-                    disabled={isSubmitting}
-                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
-                    onClick={handleSubmit(handlePasswordSubmit)}
-                  >
-                    <Save className="h-4 w-4 mr-2" />{isSubmitting ? "Changing Password..." : "Change Password"}
-                  </Button>
-                  <Button variant="outline" onClick={handlePasswordCancel} className="flex-1 border-border hover:bg-accent hover:text-accent-foreground">
-                    <X className="h-4 w-4 mr-2" />Cancel
-                  </Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* Change Password Section */}
+        <ChangePassword />
       </div>
     </div>
   )

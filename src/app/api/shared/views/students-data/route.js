@@ -1,6 +1,7 @@
 'use server';
 
 import { Student } from "@/db/models/studentModel";
+import { Teacher } from "@/db/models/teacherModel";
 import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
 
@@ -16,10 +17,14 @@ export const GET = withDB(async (req) => {
         const search = req.nextUrl.searchParams.get("search") || '';
 
         const reqUser = JSON.parse(req.headers.get("user"))
-
+        // Check if the user is a teacher
+        
+        const teacher = reqUser.role === 'teacher' ? await Teacher.findById(reqUser._id, 'department') : null;
+        
         const query = {};
-        if (reqUser.role === 'teacher') {
-            query.addedBy = reqUser._id;
+
+        if (teacher) {
+            query.department = teacher.department ;
         }
 
         // Build query based on search params and also case insensitive

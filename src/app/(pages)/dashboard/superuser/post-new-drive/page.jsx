@@ -33,7 +33,7 @@ export default function PostJobPage() {
 
   const handleFileSelect = (file) => {
     if (!file || file.type !== "application/pdf") {
-      toast.error("Please upload a PDF file")
+      toast("Please upload a PDF file")
       return
     }
     setValue("pdfFile", file)
@@ -82,7 +82,10 @@ export default function PostJobPage() {
     } catch (error) {
       setJobId(null)
       setIsParsed(false)
-      toast(error.response?.data?.message || error.message, { variant: "destructive", action: { label: 'Close' } })
+      toast(error.response?.data?.message || error.message, { style: {
+        backgroundColor: 'red',
+        color: 'white'
+      }, action: { label: 'Close' } })
     } finally {
       setIsParsing(false)
     }
@@ -124,7 +127,7 @@ export default function PostJobPage() {
         return
       }
 
-      const response = await axios.post('/api/superuser/jobs/assign-job-to-admin', {
+      const response = await axios.post('/api/superuser/jobs/assign-job-to-admins', {
         adminIds: selectedAdmins?.map(admin => admin._id) || [],
       },
         {
@@ -136,7 +139,10 @@ export default function PostJobPage() {
       router.push('/dashboard/superuser/drives/unpublished-drives')
     } catch (error) {
       console.error('Error posting job:', error)
-      toast(error?.response?.data?.message || "Failed to post job", { variant: "destructive" })
+      toast(error?.response?.data?.message || "Failed to post job", { style: {
+        backgroundColor: 'red',
+        color: 'white'
+      }})
     } finally {
       reset();
       setJobId(null);
@@ -150,8 +156,8 @@ export default function PostJobPage() {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-3xl mx-auto space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Post New Job</h1>
-          <p className="text-gray-600 mt-2">Upload job description PDF and assign to admins</p>
+          <h1 className="text-3xl font-bold text-gray-900">AI-Powered Job Posting</h1>
+          <p className="text-gray-600 mt-2">Upload job description PDF containing text and Let the magic happen.</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -323,7 +329,7 @@ export default function PostJobPage() {
                   <Label className="text-sm text-gray-600">Selected Admins:</Label>
                   <div className="flex flex-wrap gap-2">
                     {selectedAdmins.map((admin) => (
-                      <Badge key={admin.id} variant="secondary" className="flex items-center gap-2 pr-1">
+                      <Badge key={admin._id} variant="secondary" className="flex items-center gap-2 pr-1">
                         <div>
                           <div className="font-medium">{admin.name}</div>
                           <div className="text-xs">{admin.email}</div>

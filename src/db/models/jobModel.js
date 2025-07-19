@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const JobSchema = new mongoose.Schema({
+    fileHash: { type: String, unique: true, required: true }, // to store the hash of the PDF file
     company: {
         name: { type: String, required: true },
         website: { type: String }
@@ -51,7 +52,7 @@ const JobSchema = new mongoose.Schema({
         package: { type: String }, // e.g., "₹12-18 LPA" or "Not Disclosed"
         shift_timing: { type: String },
         date_of_joining: { type: String },
-        placement_process: { type: [String] },
+        placement_process: { type: [String] , default: [] }, // e.g., ["Online Test", "Technical Interview", "HR Round"]
     },
 
     // done by superuser

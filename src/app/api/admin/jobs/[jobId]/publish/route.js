@@ -55,7 +55,7 @@ export const PUT = withDB(async (req, { params }) => {
 
         await Assignment.updateMany(
             { company: jobId },
-            { $set: { status: 'completed' } } // Update all assignments related to this job to 'in-progress'
+            { $set: { status: 'in-progress' } } // Update all assignments related to this job to 'in-progress'
         );
         await job.save();
 

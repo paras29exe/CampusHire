@@ -117,5 +117,5 @@ export function useInfiniteScroll(
         }, 1000);
     }, [searchTerm])
 
-    return { data, hasMore, isLoading, lastElementRef, fetchData }
+    return { data, setData, hasMore, isLoading, lastElementRef, fetchData }
 }

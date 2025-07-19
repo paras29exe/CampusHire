@@ -85,6 +85,7 @@ export default function JobDescriptionPage({ jobData, role }) {
                                     {jobData.company.website && (
                                         <Link
                                             href={jobData.company.website}
+                                            target="_blank"
                                             className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm flex items-center gap-1 transition-colors"
                                         >
                                             <ExternalLink className="h-4 w-4" />

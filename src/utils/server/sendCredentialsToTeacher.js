@@ -31,10 +31,17 @@ export const sendCredentialsToTeacher = async (email, studentsData) => {
 
         // Send email
         await transporter.sendMail({
-            from: '"CampusHire Portal" <paras.webdev404@gmail.com>',
+            from: process.env.EMAIL_FROM,
             to: email,
-            subject: `Credentials for Newly Added ${studentsData[0].course + (studentsData[0].branch ? ("-" + studentsData[0].branch) : "" )} Students`,
-            text: "Check the attached file for the credentials of newly added students. ",
+            subject: `Credentials for Newly Added ${studentsData[0].course + (studentsData[0].branch ? ("-" + studentsData[0].branch) : "")} Students`,
+            text: "Check the attached file for the credentials of newly added students. If you find any student's credentials missing, they might already exist in the database or are duplicate entries in the file. \n\n Regards, \n CampusHire Team",
+            html: `
+                <div style="font-size:16px; font-family:Arial, sans-serif; line-height:1.6; color:#333;">
+                <p>Check the attached file for the credentials of newly added students.</p>
+                <p>If you find any student's credentials missing, they might already exist in the database or are duplicate entries in the file.</p>
+                <p style="margin-top:20px;">Regards,<br/><strong>CampusHire Team</strong></p>
+                </div>
+            `,
             attachments: [
                 {
                     filename: "students_credentials.xlsx",

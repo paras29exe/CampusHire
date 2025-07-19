@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 // Helper to format date (assuming it exists or will be created)
 const formatDate = (dateString) => {
@@ -18,8 +19,13 @@ const formatDate = (dateString) => {
 
 export default function CompletedDriveCard({ driveData, userRole }) {
   const [isAdminsOpen, setIsAdminsOpen] = React.useState(false)
+  const router = useRouter()
 
   const isSuperuser = userRole === "superuser"
+
+  const handleViewDetails = () => {
+    router.push(`/job-description?jobId=${driveData.company._id}`);
+  }
 
   return (
     <Card className="w-full max-w-4xl mx-auto hover:shadow-md transition-shadow duration-300">
@@ -113,11 +119,9 @@ export default function CompletedDriveCard({ driveData, userRole }) {
         </Collapsible>
       </CardContent>
       <CardFooter className="flex flex-col sm:flex-row gap-2 mt-auto p-4 pt-0">
-        <Link href={`/drives/${driveData.id}`} className="w-full">
-          <Button variant="outline" className="w-full bg-transparent">
-            View Drive Details
-          </Button>
-        </Link>
+        <Button onClick={handleViewDetails} variant="outline" className="w-full bg-transparent">
+          View Drive Details
+        </Button>
       </CardFooter>
     </Card>
   )

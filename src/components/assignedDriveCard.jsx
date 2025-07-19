@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 // Helper to format date (assuming it exists or will be created)
 const formatDate = (dateString) => {
@@ -25,6 +26,9 @@ export default function AssignedDriveCard({ driveData, userRole }) {
         router.push(`/dashboard/admin/modify-job?jobId=${driveData.company._id}`);
     }
 
+    const handleViewDetails = () => {
+        router.push(`/job-description?jobId=${driveData.company._id}`);
+    }
 
     return (
         <Card className="w-full p-2 pt-4 max-w-4xl mx-auto hover:shadow-md transition-shadow duration-300">
@@ -111,13 +115,13 @@ export default function AssignedDriveCard({ driveData, userRole }) {
             </CardContent>
             <CardFooter className="flex flex-col sm:ml-auto mt-auto sm:flex-row gap-2 p-4 pt-0">
                 {isSuperuser ? (
-                    <Button className="max-sm:w-full">
+                    <Button onClick={() => toast("This feature is not available yet.")} className="max-sm:w-full">
                        <Bell className="w-3 m-auto" /> Notify Admins
                     </Button>
                 ) : (
                     <Button onClick={handleManage} className="max-sm:w-full"><Edit className="w-4 h-4" /> Manage</Button>
                 )}
-                    <Button variant="outline" className="max-sm:w-full bg-transparent">
+                    <Button onClick={handleViewDetails} variant="outline" className="max-sm:w-full bg-transparent">
                         View Drive Details
                     </Button>
             </CardFooter>

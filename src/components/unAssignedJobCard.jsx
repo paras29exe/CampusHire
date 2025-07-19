@@ -6,9 +6,17 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/utils/client/formatDate"
 import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/store/store"
+import DialogBox from "./DialogBox"
+import { useState } from "react"
+import { toast } from "sonner"
+import axios from "axios"
 
-export default function UnassignedJobCard({ jobData }) {
+export default function UnassignedJobCard({ jobData, removeVideo }) {
   const router = useRouter()
+  const { userData } = useAuthStore()
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleViewDetails = () => {
     router.push(`/job-description?jobId=${jobData._id}`)
@@ -18,8 +26,19 @@ export default function UnassignedJobCard({ jobData }) {
     router.push(`/dashboard/superuser/assignments/assign-to-admin?jobId=${jobData._id}`)
   }
 
-  const handleDelete = () => {
-    
+  const handleDelete = async () => {
+    try {
+      setLoading(true)
+      await axios.delete(`/api/superuser/jobs/delete?jobId=${jobData._id}`);
+      toast("Job deleted successfully");
+      removeVideo(jobData._id);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to delete job");
+      console.error("Error deleting job:", error);
+    } finally {
+      setLoading(false)
+      setDialogOpen(false)
+    }
   }
 
   const getDaysAgo = (dateString) => {
@@ -146,7 +165,7 @@ export default function UnassignedJobCard({ jobData }) {
             </Button>
 
             <Button
-              onClick={handleDelete}
+              onClick={() => setDialogOpen(true)}
               variant="destructive"
               className="flex-1 sm:flex-none lg:w-full justify-center"
             >
@@ -154,6 +173,21 @@ export default function UnassignedJobCard({ jobData }) {
               Delete
             </Button>
           </div>
+          {
+            userData.role === 'superuser' && (
+              <DialogBox
+                open={dialogOpen}
+                setOpen={setDialogOpen}
+                title="Confirm Deletion"
+                description="Are you sure you want to delete this job? This action cannot be undone."
+                confirmText="Yes, Delete"
+                cancelText="No, Cancel"
+                onSuccess={handleDelete}
+                onCancel={() => setDialogOpen(false)}
+                loading={loading}
+              />
+            )
+          }
         </div>
       </CardContent>
     </Card>

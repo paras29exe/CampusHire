@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { LoaderCircle, Search } from 'lucide-react';
 import {
   Table,
@@ -15,7 +15,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import FiltersComponent from '@/components/filtersComponent';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useInfiniteScroll } from '@/hooks/infiniteScrollHook';
-
 
 export default function StudentDataTable() {
   const params = useSearchParams();
@@ -100,6 +99,7 @@ export default function StudentDataTable() {
                     <TableHead className="font-medium">Email</TableHead>
                     <TableHead className="font-medium">Course</TableHead>
                     <TableHead className="font-medium">Branch</TableHead>
+                    <TableHead className="font-medium">Department</TableHead>
                     <TableHead className="font-medium">Batch</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -112,6 +112,7 @@ export default function StudentDataTable() {
                         <TableCell>{student.email}</TableCell>
                         <TableCell>{student.course}</TableCell>
                         <TableCell>{student.branch}</TableCell>
+                        <TableCell>{student.department}</TableCell>
                         <TableCell>{student.batch}</TableCell>
                       </TableRow>
                     ))

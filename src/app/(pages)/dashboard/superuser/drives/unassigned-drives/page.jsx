@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
 
 export default function UnassignedJobsDemo() {
-    const { data: unassignedJobs, isLoading, hasMore, lastElementRef } = useInfiniteScroll('/api/superuser/jobs/unassigned-jobs');
+    const { data: unassignedJobs, setData: setUnassignedJobs, isLoading, hasMore, lastElementRef } = useInfiniteScroll('/api/superuser/jobs/unassigned-jobs');
 
     const handleAddNewJob = () => {
         window.location.href = "/superuser/jobs/add"
@@ -21,6 +21,10 @@ export default function UnassignedJobsDemo() {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
         return diffDays > 3
     })
+
+    const removeVideo = (id) => {
+        setUnassignedJobs((prev) => prev.filter((job) => job._id !== id));
+    }
 
     return (
         <div className="min-h-screen ">
@@ -54,7 +58,7 @@ export default function UnassignedJobsDemo() {
                 <CardContent className="space-y-4">
                     {unassignedJobs.length > 0 ? (
                         unassignedJobs.map((job) => (
-                            <UnassignedJobCard key={job._id} jobData={job} />
+                            <UnassignedJobCard key={job._id} jobData={job} removeVideo={removeVideo} />
                         ))
                     ) : (
                         <div className="text-center py-8 space-y-2">

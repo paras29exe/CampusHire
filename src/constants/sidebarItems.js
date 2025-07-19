@@ -19,8 +19,8 @@ const ROUTES = {
         },
         STUDENTS: {
             ADD: '/dashboard/teacher/manage/add-student',
-            MY_STUDENTS: '/dashboard/teacher/view/my-students',
-            BULK_UPLOAD: '/dashboard/teacher/onboard/bulk-upload'
+            MY_STUDENTS: '/dashboard/teacher/views/my-students',
+            BULK_UPLOAD: '/dashboard/teacher/bulk-onboard'
         },
         FACULTY: {
             ADMINS: '/dashboard/teacher/view/admins',
@@ -37,7 +37,6 @@ const ROUTES = {
         STUDENTS: {
             ADD: '/dashboard/admin/manage/add-student',
             VIEW_ALL: '/dashboard/admin/view/students',
-            BULK_UPLOAD: '/dashboard/admin/onboard/bulk-upload'
         },
         FACULTY: {
             ADD_TEACHER: '/dashboard/admin/manage/add-teacher',
@@ -157,7 +156,7 @@ export function getSidebarItems(role) {
                         icon: <UserPlus className="w-4 h-4" />
                     },
                     { 
-                        title: 'My Students', 
+                        title: 'Department Students', 
                         href: ROUTES.TEACHER.STUDENTS.MY_STUDENTS,
                         icon: <GraduationCap className="w-4 h-4" />
                     }
@@ -273,12 +272,6 @@ export function getSidebarItems(role) {
                         icon: <ShieldHalf className="w-4 h-4" />
                     }
                 ]
-            },
-            { 
-                title: 'Bulk Register', 
-                icon: <Upload className="w-5 h-5" />, 
-                href: ROUTES.ADMIN.STUDENTS.BULK_UPLOAD,
-                description: 'Bulk upload students and data'
             }
         ],
 

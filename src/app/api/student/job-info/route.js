@@ -43,7 +43,10 @@ export const GET = withDB(async (req) => {
             }
         ]);
 
-        const job = await Job.findById(jobId).populate('assigned_to');
+        const job = await Job.findOne({
+            _id: mongoose.Types.ObjectId.createFromHexString(jobId),
+            status: { $ne: ['unpublished', 'unassigned'] } // Exclude unpublished jobs
+        }).populate('assigned_to');
 
         const info = applications.reduce((acc, curr) => {
             acc[curr.status] = curr.count;

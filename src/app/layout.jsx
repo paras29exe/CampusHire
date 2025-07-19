@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
         <Main>
           {children}
         </Main>
-        <Toaster position="top-center" visibleToasts={1} limit={1} closeButton duration={2000} />
+        <Toaster position="top-center" visibleToasts={1} limit={1} closeButton duration={4000} />
 
       </body>
     </html >

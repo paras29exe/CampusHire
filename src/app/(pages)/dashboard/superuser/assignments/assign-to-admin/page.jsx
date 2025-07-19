@@ -22,9 +22,8 @@ import {
 } from "@/components/ui/command"
 import { ArrowLeft, Calendar, Globe, IndianRupee, LoaderCircle, Users } from "lucide-react"
 import axios from "axios"
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader } from "@/components/ui/dialog"
 import { toast } from "sonner"
-import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog"
+import Dialogbox from "@/components/DialogBox"
 
 export default function Page() {
     const router = useRouter()
@@ -112,31 +111,16 @@ export default function Page() {
 
     return (
         <div className="container mx-auto p-4 sm:p-6">
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogContent className="max-w-md">
-                    <DialogHeader>
-                        <DialogTitle className="text-lg! font-bold">Are you sure you want to assign this drive?</DialogTitle>
-                        <DialogDescription className="text-xs">
-                            This action will assign the job to the selected admins. They will be able to manage this job and its applicants.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                                Cancel
-                            </Button>
-                        </DialogClose>
-                        <DialogClose asChild>
-                            <Button
-                                onClick={confirmAssignment}
-                                className="bg-blue-600 hover:bg-blue-700 text-white"
-                            >
-                                Yes, I&apos;m sure
-                            </Button>
-                        </DialogClose>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+            <Dialogbox 
+                open={dialogOpen}
+                setOpen={setDialogOpen}
+                title="Confirm Assignment?"
+                description="Selected admins can modify this job as they want?"
+                confirmText="Yes, Assign"
+                cancelText="No, Cancel"
+                onSuccess={confirmAssignment}
+                onCancel={() => setDialogOpen(false)}
+            />
 
             <div className="flex flex-wrap items-center gap-x-4">
                 <Button variant="ghost" onClick={() => router.back()} className="mb-6 flex items-center gap-2">

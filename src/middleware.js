@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 export const middleware = async (req) => {
     const { pathname } = req.nextUrl;
 
-    // Skip all `/api/auth` paths
+    // Skip validation for login page
     if (pathname.endsWith('/login')) {
         return NextResponse.next();
     }

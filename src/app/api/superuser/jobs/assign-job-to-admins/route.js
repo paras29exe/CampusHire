@@ -6,19 +6,19 @@ import { withDB } from "@/utils/server/dbHandler";
 import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
-    const jobId = req.nextUrl.searchParams.get("jobId");
-    const { adminIds } = await req.json()
-    const currUser = JSON.parse(req.headers.get("user"));
-
-    if (!jobId || !adminIds) {
-        return NextResponse.json({ error: "Job ID and Admin IDs are required" }, { status: 400 });
-    }
-
     try {
+        const jobId = req.nextUrl.searchParams.get("jobId");
+        const { adminIds } = await req.json()
+        const currUser = JSON.parse(req.headers.get("user"));
+
+        if (!jobId || !adminIds) {
+            return NextResponse.json({ message: "Job ID and Admin IDs are required" }, { status: 400 });
+        }
+
         // Find the job by ID
         const job = await Job.findById(jobId);
         if (!job) {
-            return NextResponse.json({ error: "Job not found" }, { status: 404 });
+            return NextResponse.json({ message: "Job not found" }, { status: 404 });
         }
 
         // Ensure adminIds is an array

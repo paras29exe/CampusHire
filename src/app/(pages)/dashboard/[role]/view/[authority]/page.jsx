@@ -28,10 +28,13 @@ const otherApiMap = {
     admin: '/api/shared/views/admins-data',
 }
 
-export default function StudentDataTable() {
+export default function AuthorityDataTable() {
     const RouteParams = useParams()
     const temp = useMemo(() => RouteParams.authority?.toLowerCase() || 'students', [RouteParams.authority]);
     const authority = useMemo(() => temp.charAt(0).toUpperCase() + temp.slice(1, temp.length - 1), [temp]);
+
+    const router = useRouter();
+    const params = useSearchParams();
 
     const { role } = useAuthStore();
     const apiEndpoint = useMemo(() => {
@@ -43,8 +46,6 @@ export default function StudentDataTable() {
         return endpoint;
     }, [role, authority]);
 
-    const router = useRouter();
-    const params = useSearchParams();
 
     const [searchTerm, setSearchTerm] = useState(params.get('search') || '');
     const [searchQuery, setSearchQuery] = useState(params.get('search') || '');

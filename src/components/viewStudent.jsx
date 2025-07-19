@@ -4,8 +4,17 @@ import { Mail, Phone, GraduationCap, Calendar, Award, AlertTriangle } from "luci
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "./ui/button"
+import { useAuthStore } from "@/store/store"
+import DialogBox from "./DialogBox"
+import axios from "axios"
+import { toast } from "sonner"
+import { useState } from "react"
 
 export default function ViewStudent({ student, loading }) {
+  const role = useAuthStore()
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   if (loading) {
     return (
@@ -23,6 +32,24 @@ export default function ViewStudent({ student, loading }) {
     )
   }
 
+  const handleDelete = () => {
+    setDialogOpen(false)
+    setDeleting(true)
+
+    axios.delete(`/api/shared/manage/delete-student?id=${student._id}`)
+      .then(response => {
+        toast.success(response.data.message)
+        window.history.back() // Go back to the previous page after deletion
+        // Optionally redirect or update state after deletion
+      })
+      .catch(error => {
+        toast.error(error.response?.data?.message || "Failed to delete student")
+      })
+      .finally(() => {
+        setDeleting(false)
+      })
+  }
+
   const getInitials = (name) =>
     name
       .split(" ")
@@ -32,16 +59,35 @@ export default function ViewStudent({ student, loading }) {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
+      <DialogBox
+        title="Delete Student ?"
+        description={`Are you sure you want to delete ${student.name}? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onSuccess={handleDelete}
+        onCancel={() => setDialogOpen(false)}
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+        loading={deleting}
+      />
+
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header Card */}
         <Card>
           <CardHeader className="text-center">
+            {
+              role !== "student" && (
+                <Button variant={'destructive'} onClick={() => setDialogOpen(true)} className={'w-fit ml-auto'}>
+                  Delete User
+                </Button>
+              )
+            }
             <Avatar className="w-20 h-20 mx-auto mb-4">
               <AvatarFallback className="text-2xl bg-blue-600 text-white">{getInitials(student.name)}</AvatarFallback>
             </Avatar>
-            <CardTitle className="text-2xl">{student.name}</CardTitle>
+            <CardTitle className="text-2xl">{student.name.toUpperCase()}</CardTitle>
             <div className="flex items-center justify-center gap-2 mt-2">
-              <Badge>{student.role}</Badge>
+              <Badge>{student.role.toUpperCase()}</Badge>
               <Badge variant="outline">{student.roll_number}</Badge>
               {student.backlogs > 0 && (
                 <Badge variant="destructive" className="flex items-center gap-1">
@@ -165,9 +211,8 @@ export default function ViewStudent({ student, loading }) {
               </div>
 
               <div
-                className={`p-4 rounded-lg border ${
-                  student.backlogs > 0 ? "bg-red-50 border-red-200" : "bg-green-50 border-green-200"
-                }`}
+                className={`p-4 rounded-lg border ${student.backlogs > 0 ? "bg-red-50 border-red-200" : "bg-green-50 border-green-200"
+                  }`}
               >
                 <p className={`text-sm ${student.backlogs > 0 ? "text-red-600" : "text-green-600"}`}>Backlogs</p>
                 <p className={`text-2xl font-bold ${student.backlogs > 0 ? "text-red-700" : "text-green-700"}`}>

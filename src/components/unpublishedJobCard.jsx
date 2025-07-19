@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, MapPin, IndianRupee, Users, Eye, Edit, ChevronDown, ExternalLink, Mail } from "lucide-react"
+import { Calendar, MapPin, IndianRupee, Users, Eye, Edit, ChevronDown, ExternalLink, Mail, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -11,10 +11,15 @@ import { formatDate } from "@/utils/client/formatDate"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import axios from "axios"
+import DialogBox from "./DialogBox"
 
 export default function UnpublishedJobCard({ jobData, userData }) {
   const [isAdminsOpen, setIsAdminsOpen] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const handlePublish = () => {
     router.push(`/dashboard/admin/modify-job?jobId=${jobData._id}`);
@@ -24,6 +29,25 @@ export default function UnpublishedJobCard({ jobData, userData }) {
     router.push(`/dashboard/superuser/assignments/assign-to-admin?jobId=${jobData._id}`);
   }
 
+  const handleNotify = () => {
+    toast("Notification feature is not Available yet.")
+  }
+
+  const handleDelete = async () => {
+    try {
+      setDeleteLoading(true);
+      await axios.delete(`/api/superuser/jobs/delete?jobId=${jobData._id}`);
+      toast("Job deleted successfully");
+      window.location.reload(); 
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to delete job");
+      console.error("Error deleting job:", error);
+    }finally{
+      setDeleteLoading(false);
+      setDialogOpen(false);
+    }
+  }
+    
   // Mock assigned admins data - replace with actual data from jobData.assigned_to
 
 
@@ -154,7 +178,7 @@ export default function UnpublishedJobCard({ jobData, userData }) {
             <Separator orientation="vertical" className="hidden lg:block h-16 mx-4" />
             <div className="flex flex-col gap-1.5 w-full lg:w-auto">
               <Link href={`/job-description?jobId=${jobData._id}`} className="w-full lg:w-auto">
-                <Button onClick={() => router.push(`job-description/?jobId=${jobData._id}`)} variant="outline" className="w-full lg:w-auto bg-background">
+                <Button onClick={() => router.push(`job-description/?jobId=${jobData._id}`)} variant="outline" className="w-full shadow-sm lg:w-auto bg-background">
                   <Eye className="h-4 w-4 mr-2" />
                   View Details
                 </Button>
@@ -176,7 +200,26 @@ export default function UnpublishedJobCard({ jobData, userData }) {
                     <Mail className="h-4 w-4 mr-2" />
                     Notify Admins
                   </Button>
+                  <Button onClick={() => setDialogOpen(true)} className="w-full cursor-pointer lg:w-auto bg-red-600 hover:bg-red-700">
+                    <Trash className="h-4 w-4 mr-2" />
+                    Delete
+                  </Button>
                   </>
+                )
+              }
+              {
+                userData.role === 'superuser' && (
+                  <DialogBox 
+                    open={dialogOpen}
+                    setOpen={setDialogOpen}
+                    title="Confirm Deletion"
+                    description="Are you sure you want to delete this job? This action cannot be undone."
+                    confirmText="Yes, Delete"
+                    cancelText="No, Cancel"
+                    onSuccess={handleDelete}
+                    onCancel={() => setDialogOpen(false)}
+                    loading={deleteLoading} // Set to true if you want to show a loading state during deletion
+                  />
                 )
               }
             </div>

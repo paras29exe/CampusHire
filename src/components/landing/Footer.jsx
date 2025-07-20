@@ -32,8 +32,8 @@ export default function Footer() {
             className="lg:col-span-1 space-y-4"
           >
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">CH</span>
+              <div className="w-10 aspect-square rounded-lg flex items-center justify-center">
+                <img src="/logo.png" alt="CampusHire Logo" />
               </div>
               <span className="text-xl font-bold">CampusHire</span>
             </div>
@@ -124,7 +124,7 @@ export default function Footer() {
           viewport={{ once: true }}
           className="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center"
         >
-          <p className="text-sm text-gray-400">© 2024 CampusHire. All rights reserved.</p>
+          <p className="text-sm text-gray-400">© 2025 CampusHire. All rights reserved.</p>
           <p className="text-sm text-gray-400 mt-2 sm:mt-0">
             Crafted with ❤️ by <span className="text-blue-400 font-medium">Paras</span>
           </p>

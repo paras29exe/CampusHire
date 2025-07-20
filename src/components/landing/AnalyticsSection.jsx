@@ -6,26 +6,29 @@ import { Activity, Eye, Users, TrendingUp } from "lucide-react"
 const analyticsFeatures = [
   {
     icon: Activity,
-    title: "Application Tracking",
-    description: "Keep a clear record of how many students applied, got shortlisted, or were rejected for each drive.",
+    title: "Round‑Wise Results",
+    description:
+      "Companies give roll numbers for shortlisted , just upload it and instantly see who progressed and who was rejected — stage by stage.",
   },
   {
     icon: Eye,
-    title: "Drive Oversight for Admins",
-    description: "Admins can review progress of assigned drives, check recruiter updates, and ensure timelines are followed.",
+    title: "Drive Progress at a Glance",
+    description:
+      "Track how each drive is moving, spot delays, and see recruiter updates without back‑and‑forth calls.",
   },
   {
     icon: Users,
-    title: "Student Engagement Reports",
-    description: "View overall student participation, see who applied, and identify students yet to participate.",
+    title: "Missed Opportunities",
+    description:
+      "Identify eligible students who haven’t applied yet so teachers can nudge them in time.",
   },
   {
     icon: TrendingUp,
-    title: "Shortlisting via Excel",
-    description: "Upload a shortlist Excel file and automatically mark everyone else as rejected to simplify management.",
+    title: "Actionable Insights",
+    description:
+      "Get graphs, tables & Filter reports by batch, course, or department to plan better and improve future drives.",
   },
 ]
-
 
 export default function AnalyticsSection() {
   return (
@@ -38,9 +41,9 @@ export default function AnalyticsSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Advanced Analytics</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Advanced Drive Analytics</h2>
           <p className="text-base text-gray-600 max-w-2xl mx-auto">
-            Make informed decisions with comprehensive analytics and real-time monitoring.
+            Go beyond tracking — take action with insights that help you run smoother, smarter campus drives.
           </p>
         </motion.div>
 
@@ -53,7 +56,7 @@ export default function AnalyticsSection() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
-              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg "
+              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg"
             >
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">

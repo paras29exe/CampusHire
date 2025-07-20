@@ -6,33 +6,39 @@ import { Shield, FileText, Users, BarChart3, Settings, Zap } from "lucide-react"
 const features = [
   {
     icon: Shield,
-    title: "Role-Based Access",
-    description: "Secure permissions for students, coordinators, and administrators.",
+    title: "Clear Role-Based Access",
+    description:
+      "Different dashboards and permissions for Superusers, Admins, Teachers, and Students—each sees and manages only what they’re supposed to.",
   },
   {
     icon: FileText,
-    title: "AI PDF Extraction",
-    description: "Automatically extract job details from company PDFs with high accuracy.",
+    title: "Instant Job Extraction",
+    description:
+      "Upload company job PDFs (even from email) and get a ready‑made job listing in seconds—no copy‑pasting, no manual typing.",
   },
   {
     icon: Users,
-    title: "Bulk Student Management",
-    description: "Import and manage student profiles with automated validation.",
+    title: "Bulk Student Onboarding",
+    description:
+      "Add 450+ students at once by uploading an Excel sheet. The system ignores duplicates and instantly sends login credentials back to the teacher.",
   },
   {
     icon: Settings,
-    title: "Admin Controls",
-    description: "Complete oversight and management tools for placement administrators.",
+    title: "Drive Management for Admins",
+    description:
+      "Admins can set eligibility criteria, assign drives, and update round‑wise results with just a few clicks—no paperwork needed.",
   },
   {
     icon: BarChart3,
-    title: "Analytics Dashboard",
-    description: "Real-time insights into applications, placements, and drive performance.",
+    title: "Actionable Analytics",
+    description:
+      "See which students applied or skipped, track progress by batch or course, and view round‑wise performance to make data‑driven decisions.",
   },
   {
     icon: Zap,
-    title: "Smart Workflows",
-    description: "Automated notifications and status updates for seamless operations.",
+    title: "Smart Automation",
+    description:
+      "Automatic status updates, instant notifications, and time‑saving workflows cut manual work from hours to seconds.",
   },
 ]
 
@@ -47,9 +53,11 @@ export default function FeaturesSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Comprehensive Features</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+            Everything You Need for Campus Hiring
+          </h2>
           <p className="text-base text-gray-600 max-w-2xl mx-auto">
-            Everything you need to run efficient campus recruitment drives.
+            CampusHire automates and simplifies every step—from uploading job details to tracking student progress—so your placement drives run effortlessly.
           </p>
         </motion.div>
 
@@ -61,7 +69,7 @@ export default function FeaturesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
               viewport={{ once: true }}
-              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg "
+              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg"
             >
               <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4">
                 <feature.icon className="h-6 w-6 text-blue-600" />

@@ -110,10 +110,11 @@ export default function LoginPage() {
           <p className="text-gray-600 ">Sign in to your account</p>
         </div>
         <p className="text-sm text-center font-medium text-gray-600 my-2">
-          For Testing the product, You can contact on <span><a href="https://linkedin.com/in/paras29exe" target="_blank" className="text-blue-600 mr-1 hover:underline">LinkedIn</a></span>
-          or <a
+          For Testing the product, You can contact on <span><a href="https://linkedin.com/in/paras29exe" target="_blank" className="text-blue-600 mr-1 hover:underline">LinkedIn</a></span>or 
+          <span>
+          <a
           target="_blank"
-            href="mailto:paras.webdev404@gmail.com?subject=Demo%20credentials%20request%20for%20CampusHire&body=Hi%20Paras,%0A%0AI%20came%20across%20your%20project%20CampusHire%20and%20I%E2%80%99m%20really%20impressed%20with%20its%20features%20and%20workflow.%0A%0AI%20would%20like%20to%20request%20demo%20credentials%20to%20explore%20the%20platform%20further.%0A%0APlease%20let%20me%20know%20if%20you%20need%20any%20additional%20information%20from%20my%20side.%0A%0ALooking%20forward%20to%20your%20response.%0A%0AThanks%20%26%20Regards,%0A[Your%20Name]%0A[Your%20Organization%20/%20College]" className="text-blue-600 hover:underline ml-1">Email</a> me
+            href="mailto:paras.webdev404@gmail.com?subject=Demo%20credentials%20request%20for%20CampusHire&body=Hi%20Paras,%0A%0AI%20came%20across%20your%20project%20CampusHire%20and%20I%E2%80%99m%20really%20impressed%20with%20its%20features%20and%20workflow.%0A%0AI%20would%20like%20to%20request%20demo%20credentials%20to%20explore%20the%20platform%20further.%0A%0APlease%20let%20me%20know%20if%20you%20need%20any%20additional%20information%20from%20my%20side.%0A%0ALooking%20forward%20to%20your%20response.%0A%0AThanks%20%26%20Regards,%0A[Your%20Name]%0A[Your%20Organization%20/%20College]" className="text-blue-600 hover:underline ml-1">Email</a></span> me
           for demo credentials.
         </p>
 

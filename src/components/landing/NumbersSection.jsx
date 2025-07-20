@@ -3,10 +3,10 @@
 import { motion } from "framer-motion"
 
 const stats = [
-  { number: "95%", label: "PDF Extraction Accuracy", description: "AI-powered precision" },
-  { number: "90%", label: "Time Saved", description: "Automated workflows" },
-  { number: "100%", label: "Data Security", description: "Enterprise-grade protection" },
-  { number: "24/7", label: "Platform Availability", description: "Always accessible" },
+  { number: "95%", label: "Job Details Captured Correctly", description: "Almost every detail from company files is extracted accurately." },
+  { number: "90%", label: "Time Saved on Each Drive", description: "Job listing time reduced to ~10 seconds from 15 minutes" },
+  { number: "100%", label: "Safe and Secure Data", description: "Your student and company data is fully protected." },
+  { number: "24/7", label: "Always Available", description: "Access the platform anytime, from anywhere." },
 ]
 
 export default function NumbersSection() {
@@ -20,9 +20,9 @@ export default function NumbersSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Built for Performance</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Built for Real Impact</h2>
           <p className="text-base text-blue-100 max-w-2xl mx-auto">
-            Designed with cutting-edge technology to deliver reliable, efficient campus recruitment solutions.
+            CampusHire delivers clear results that save time, reduce errors, and keep your data safe.
           </p>
         </motion.div>
 

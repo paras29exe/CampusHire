@@ -6,12 +6,14 @@ import { AlertTriangle, LoaderCircle, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
+import { useRouter } from "next/navigation"
 
 export default function UnassignedJobsDemo() {
     const { data: unassignedJobs, setData: setUnassignedJobs, isLoading, hasMore, lastElementRef } = useInfiniteScroll('/api/superuser/jobs/unassigned-jobs');
+    const router = useRouter()
 
     const handleAddNewJob = () => {
-        window.location.href = "/superuser/jobs/add"
+        router.push('/dashboard/superuser/post-new-drive')
     }
 
     const urgentJobs = unassignedJobs.filter((job) => {

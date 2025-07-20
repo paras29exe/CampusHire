@@ -3,7 +3,7 @@
 CampusHire is an AI-powered campus recruitment management platform designed to streamline the entire hiring process for colleges. It offers secure role-based dashboards for students, teachers, admins, and superusers, with powerful features like bulk onboarding, drive management, and automated analytics.
 
 #### ✅ Tested with 20+ email PDFs with over 95% extraction accuracy.
-#### ⚡ Reduced job listing creation time from ~15 minutes to just ~7 seconds.
+#### ⚡ Reduced job listing creation time from ~15 minutes to just ~10 seconds.
 #### 👽 Can onboard/register 400+ students in less than 5 seconds.
 #### 📚 Track performance of Each student across multiple rounds of Drive.
 #### 📚 Can track the Non-applicants but eligible students to take action.

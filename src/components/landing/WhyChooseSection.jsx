@@ -1,28 +1,32 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { MessageSquareOff, Zap, Users, BarChart3 } from "lucide-react"
+import { Zap, Users, BarChart3, FileText } from "lucide-react"
 
 const features = [
   {
-    icon: MessageSquareOff,
-    title: "End WhatsApp Chaos",
-    description: "Replace scattered group chats with a unified, organized communication platform.",
-  },
-  {
-    icon: Zap,
-    title: "AI-Powered Automation",
-    description: "Intelligent PDF processing and automated workflows reducing Job listing time from 15 minutes to ~7 seconds.",
+    icon: FileText,
+    title: "Turns Hours into Seconds",
+    description:
+      "Companies send job details as emails. Just upload them—CampusHire turns them into ready‑to‑post listings in less than 10 seconds.",
   },
   {
     icon: Users,
-    title: "Streamlined Onboarding",
-    description: "Bulk import and manage student data with smart validation and processing.",
+    title: "Onboard 450+ Students Fast",
+    description:
+      "Import students in bulk via Excel. Duplicates are skipped, new passwords are auto‑generated, and credentials are emailed instantly.",
   },
   {
     icon: BarChart3,
-    title: "Unified Dashboard",
-    description: "Role-based access with real-time insights for complete recruitment oversight.",
+    title: "Know What Others Missed",
+    description:
+      "See which eligible students applied or missed out, and track how far each progressed in every round.",
+  },
+  {
+    icon: Zap,
+    title: "Update Rounds in One Go",
+    description:
+      "Upload a shortlist roll numbers Excel, and CampusHire instantly updates hundreds of student statuses—no manual work.",
   },
 ]
 
@@ -37,9 +41,11 @@ export default function WhyChooseSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Why Choose CampusHire?</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+            Why Choose CampusHire?
+          </h2>
           <p className="text-base text-gray-600 max-w-2xl mx-auto">
-            Modern solutions for age-old campus recruitment challenges.
+            Stop wasting hours on manual work. Automate and simplify your campus drives.
           </p>
         </motion.div>
 
@@ -50,8 +56,8 @@ export default function WhyChooseSection() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: "easeInOut" }}
-              viewport={{ once: true, amount:0.2 }}
-              className="text-center p-6 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-lg "
+              viewport={{ once: true, amount: 0.2 }}
+              className="text-center p-6 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-lg"
             >
               <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4">
                 <feature.icon className="h-6 w-6 text-blue-600" />

@@ -175,7 +175,6 @@ export default function PostJobPage() {
                 {!pdfFile ? (
                   <div
                     className="border-2 cursor-pointer border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors"
-                    onClick={() => document.querySelector('input[type="file"]').click()}
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
                   >
@@ -188,6 +187,7 @@ export default function PostJobPage() {
                           <input
                             type="file"
                             className="hidden"
+                            onClick={(e) => {e.stopPropagation()}}
                             accept=".pdf"
                             onChange={(e) => handleFileSelect(e.target.files?.[0])}
                           />

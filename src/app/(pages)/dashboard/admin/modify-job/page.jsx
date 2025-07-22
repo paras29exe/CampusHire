@@ -1,87 +1,69 @@
-"use client"
+'use client';
 
-import { useState, useEffect, useMemo } from "react"
-import { Briefcase, CheckCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import EligibilityCriteriaSection from "@/components/modify-job/eligibility"
-import LinksDateSection from "@/components/modify-job/linksAndDate"
-import RoundDetailsSection from "@/components/modify-job/roundDetails"
-import { toast } from "sonner"
-import axios from "axios"
-import { useRouter, useSearchParams } from "next/navigation"
+import EditBasicDetails from "@/components/modify-job/basicDetailsPage";
+import RoundDetailsSection from "@/components/modify-job/roundDetails";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import axios from "axios";
+import { Briefcase, CheckCircle } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
-// ✅ Import Dialog from ShadCN
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog"
-
-export default function EditJobPage() {
-  const [jobData, setJobData] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isPublishing, setIsPublishing] = useState(false)
+export default function Page() {
+  const params = useSearchParams()
+  const jobId = params.get("jobId")
+  const router = useRouter()
+  const [jobData, setJobData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [eligibilityValid, setEligibilityValid] = useState(false)
   const [linksDateValid, setLinksDateValid] = useState(false)
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false) // ✅ state for dialog
+  const [roundDetailsValid, setRoundDetailsValid] = useState(false);
+  const isAllSectionsValid = useMemo(() => eligibilityValid && linksDateValid, [eligibilityValid, linksDateValid])
 
-  const params = useSearchParams()
-  const jobId = params.get("jobId")
-  const router = useRouter()
-
+  const [isJobPublished, setIsJobPublished] = useState(false)
+  const [selectedTab, setSelectedTab] = useState('basic');
+  
   useEffect(() => {
     const fetchJobData = async () => {
-      setIsLoading(true)
       try {
-        const response = await axios.get(`/api/views/job-description?jobId=${jobId}`)
-        const data = response.data.data
-        if (data.eligibility_criteria.courses.length && data.eligibility_criteria.batches.length && data.eligibility_criteria.cgpa !== null) {
-          setEligibilityValid(true)
-        }
-        if (data.links?.company_link && data.links?.college_link && data.last_date_to_apply) {
-          setLinksDateValid(true)
-        }
-        setJobData(data)
+        const response = await axios.get(`/api/views/job-description?jobId=${jobId}`);
+        setJobData(response.data.data);
+        setIsJobPublished(response.data.data.status === "active");
+        setSelectedTab(response.data.data.status === "active" ? "rounds" : "basic");
       } catch (error) {
-        console.error("Failed to fetch job data:", error)
-        toast("Failed to load job data", { action: { label: "OK" } })
+        console.error("Error fetching job data:", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
-    fetchJobData()
-  }, [])
+    };
 
-  const handleGoBack = () => window.history.back()
-
-  // ✅ This is triggered after confirmation in dialog
-  const handlePublishConfirmed = async () => {
-    setIsDialogOpen(false) // close dialog
-    if (!eligibilityValid || !linksDateValid) {
-      toast("Please complete all sections before publishing", { action: { label: "OK" } })
-      return
+    if (jobId) {
+      fetchJobData();
     }
-    setIsPublishing(true)
+  }, [jobId])
+
+  const handlePublish = async () => {
+    if (!isAllSectionsValid || !roundDetailsValid) {
+      toast("Please complete all sections before publishing", { style: { backgroundColor: 'red', color: 'white' } });
+      return;
+    }
+    setIsSubmitting(true);
     try {
-      const response = await axios.put(`/api/admin/jobs/${jobId}/publish`)
-      toast("Job published successfully!", { action: { label: "OK" } })
-      setJobData(response.data.data)
-      router.back()
+      const res = await axios.put(`/api/admin/jobs/${jobId}/publish`, {}, { params: { jobId } });
+      toast("Job published successfully!", { style: { backgroundColor: 'green', color: 'white' } });
+      setJobData(res.data.data);
+      router.push(`/dashboard/admin/drives/active-drives`);
     } catch (error) {
-      toast("Failed to publish job: " + (error.response?.data?.message || error.message))
+      console.error("Error publishing job:", error);
+      toast(error.response?.data?.message || "Failed to publish job", { style: { backgroundColor: 'red', color: 'white' } });
     } finally {
-      setIsPublishing(false)
+      setIsSubmitting(false);
     }
   }
-
-  const isAllSectionsValid = useMemo(() => eligibilityValid && linksDateValid, [eligibilityValid, linksDateValid])
-  const isJobPublished = useMemo(() => jobData?.status === "active", [jobData?.status])
 
   if (isLoading) {
     return (
@@ -95,20 +77,11 @@ export default function EditJobPage() {
   }
 
   if (!jobData) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">Job not found</p>
-          <Button onClick={handleGoBack} className="mt-4">
-            Go Back
-          </Button>
-        </div>
-      </div>
-    )
+    return <div className="p-6">Job not found. Give a valid JobId</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="w-full max-w-7xl mx-auto p-6">
       {/* Header */}
       <div className="bg-white border-b shadow-sm">
         <div className="max-w-6xl mx-auto px-6 py-4">
@@ -132,100 +105,44 @@ export default function EditJobPage() {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-8">
-            <EligibilityCriteriaSection
-              jobId={jobId}
-              initialData={jobData.eligibility_criteria}
-              onValidationChange={setEligibilityValid}
-            />
-            <LinksDateSection
-              jobId={jobId}
-              initialData={{
-                company_link: jobData.links?.company_link,
-                college_link: jobData.links?.college_link,
-                last_date_to_apply: jobData.last_date_to_apply,
-              }}
-              onValidationChange={setLinksDateValid}
-            />
-          </div>
+      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+        <TabsList className={"w-fit mx-auto mt-4 flex gap-4"}>
+          <TabsTrigger className={"outline-1"} value="basic">Basic Details</TabsTrigger>
+          <TabsTrigger className={"outline-1"} value="rounds">Interview Rounds</TabsTrigger>
+        </TabsList>
 
-          <div>
-            <RoundDetailsSection jobId={jobId} roles={jobData.job_roles} />
-          </div>
-        </div>
+        <TabsContent value="basic">
+          <EditBasicDetails
+            jobData={jobData}
+            setSelectedTab={setSelectedTab}
+            eligibilityValid={eligibilityValid}
+            linksDateValid={linksDateValid}
+            setEligibilityValid={setEligibilityValid}
+            setLinksDateValid={setLinksDateValid}
+            isJobPublished={isJobPublished}
+            isAllSectionsValid={isAllSectionsValid}
+          />
+        </TabsContent>
+        
+        <TabsContent value="rounds">
+          <RoundDetailsSection
+            jobId={jobData._id}
+            roles={jobData.job_roles}
+            setRoundDetailsValid={setRoundDetailsValid}
+            isPublished={isJobPublished}
+          />
 
-        {/* Publish Job Section */}
-        <div className="mt-8">
-          <Card
-            className={`border-2 ${isAllSectionsValid ? "border-green-200 bg-green-50" : "border-orange-200 bg-orange-50"}`}
+          {!isJobPublished && <Button
+            onClick={handlePublish}
+            className="mt-4 ml-auto w-full disabled:cursor-not-allowed bg-green-600 hover:bg-green-700"
+            disabled={!isAllSectionsValid || !roundDetailsValid}
           >
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {isJobPublished ? "Job Status" : "Ready to Publish?"}
-                  </h3>
-                  {isJobPublished ? (
-                    <p className="text-green-700">This job is currently published and visible to students.</p>
-                  ) : isAllSectionsValid ? (
-                    <p className="text-green-700">
-                      You can publish this job to make it visible to students.
-                    </p>
-                  ) : (
-                    <div className="space-y-2">
-                      <p className="text-orange-700">Please complete all sections before publishing:</p>
-                      <ul className="text-sm space-y-1">
-                        <li className={`flex items-center gap-2 ${eligibilityValid ? "text-green-600" : "text-red-600"}`}>
-                          <div className={`w-2 h-2 rounded-full ${eligibilityValid ? "bg-green-500" : "bg-red-500"}`}></div>
-                          Eligibility Criteria {eligibilityValid ? "✓" : "✗"}
-                        </li>
-                        <li className={`flex items-center gap-2 ${linksDateValid ? "text-green-600" : "text-red-600"}`}>
-                          <div className={`w-2 h-2 rounded-full ${linksDateValid ? "bg-green-500" : "bg-red-500"}`}></div>
-                          Links and Date {linksDateValid ? "✓" : "✗"}
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
-
-                {!isJobPublished && (
-                  <Button
-                    onClick={() => setIsDialogOpen(true)} // ✅ Open dialog instead of publishing directly
-                    disabled={!isAllSectionsValid || isPublishing}
-                    size="lg"
-                    className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400"
-                  >
-                    {isPublishing ? "Publishing..." : "Publish Job"}
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      {/* ✅ Dialog Component */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Have You clicked Save?</DialogTitle>
-            <DialogDescription className={"text-sm"}>
-              Make sure you have clicked the <strong>Save</strong> button in each section (Eligibility, Links & Date, Round Details) to ensure your changes are stored before publishing.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="mt-4 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handlePublishConfirmed} disabled={isPublishing} className="bg-green-600 hover:bg-green-700">
-              {isPublishing ? "Publishing..." : "Continue to Publish"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            {isSubmitting ? "Publishing..." : "Publish Job"}
+          </Button>
+          }
+        </TabsContent>
+      </Tabs>
     </div>
+
   )
 }

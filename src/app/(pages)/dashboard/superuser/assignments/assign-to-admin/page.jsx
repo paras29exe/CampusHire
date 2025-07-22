@@ -24,6 +24,8 @@ import { ArrowLeft, Calendar, Globe, IndianRupee, LoaderCircle, Users } from "lu
 import axios from "axios"
 import { toast } from "sonner"
 import Dialogbox from "@/components/DialogBox"
+import { Card } from "@/components/ui/card"
+import ReviewStipendPackage from "@/components/reviewStipendPackage"
 
 export default function Page() {
     const router = useRouter()
@@ -31,6 +33,8 @@ export default function Page() {
     const jobId = searchParams.get("jobId")
     const [job, setJob] = useState(null)
     const [admins, setAdmins] = useState([])
+    const [packageSaved, setPackageSaved] = useState(false)
+
     const [selected, setSelected] = useState([])
     const [loading, setLoading] = useState(true)
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -115,7 +119,7 @@ export default function Page() {
                 open={dialogOpen}
                 setOpen={setDialogOpen}
                 title="Confirm Assignment?"
-                description="Selected admins can modify this job as they want?"
+                description="Have you reviewed the stipend and package details? This action cannot be undone."
                 confirmText="Yes, Assign"
                 cancelText="No, Cancel"
                 onSuccess={confirmAssignment}
@@ -128,6 +132,10 @@ export default function Page() {
                 </Button>
                 <h1 className="text-3xl font-bold mb-8">{`Assign Job: ${job.company.name}`}</h1>
             </div>
+
+            <Card>
+                <ReviewStipendPackage parsedData={job} setPackageSaved={setPackageSaved}/>
+            </Card>
 
             <div className=" p-6 ">
                 <div className="flex items-center gap-4 mb-4">
@@ -161,6 +169,12 @@ export default function Page() {
 
                 <Separator className="my-6" />
 
+                {!packageSaved && (
+                    <div className="bg-yellow-100 text-black p-4 rounded-md mb-6">
+                        <p className="text-sm">Please review the stipend and package details before assigning the job.</p>
+                    </div>
+                )}
+
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -186,7 +200,7 @@ export default function Page() {
                         </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <Button onClick={handleConfirm} className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700">
+                    <Button onClick={handleConfirm} disabled={!packageSaved} className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700">
                        {assigning ? <LoaderCircle className="w-4 animate-spin" /> : "Confirm Assignment"}
                     </Button>
                 </div>

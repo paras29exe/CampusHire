@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -11,7 +11,7 @@ import { format } from "date-fns"
 import axios from "axios"
 import { toast } from "sonner"
 
-export default function RoundDetailsSection({ jobId, roles }) {
+export default function RoundDetailsSection({ jobId, roles, setRoundDetailsValid, isPublished }) {
     const [roundDate, setRoundDate] = useState()
     const [selectAll, setSelectAll] = useState(false)
     const [uploadedFile, setUploadedFile] = useState(null)
@@ -71,22 +71,12 @@ export default function RoundDetailsSection({ jobId, roles }) {
                     "Content-Type": "multipart/form-data",
                 },
             })
-            toast.success("Round details updated successfully", {
-                style: {
-                    background: "#f0f4f8",
-                    color: "#333",
-                },
-                action: {
-                    label: "OK",
-                },
-            })
+            toast.success("Round details updated successfully", { style: { background: "#f0f4f8", color: "#333", }, action: { label: "OK" } })
+            setRoundDetailsValid(true)
         } catch (err) {
             console.error(err)
             toast(err.response?.data?.message || "Failed to update round details", {
-                style: {
-                    background: "#f8d7da",
-                    color: "#721c24",
-                },
+                style: { background: "#f8d7da", color: "#721c24", }
             })
         } finally {
             setIsLoading(false)
@@ -111,28 +101,29 @@ export default function RoundDetailsSection({ jobId, roles }) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Round Details</CardTitle>
+                <CardTitle>Update Round Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 <form onSubmit={onSubmit} className="space-y-6">
-                    <div className="flex items-center space-x-2">
-                        <Checkbox
+                    {!isPublished &&
+                        <div className="flex items-center space-x-2">
+                         <Checkbox
                             id="without-details"
                             className={"border-black"}
                             checked={publishWithoutDetails}
                             onCheckedChange={(v) => {
-                                resetForm()
                                 setPublishWithoutDetails(v)
                                 if (v) {
                                     setRoleId("")
+                                    setRoundDetailsValid(true)
                                     resetForm()
                                 }
                             }}
                         />
                         <Label htmlFor="without-details" className="flex items-center gap-2">
-                            <ShieldAlertIcon className="h-4 w-4" /> Publish without Details
+                            <ShieldAlertIcon className="h-4 w-4" /> Publish without Changes
                         </Label>
-                    </div>
+                    </div>}
                     {!publishWithoutDetails && (
                         <>
                             <div className="space-y-2">
@@ -183,7 +174,7 @@ export default function RoundDetailsSection({ jobId, roles }) {
                                         </div>
                                         <div className="space-y-2">
                                             <Label>Date *</Label>
-                                            <Input 
+                                            <Input
                                                 type="date"
                                                 value={roundDate ? format(roundDate, "yyyy-MM-dd") : ""}
                                                 onChange={(e) => setRoundDate(new Date(e.target.value))}

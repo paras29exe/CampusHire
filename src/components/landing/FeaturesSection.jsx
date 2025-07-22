@@ -14,7 +14,7 @@ const features = [
     icon: FileText,
     title: "Instant Job Extraction",
     description:
-      "Upload company job PDFs (even from email) and get a ready‑made job listing in seconds—no copy‑pasting, no manual typing.",
+      "Upload company job PDFs (even download the email as PDF) and get a ready‑made job listing in seconds—no copy‑pasting, no manual typing.",
   },
   {
     icon: Users,

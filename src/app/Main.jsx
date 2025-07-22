@@ -1,25 +1,25 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { useAuthStore } from '@/store/store';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function Main({ children }) {
     const { setUserData, setRole } = useAuthStore();
-    const [loading, setLoading] = useState(true);
     const router = useRouter();
     const pathname = usePathname()
+    const isHome = useMemo(() => pathname === '/', [pathname]);
+    const [loading, setLoading] = useState(!isHome);
 
     useEffect(() => {
         const autoLogin = async () => {
-            const isLoginPage = pathname === '/auth/login';
             try {
                 const response = await axios.get('/api/auth/auto-login');
                 setUserData(response.data.user);
                 setRole(response.data.role);
 
-                if (isLoginPage) {
+                if (pathname === '/auth/login') {
                     router.replace(`/dashboard/${response.data.role}/drives/active-drives`);
                 }
             } catch (error) {
@@ -29,7 +29,6 @@ export default function Main({ children }) {
                 setLoading(false);
             }
         };
-        if(pathname === '/' ) setLoading(false);
         pathname !== '/' && autoLogin();
     }, []);
 

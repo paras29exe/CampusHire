@@ -3,8 +3,8 @@
 import { motion } from "framer-motion"
 
 const stats = [
-  { number: "95%", label: "Job Details Captured Correctly", description: "Almost every detail from company files is extracted accurately." },
-  { number: "90%", label: "Time Saved on Each Drive", description: "Job listing time reduced to ~10 seconds from 15 minutes" },
+  { number: "90%", label: "Job Details Captured Correctly", description: "Almost every detail from company files is extracted accurately." },
+  { number: "95%", label: "Time Saved on Each Drive", description: "Job listing time reduced to ~10 seconds from 15 minutes" },
   { number: "100%", label: "Safe and Secure Data", description: "Your student and company data is fully protected." },
   { number: "24/7", label: "Always Available", description: "Access the platform anytime, from anywhere." },
 ]

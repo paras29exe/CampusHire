@@ -206,7 +206,7 @@ export default function JobDescriptionPage({ jobData, role }) {
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {jobData.assigned_to.map((mentor, index) => (
-                                    <div key={mentor._id || index} onClick={() => router.push(`/view-user?role=admin&userId=${mentor._id}`)} className="flex items-center gap-3 sm:px-4 bg-gray-50 rounded-lg">
+                                    <div key={mentor._id || index} onClick={() => router.push(`/view-user?role=admin&uid=${mentor._id}`)} className="flex items-center gap-3 sm:px-4 bg-gray-50 rounded-lg">
                                         <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
                                             {mentor?.name?.split(" ")
                                                 .map((n) => n[0])
@@ -292,7 +292,7 @@ export default function JobDescriptionPage({ jobData, role }) {
                                                                         <div className="flex justify-between">
                                                                             <span className="text-sm text-gray-600">Stipend:</span>
                                                                             <span className="font-medium text-green-700">
-                                                                                {role.package_details.stipend ? `₹${role.package_details.stipend}` : 'To be announced'}
+                                                                                {role.package_details.stipend ? `${role.package_details.stipend}` : 'To be announced'}
                                                                             </span>
                                                                         </div>
                                                                         <div className="flex justify-between">

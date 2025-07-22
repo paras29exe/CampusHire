@@ -12,6 +12,7 @@ import { Command, CommandList, CommandEmpty, CommandGroup, CommandInput, Command
 import { toast } from "sonner"
 import axios from "axios"
 import { useRouter } from "next/navigation"
+import ReviewStipendPackage from "@/components/reviewStipendPackage"
 
 export default function PostJobPage() {
   const { control, handleSubmit, watch, setValue, formState: { isSubmitting }, reset } = useForm({
@@ -25,8 +26,10 @@ export default function PostJobPage() {
 
   const { pdfFile, selectedAdmins, assignLater } = watch()
   const [jobId, setJobId] = useState(null)
+  const [parsedData, setParsedData] = useState(null)
   const [isParsing, setIsParsing] = useState(false)
   const [isParsed, setIsParsed] = useState(false)
+  const [packageSaved, setPackageSaved] = useState(false)
   const [adminsList, setAdminsList] = useState([])
 
   const router = useRouter()
@@ -77,15 +80,18 @@ export default function PostJobPage() {
       }
 
       setJobId(response.data.jobId)
+      setParsedData(response.data.data)
       setIsParsed(true)
-      toast("PDF parsed successfully", { variant: "success", description: 'You can now assign this job to admins.', action: { label: 'ok' } })
+      toast("PDF parsed successfully", { variant: "success", description: 'Review the Crucial Details and Assign to Admin.', action: { label: 'ok' } })
     } catch (error) {
       setJobId(null)
       setIsParsed(false)
-      toast(error.response?.data?.message || error.message, { style: {
-        backgroundColor: 'red',
-        color: 'white'
-      }, action: { label: 'Close' } })
+      toast(error.response?.data?.message || error.message, {
+        style: {
+          backgroundColor: 'red',
+          color: 'white'
+        }, action: { label: 'Close' }
+      })
     } finally {
       setIsParsing(false)
     }
@@ -139,10 +145,12 @@ export default function PostJobPage() {
       router.push('/dashboard/superuser/drives/unpublished-drives')
     } catch (error) {
       console.error('Error posting job:', error)
-      toast(error?.response?.data?.message || "Failed to post job", { style: {
-        backgroundColor: 'red',
-        color: 'white'
-      }})
+      toast(error?.response?.data?.message || "Failed to post job", {
+        style: {
+          backgroundColor: 'red',
+          color: 'white'
+        }
+      })
     } finally {
       reset();
       setJobId(null);
@@ -187,7 +195,7 @@ export default function PostJobPage() {
                           <input
                             type="file"
                             className="hidden"
-                            onClick={(e) => {e.stopPropagation()}}
+                            onClick={(e) => { e.stopPropagation() }}
                             accept=".pdf"
                             onChange={(e) => handleFileSelect(e.target.files?.[0])}
                           />
@@ -263,7 +271,13 @@ export default function PostJobPage() {
               </div>
             </CardContent>
           </Card>
-
+          {
+            parsedData && isParsed && (
+              <Card>
+                <ReviewStipendPackage parsedData={parsedData} setPackageSaved={setPackageSaved} />
+              </Card>
+            )
+          }
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -360,7 +374,7 @@ export default function PostJobPage() {
               <Button
                 type="submit"
                 disabled={
-                  !isParsed || isSubmitting || (!assignLater && (!selectedAdmins || selectedAdmins.length === 0))
+                  !isParsed || isSubmitting || !packageSaved || (!assignLater && (!selectedAdmins || selectedAdmins.length === 0))
                 }
                 className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400"
                 size="lg"

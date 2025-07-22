@@ -23,8 +23,8 @@ const ROLES = [
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
-  const { setUserData, setRole } = useAuthStore()
-  const [loading, setLoading] = useState(true)
+  const { userData, setUserData, setRole } = useAuthStore()
+  const [loading, setLoading] = useState(false)
 
   const [loginSelecedRole, setLoginSelecedRole] = useState("")
 
@@ -88,13 +88,13 @@ export default function LoginPage() {
       }
     };
 
-    autoLogin();
+    !userData && autoLogin();
   }, [])
 
   if (loading) return (
     <div className="min-h-screen flex flex-col gap-y-3 items-center justify-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-3 border-blue-600"></div>
-      <p>Please wait....</p>
+      <p>Logging you in....</p>
     </div>
   )
 

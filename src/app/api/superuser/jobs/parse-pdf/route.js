@@ -88,7 +88,7 @@ export const POST = withDB(async (req) => {
         // make job in database with the data received from the PDF processing script
         const job = await Job.create(data);
 
-        return NextResponse.json({ message: "PDF file processed successfully", data: {}, jobId: job._id }, { status: 200 });
+        return NextResponse.json({ message: "PDF file processed successfully", data: job, jobId: job._id }, { status: 200 });
     } catch (err) {
         console.error("Error in PDF processing:", err);
         return NextResponse.json({

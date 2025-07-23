@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
 import { AlertCircle, LoaderCircle } from "lucide-react"
 
-function Page() {
+export default function Page() {
   const { data: activeJobs, lastElementRef, hasMore, isLoading } = useInfiniteScroll('/api/student/jobs/active-jobs')
 
   return (
@@ -40,5 +40,3 @@ function Page() {
     </div>
   )
 }
-
-export default Page()

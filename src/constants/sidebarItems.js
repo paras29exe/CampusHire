@@ -87,41 +87,35 @@ export function getSidebarItems(role) {
     const items = {
         student: [
             {
-                title: 'Job Drives',
-                icon: <Briefcase className="w-5 h-5" />,
-                subItems: [
-                    { 
-                        title: 'Active Drives', 
-                        href: ROUTES.STUDENT.DRIVES.ACTIVE,
-                        icon: <TrendingUp className="w-4 h-4" />,
-                        description: 'View all currently active job drives'
-                    },
-                    { 
-                        title: 'Applied Drives', 
-                        href: ROUTES.STUDENT.DRIVES.APPLIED,
-                        icon: <CheckCircle className="w-4 h-4" />,
-                        description: 'Track your job applications'
-                    },
-                    { 
-                        title: 'Shortlisted Drives', 
-                        href: ROUTES.STUDENT.DRIVES.SHORTLISTED,
-                        icon: <FileText className="w-4 h-4" />,
-                        description: 'Drives where you\'ve been shortlisted'
-                    },
-                    { 
-                        title: 'Expired Drives', 
-                        href: ROUTES.STUDENT.DRIVES.EXPIRED,
-                        icon: <Clock className="w-4 h-4" />,
-                        description: 'View past job drives'
-                    }
-                ]
+                title: 'Active Drives',
+                href: ROUTES.STUDENT.DRIVES.ACTIVE,
+                icon: <TrendingUp className="w-4 h-4" />,
+                description: 'View all currently active job drives'
             },
-            { 
-                title: 'Mentor Support', 
-                icon: <PersonStanding className="w-5 h-5" />, 
-                href: ROUTES.STUDENT.MENTOR,
-                description: 'Connect with your assigned mentor'
-            }
+            {
+                title: 'Applied Drives',
+                href: ROUTES.STUDENT.DRIVES.APPLIED,
+                icon: <CheckCircle className="w-4 h-4" />,
+                description: 'Track your job applications'
+            },
+            {
+                title: 'Shortlisted Drives',
+                href: ROUTES.STUDENT.DRIVES.SHORTLISTED,
+                icon: <FileText className="w-4 h-4" />,
+                description: 'Drives where you\'ve been shortlisted'
+            },
+            {
+                title: 'Expired Drives',
+                href: ROUTES.STUDENT.DRIVES.EXPIRED,
+                icon: <Clock className="w-4 h-4" />,
+                description: 'View past job drives'
+            },
+            // {
+            //     title: 'Mentor Support',
+            //     icon: <PersonStanding className="w-5 h-5" />,
+            //     href: ROUTES.STUDENT.MENTOR,
+            //     description: 'Connect with your assigned mentor'
+            // }
         ],
 
         teacher: [
@@ -129,18 +123,18 @@ export function getSidebarItems(role) {
                 title: 'Drive Management',
                 icon: <Briefcase className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Active Drives', 
+                    {
+                        title: 'Active Drives',
                         href: ROUTES.TEACHER.DRIVES.ACTIVE,
                         icon: <TrendingUp className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Unpublished Drives', 
+                    {
+                        title: 'Unpublished Drives',
                         href: ROUTES.TEACHER.DRIVES.UNPUBLISHED,
                         icon: <AlertCircle className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Expired Drives', 
+                    {
+                        title: 'Expired Drives',
                         href: ROUTES.TEACHER.DRIVES.EXPIRED,
                         icon: <Clock className="w-4 h-4" />
                     }
@@ -150,13 +144,13 @@ export function getSidebarItems(role) {
                 title: 'Student Management',
                 icon: <Users className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Add Student', 
+                    {
+                        title: 'Add Student',
                         href: ROUTES.TEACHER.STUDENTS.ADD,
                         icon: <UserPlus className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Department Students', 
+                    {
+                        title: 'Department Students',
                         href: ROUTES.TEACHER.STUDENTS.MY_STUDENTS,
                         icon: <GraduationCap className="w-4 h-4" />
                     }
@@ -166,27 +160,27 @@ export function getSidebarItems(role) {
                 title: 'Faculty Directory',
                 icon: <UserRoundCheck className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'View Admins', 
+                    {
+                        title: 'View Admins',
                         href: ROUTES.TEACHER.FACULTY.ADMINS,
                         icon: <ShieldHalf className="w-4 h-4" />
                     },
-                    { 
-                        title: 'View Teachers', 
+                    {
+                        title: 'View Teachers',
                         href: ROUTES.TEACHER.FACULTY.TEACHERS,
                         icon: <UserRoundCheck className="w-4 h-4" />
                     }
                 ]
             },
-            { 
-                title: 'Bulk Register', 
-                icon: <Upload className="w-5 h-5" />, 
+            {
+                title: 'Bulk Register',
+                icon: <Upload className="w-5 h-5" />,
                 href: ROUTES.TEACHER.STUDENTS.BULK_UPLOAD,
                 description: 'Upload multiple students at once'
             },
-            { 
-                title: 'Job Analytics', 
-                icon: <BarChart2 className="w-5 h-5" />, 
+            {
+                title: 'Job Analytics',
+                icon: <BarChart2 className="w-5 h-5" />,
                 href: ROUTES.TEACHER.DRIVES.ANALYTICS,
                 description: 'View job drive performance metrics'
             }
@@ -197,26 +191,26 @@ export function getSidebarItems(role) {
                 title: 'Drive Management',
                 icon: <Briefcase className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Active Drives', 
+                    {
+                        title: 'Active Drives',
                         href: ROUTES.ADMIN.DRIVES.ACTIVE,
                         icon: <TrendingUp className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Unpublished Drives', 
+                    {
+                        title: 'Unpublished Drives',
                         href: ROUTES.ADMIN.DRIVES.UNPUBLISHED,
                         icon: <AlertCircle className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Expired Drives', 
+                    {
+                        title: 'Expired Drives',
                         href: ROUTES.ADMIN.DRIVES.EXPIRED,
                         icon: <Clock className="w-4 h-4" />
                     },
                 ]
             },
-            { 
-                title: 'Job Analytics', 
-                icon: <BarChart2 className="w-5 h-5" />, 
+            {
+                title: 'Job Analytics',
+                icon: <BarChart2 className="w-5 h-5" />,
                 href: ROUTES.ADMIN.DRIVES.ANALYTICS,
                 description: 'Comprehensive job placement analytics'
             },
@@ -224,13 +218,13 @@ export function getSidebarItems(role) {
                 title: 'Assignment Management',
                 icon: <ClipboardList className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Assigned Drives', 
+                    {
+                        title: 'Assigned Drives',
                         href: ROUTES.ADMIN.ASSIGNMENTS.PENDING,
                         icon: <Clock className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Completed', 
+                    {
+                        title: 'Completed',
                         href: ROUTES.ADMIN.ASSIGNMENTS.COMPLETED,
                         icon: <CheckCircle className="w-4 h-4" />
                     }
@@ -240,13 +234,13 @@ export function getSidebarItems(role) {
                 title: 'Student Management',
                 icon: <Users className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Add Student', 
+                    {
+                        title: 'Add Student',
                         href: ROUTES.ADMIN.STUDENTS.ADD,
                         icon: <UserPlus className="w-4 h-4" />
                     },
-                    { 
-                        title: 'All Students', 
+                    {
+                        title: 'All Students',
                         href: ROUTES.ADMIN.STUDENTS.VIEW_ALL,
                         icon: <Database className="w-4 h-4" />
                     }
@@ -256,18 +250,18 @@ export function getSidebarItems(role) {
                 title: 'Faculty Management',
                 icon: <UserRoundCheck className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Add Teacher', 
+                    {
+                        title: 'Add Teacher',
                         href: ROUTES.ADMIN.FACULTY.ADD_TEACHER,
                         icon: <UserPlus className="w-4 h-4" />
                     },
-                    { 
-                        title: 'All Teachers', 
+                    {
+                        title: 'All Teachers',
                         href: ROUTES.ADMIN.FACULTY.ALL_TEACHERS,
                         icon: <UserRoundCheck className="w-4 h-4" />
                     },
-                    { 
-                        title: 'All Admins', 
+                    {
+                        title: 'All Admins',
                         href: ROUTES.ADMIN.FACULTY.ALL_ADMINS,
                         icon: <ShieldHalf className="w-4 h-4" />
                     }
@@ -280,36 +274,36 @@ export function getSidebarItems(role) {
                 title: 'Drive Management',
                 icon: <Briefcase className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Active Drives', 
+                    {
+                        title: 'Active Drives',
                         href: ROUTES.SUPERUSER.DRIVES.ACTIVE,
                         icon: <TrendingUp className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Unpublished Drives', 
+                    {
+                        title: 'Unpublished Drives',
                         href: ROUTES.SUPERUSER.DRIVES.UNPUBLISHED,
                         icon: <AlertCircle className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Expired Drives', 
+                    {
+                        title: 'Expired Drives',
                         href: ROUTES.SUPERUSER.DRIVES.EXPIRED,
                         icon: <Clock className="w-4 h-4" />
                     },
                 ]
             },
-            { 
-                title: 'Unassigned Drives', 
+            {
+                title: 'Unassigned Drives',
                 href: ROUTES.SUPERUSER.DRIVES.UNASSIGNED,
                 icon: <XCircle className="w-4 h-4" />
             },
-            { 
-                title: 'Post New Drive (PDF)', 
+            {
+                title: 'Post New Drive (PDF)',
                 href: ROUTES.SUPERUSER.JOB_MANAGEMENT.POST_FROM_PDF,
                 icon: <FileText className="w-4 h-4" />
             },
-            { 
-                title: 'Job Analytics', 
-                icon: <BarChart2 className="w-5 h-5" />, 
+            {
+                title: 'Job Analytics',
+                icon: <BarChart2 className="w-5 h-5" />,
                 href: ROUTES.SUPERUSER.DRIVES.ANALYTICS,
                 description: 'System-wide job placement analytics'
             },
@@ -317,13 +311,13 @@ export function getSidebarItems(role) {
                 title: 'Student Management',
                 icon: <Users className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Add Student', 
+                    {
+                        title: 'Add Student',
                         href: ROUTES.SUPERUSER.STUDENTS.ADD,
                         icon: <UserPlus className="w-4 h-4" />
                     },
-                    { 
-                        title: 'All Students', 
+                    {
+                        title: 'All Students',
                         href: ROUTES.SUPERUSER.STUDENTS.VIEW_ALL,
                         icon: <Database className="w-4 h-4" />
                     }
@@ -333,13 +327,13 @@ export function getSidebarItems(role) {
                 title: 'Teacher Management',
                 icon: <UserRoundCheck className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Add Teacher', 
+                    {
+                        title: 'Add Teacher',
                         href: ROUTES.SUPERUSER.TEACHERS.ADD,
                         icon: <UserPlus className="w-4 h-4" />
                     },
-                    { 
-                        title: 'All Teachers', 
+                    {
+                        title: 'All Teachers',
                         href: ROUTES.SUPERUSER.TEACHERS.VIEW_ALL,
                         icon: <UserRoundCheck className="w-4 h-4" />
                     }
@@ -349,13 +343,13 @@ export function getSidebarItems(role) {
                 title: 'Admin Management',
                 icon: <ShieldHalf className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Add Admin', 
+                    {
+                        title: 'Add Admin',
                         href: ROUTES.SUPERUSER.ADMINS.ADD,
                         icon: <UserPlus className="w-4 h-4" />
                     },
-                    { 
-                        title: 'All Admins', 
+                    {
+                        title: 'All Admins',
                         href: ROUTES.SUPERUSER.ADMINS.VIEW_ALL,
                         icon: <ShieldHalf className="w-4 h-4" />
                     }
@@ -365,13 +359,13 @@ export function getSidebarItems(role) {
                 title: 'SuperUser Management',
                 icon: <Crown className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Add SuperUser', 
+                    {
+                        title: 'Add SuperUser',
                         href: ROUTES.SUPERUSER.SUPERUSERS.ADD,
                         icon: <UserPlus className="w-4 h-4" />
                     },
-                    { 
-                        title: 'All SuperUsers', 
+                    {
+                        title: 'All SuperUsers',
                         href: ROUTES.SUPERUSER.SUPERUSERS.VIEW_ALL,
                         icon: <Crown className="w-4 h-4" />
                     }
@@ -381,13 +375,13 @@ export function getSidebarItems(role) {
                 title: 'Assignment Management',
                 icon: <ClipboardList className="w-5 h-5" />,
                 subItems: [
-                    { 
-                        title: 'Pending Assignments', 
+                    {
+                        title: 'Pending Assignments',
                         href: ROUTES.SUPERUSER.ASSIGNMENTS.PENDING,
                         icon: <Clock className="w-4 h-4" />
                     },
-                    { 
-                        title: 'Completed Assignments', 
+                    {
+                        title: 'Completed Assignments',
                         href: ROUTES.SUPERUSER.ASSIGNMENTS.COMPLETED,
                         icon: <CheckCircle className="w-4 h-4" />
                     }

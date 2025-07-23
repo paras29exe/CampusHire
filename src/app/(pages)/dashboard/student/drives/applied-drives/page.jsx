@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useInfiniteScroll } from '@/hooks/infiniteScrollHook'
 import { AlertCircle, LoaderCircle } from 'lucide-react'
 
-function Page() {
+export default function Page() {
   const { data: appliedJobs, lastElementRef, hasMore, isLoading } = useInfiniteScroll('/api/student/jobs/applied-jobs')
 
   return (
@@ -16,8 +16,8 @@ function Page() {
             <CardDescription className="text-sm text-center sm:text-base text-gray-700">Track your job applications and Start Preparing</CardDescription>
           </CardHeader>
           <CardContent className="w-full space-y-2 sm:space-y-4 p-0">
-            {appliedJobs.map((job) => (
-              <AppliedJobCard key={job._id} jobData={job} />
+            {appliedJobs.map((data) => (
+              <AppliedJobCard key={data._id} jobData={data} />
             ))}
           </CardContent>
           {hasMore && (
@@ -37,5 +37,3 @@ function Page() {
     </div>
   )
 }
-
-export default Page()

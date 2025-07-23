@@ -222,6 +222,7 @@ export default function PostJobPage() {
                         type="button"
                         variant="ghost"
                         size="sm"
+                        disabled={isParsing || isParsed}
                         onClick={handleRemoveFile}
                         className="text-red-600 hover:text-red-800 hover:bg-red-50"
                       >

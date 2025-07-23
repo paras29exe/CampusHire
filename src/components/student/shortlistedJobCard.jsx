@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/utils/client/formatDate"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 export default function ShortlistedDriveCard({ jobData }) {
 
@@ -15,8 +16,10 @@ export default function ShortlistedDriveCard({ jobData }) {
         return type === "online" ? <Monitor className="h-4 w-4" /> : <Users className="h-4 w-4" />
     }
 
+    // here _id is the application ID, not the job ID
+
     return (
-        <Card onClick={() => router.push(`/job-description?jobId=${jobData._id}`)} className="w-full transition-all duration-300 border-0 relative overflow-hidden group">
+        <Card className="w-full transition-all duration-300 border-0 relative overflow-hidden group">
             {/* Decorative elements */}
 
 
@@ -42,7 +45,7 @@ export default function ShortlistedDriveCard({ jobData }) {
 
             <CardContent className="space-y-1 relative">
                 {/* Congratulatory Message */}
-                <div className="bg-gradient-to-r from-green-100 to-emerald-100 border border-green-200 rounded-lg p-2">
+                <div className="bg-gradient-to-r text-center from-green-100 to-emerald-100 border border-green-200 rounded-lg p-2">
                     <p className="text-green-800 font-medium sm:text-sm text-xs text-center">
                         🎉 Congratulations! You've been shortlisted for the next round!
                     </p>
@@ -68,7 +71,7 @@ export default function ShortlistedDriveCard({ jobData }) {
                             </div>
                             <div>
                                 <p className="text-gray-600">Next Round</p>
-                                <p className="font-semibold text-orange-700">{formatDate(jobData.nextRoundDate)}</p>
+                                <p className="font-semibold text-orange-700">Date:{formatDate(jobData.nextRoundDate)}</p>
                                 <p className="text-sm text-orange-600 font-medium">{jobData.nextRoundName}</p>
                             </div>
                         </div>
@@ -108,31 +111,45 @@ export default function ShortlistedDriveCard({ jobData }) {
                                 </div>
                             </div>
                         </div>
-
-                        {/* Motivational Quote */}
-                        <div className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
-                            <p className="text-xs text-blue-700 italic text-center">
-                                "Success is where preparation meets opportunity!"
-                            </p>
-                        </div>
                     </div>
                 </div>
 
                 {/* CTA Button */}
-                <CardFooter className="p-0 mt-6  flex-col gap-0">
-                    <h4 className="text-xs font-bold">Next Step Awaiting : <span className="text-red-500">{jobData.nextRoundName || "To be Announced"}</span> </h4>
+                <CardFooter className="p-0 mt-6 space-x-2">
                     <Button
                         size={'lg'}
+                        onClick={() => router.push(`/job-description?jobId=${jobData.jobId}`)}
                         variant={'outline'}
-                        className="w-full bg-blue-600 text-white font-semibold  hover:shadow-xl transition-all duration-300 group"
+                        className="ml-auto bg-blue-600 text-white font-semibold  hover:shadow-xl transition-all duration-300 group"
                     >
                         <span className="flex items-center justify-center gap-2">
                             View Description
+                        </span>
+                    </Button>
+                    {/* take me to next round */}
+                    <Button
+                        size={'lg'}
+                        onClick={() => {
+                            if (!jobData.nextRoundLink) {
+                                toast("Next round link is not available yet.", { style: { background: '#f8d7da', color: '#721c24' } });
+                                return;
+                            }
+                            router.push(jobData.nextRoundLink);
+                        }}
+                        disabled={!jobData.nextRoundLink}
+                        variant={'secondary'}
+                        className=" bg-green-600 text-white hover:text-black font-semibold hover:shadow-xl transition-all duration-300"
+                    >
+                        <span className="flex items-center justify-center gap-2">
+                            Proceed to Next Round
                             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
                         </span>
                     </Button>
                 </CardFooter>
             </CardContent>
+            <h4 className="text-sm font-medium text-gray-500 mt-2 text-center">
+                If next round button is disabled / Not-working, Maybe the link is not available yet. Please check back later or check your email for latest updates.
+            </h4>
         </Card>
     )
 }

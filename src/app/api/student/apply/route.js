@@ -9,8 +9,7 @@ import { Student } from "@/db/models/studentModel";
 export const POST = withDB(async (req) => {
     try {
         const student = JSON.parse(req.headers.get('user') || '{}');
-        const jobId = await req.nextUrl.searchParams.get('jobId');
-        const roleId = await req.nextUrl.searchParams.get('roleId');
+        const { jobId, roleId } = await req.json();
         
         if (!jobId || !roleId) {
             return NextResponse.json({ error: "Job ID and Role ID are required" }, { status: 400 });

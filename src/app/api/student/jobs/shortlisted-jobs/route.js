@@ -46,7 +46,7 @@ export const GET = withDB(async (req) => {
             { $limit: limit },
             {
                 $project: {
-                    _id: 0,
+                    _id: 1,
                     jobId: "$jobData._id",
                     roleId: "$matchedRole._id",
                     companyName: "$jobData.company.name",

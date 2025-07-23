@@ -5,7 +5,7 @@ import ShortlistedDriveCard from "@/components/student/shortlistedJobCard"
 import { AlertCircle, LoaderCircle, Trophy } from "lucide-react"
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
 
-function Page() {
+export default function Page() {
   const { data: shortlistedDrives, lastElementRef, hasMore, isLoading } = useInfiniteScroll('/api/student/jobs/shortlisted-jobs')
 
 
@@ -45,5 +45,3 @@ function Page() {
     </div>
   )
 }
-
-export default Page()

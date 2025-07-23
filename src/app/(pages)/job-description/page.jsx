@@ -78,7 +78,7 @@ export default function Page() {
                     </div>
                 )
             }
-            <JobDescriptionPage jobData={jobData} role={role} />
+            <JobDescriptionPage jobData={jobData} info={info} role={role} />
         </>
     )
 }

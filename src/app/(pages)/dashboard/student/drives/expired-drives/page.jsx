@@ -8,6 +8,7 @@ import { AlertCircle, LoaderCircle } from "lucide-react"
 export default function Page() {
   const {data: expiredDrives, lastElementRef, hasMore, isLoading} = useInfiniteScroll('/api/student/jobs/expired-jobs')
 
+  console.log(expiredDrives)
   return (
     <div className="min-h-screen p-4">
       <div className=" mx-auto space-y-6">

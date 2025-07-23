@@ -45,8 +45,11 @@ export const GET = withDB(async (req) => {
 
         const job = await Job.findOne({
             _id: mongoose.Types.ObjectId.createFromHexString(jobId),
-            status: { $ne: ['unpublished', 'unassigned'] } // Exclude unpublished jobs
         }).populate('assigned_to');
+
+        if (!job) {
+            return NextResponse.json({ error: 'Job not found or is unpublished' }, { status: 404 });
+        }
 
         const info = applications.reduce((acc, curr) => {
             acc[curr.status] = curr.count;
@@ -61,9 +64,8 @@ export const GET = withDB(async (req) => {
                 roleStatusMap[roleId.toString()] = appGroup.status; 
             });
         });
-        
 
-        job.job_roles = job.job_roles.map(role => (
+        const transformedRoles = job.job_roles.map(role => (
             {
                 ...role.toObject(),
                 status: roleStatusMap[role._id.toString()] || undefined
@@ -72,7 +74,10 @@ export const GET = withDB(async (req) => {
         
         return NextResponse.json({
             message: 'Data fetched successfully',
-            data: job,
+            data: {
+                ...job.toObject(),
+                job_roles: transformedRoles
+            },
             info: info
         }, { status: 200 });
     } catch (err) {

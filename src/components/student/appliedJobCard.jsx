@@ -14,9 +14,9 @@ export default function AppliedJobCard({ jobData }) {
   const getDriveTypeIcon = (type) => {
     return type === "online" ? <Monitor className="h-3 w-3 sm:h-4 sm:w-4" /> : <Users className="h-3 w-3 sm:h-4 sm:w-4" />
   }
-
+// here _id is the application ID, not the job ID
   return (
-    <Card onClick={() => router.push(`/job-description?jobId=${jobData._id}`)} className="w-full py-0.5 hover:shadow-md transition-shadow duration-300 ">
+    <Card onClick={() => router.push(`/job-description?jobId=${jobData.jobId}`)} className="w-full py-0.5 hover:shadow-md transition-shadow duration-300 ">
       <CardContent className="p-4 sm:p-6 relative">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           {/* Left Section - Company and Role Info */}

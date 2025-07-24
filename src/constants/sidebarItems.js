@@ -124,7 +124,7 @@ export function getSidebarItems(role) {
                 icon: <Briefcase className="w-5 h-5" />,
                 subItems: [
                     {
-                        title: 'Active Drives',
+                        title: 'Ongoing Drives',
                         href: ROUTES.TEACHER.DRIVES.ACTIVE,
                         icon: <TrendingUp className="w-4 h-4" />
                     },
@@ -192,7 +192,7 @@ export function getSidebarItems(role) {
                 icon: <Briefcase className="w-5 h-5" />,
                 subItems: [
                     {
-                        title: 'Active Drives',
+                        title: 'Ongoing Drives',
                         href: ROUTES.ADMIN.DRIVES.ACTIVE,
                         icon: <TrendingUp className="w-4 h-4" />
                     },
@@ -275,7 +275,7 @@ export function getSidebarItems(role) {
                 icon: <Briefcase className="w-5 h-5" />,
                 subItems: [
                     {
-                        title: 'Active Drives',
+                        title: 'Ongoing Drives',
                         href: ROUTES.SUPERUSER.DRIVES.ACTIVE,
                         icon: <TrendingUp className="w-4 h-4" />
                     },

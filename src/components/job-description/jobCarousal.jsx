@@ -2,18 +2,14 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
-import { Button } from "@/components/ui/button"
 import { Users, Clock3, ExternalLink, LinkIcon } from "lucide-react"
 import { formatDate } from "@/utils/client/formatDate"
-import axios from "axios"
-import { toast } from "sonner"
-import { useState } from "react"
 import ApplySection from "./applySection"
 
 export default function JobRolesCarousel({
     jobRoles,
+    jobId,
     isUnpublished,
     isStudent,
     isApplicationOpen,
@@ -196,6 +192,7 @@ export default function JobRolesCarousel({
                                             isApplicationOpen={isApplicationOpen}
                                             isUnassigned={isUnassigned}
                                             isUnpublished={isUnpublished}
+                                            jobId={jobId}
                                             jobLinks={jobLinks}
                                             roleData={roleData}
                                         />

@@ -12,6 +12,7 @@ export default function ApplySection({
     isApplicationOpen = true,
     isUnpublished = false,
     isUnassigned = false,
+    jobId = '',
     jobLinks = {},
     roleData = {},
 }) {
@@ -28,9 +29,11 @@ export default function ApplySection({
         }
         try {
             setIsApplying(true)
+            console.log("Applying to role:", roleId);
+            console.log("Job ID:", jobId);
 
             await axios.post('/api/student/apply', {
-                jobId: jobData._id,
+                jobId: jobId,
                 roleId: roleId,
             })
             toast("Application submitted successfully!", {
@@ -38,7 +41,7 @@ export default function ApplySection({
             })
             setDisableApply(true)
         } catch (error) {
-            console.error("Error applying to role:", error)
+            console.error("Error applying to role:", error.response?.data?.message || error.message);
             toast("An error occurred while applying. Please try again later.", {
                 style: { backgroundColor: 'red', color: 'white' },
             })
@@ -159,33 +162,5 @@ export default function ApplySection({
                 )}
             </div>
         </div >
-    );
-};
-
-// Example usage
-const App = () => {
-    const handleApplyToRole = async (roleId) => {
-        console.log('Applying to role:', roleId);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        alert('Application submitted successfully!');
-    };
-
-    return (
-        <div className="max-w-2xl mx-auto p-6 bg-white">
-            <ApplySection
-                isStudent={true}
-                isApplicationOpen={true}
-                jobLinks={{
-                    company_link: "https://example.com/company-portal",
-                    college_link: "https://example.com/college-portal"
-                }}
-                roleData={{
-                    _id: "role123",
-                    status: null // or "applied", "accepted", "rejected"
-                }}
-                onApply={handleApplyToRole}
-            />
-        </div>
     );
 };

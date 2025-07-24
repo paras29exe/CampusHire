@@ -109,6 +109,7 @@ export default function JobDescriptionPage({ jobData, role }) {
                 {jobData.job_roles && jobData.job_roles.length > 0 && (
                     <JobRolesCarousel
                         jobRoles={jobData.job_roles}
+                        jobId={jobData._id}
                         isUnpublished={isUnpublished}
                         isStudent={isStudent}
                         isApplicationOpen={isApplicationOpen()}

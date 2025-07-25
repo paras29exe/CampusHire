@@ -7,6 +7,7 @@ import ProcessSection from "@/components/landing/ProcessSection"
 import AnalyticsSection from "@/components/landing/AnalyticsSection"
 import CTASection from "@/components/landing/CTASection"
 import Footer from "@/components/landing/Footer"
+import DemoVideoSection from "@/components/landing/demoVideo"
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <WhyChooseSection />
+      <DemoVideoSection />
       <NumbersSection />
       <FeaturesSection />
       <ProcessSection />

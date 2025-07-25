@@ -9,7 +9,8 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req, { params }) => {
     try {
-        const role = await params.role?.split('-')?.[1]?.toLowerCase();
+        const param = await params;
+        const role = param.role?.toLowerCase();
 
         if (!role || !['admin', 'teacher', 'superuser'].includes(role.toLowerCase())) {
             return NextResponse.json({

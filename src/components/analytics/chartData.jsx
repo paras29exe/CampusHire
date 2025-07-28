@@ -12,8 +12,8 @@ export default function AnalyticsChart({ applicantsData, nonApplicantsData }) {
         applicantsData?.forEach((item) => {
             courseMap.set(item.course, {
                 course: item.course,
-                applicants: 50 || item.count,
-                non_applicants: 15 || 0,
+                applicants: item.count,
+                non_applicants: 0,
             })
         })
 
@@ -23,29 +23,11 @@ export default function AnalyticsChart({ applicantsData, nonApplicantsData }) {
             } else {
                 courseMap.set(item.course, {
                     course: item.course,
-                    applicants: 50,
-                    non_applicants: 15 || item.count,
+                    applicants: 0,
+                    non_applicants: item.count,
                 })
             }
         })
-
-        courseMap.set("B-tech", {
-            course: "B-tech",
-            applicants: 30,
-            non_applicants: 15,
-        })
-
-        courseMap.set("M.Sc", {
-            course: "M.Sc",
-            applicants: 10,
-            non_applicants: 47,
-        })
-        courseMap.set("MBA", {
-            course: "MBA",
-            applicants: 75,
-            non_applicants: 24,
-        })
-
 
         return Array.from(courseMap.values())
     }

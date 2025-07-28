@@ -12,6 +12,15 @@ export const GET = withDB(async (req) => {
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
         const limit = 50; // Number of jobs per page
 
+        const studentData = await Application.findOne({ applicant: reqUser._id }, 'course branch batch');
+        if (!studentData) {
+            return NextResponse.json({ message: "Student not found" }, { status: 404 });
+        }
+        const { course, branch, batch } = studentData;
+
+        const studentCourse = (branch ? `${course}-${branch}` : course)?.toLowerCase();
+        const studentBatch = batch?.toLowerCase();
+
         const appliedJobs = await Application.find({ applicant: reqUser._id })
 
         // merge multiple jobs with same jobId
@@ -27,7 +36,9 @@ export const GET = withDB(async (req) => {
                     $or: [
                         { last_date_to_apply: { $lt: new Date() } },
                         { status: 'expired' }
-                    ] 
+                    ],
+                    'eligibility_criteria.courses': { $in: [studentCourse] },
+                    'eligibility_criteria.batches': { $in: [studentBatch] }
                 }
             },{
                 $sort: { createdAt: -1 } 

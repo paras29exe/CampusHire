@@ -10,11 +10,11 @@ import { NextResponse } from "next/server";
 export const POST = withDB(async (req, { params }) => {
     try {
         const param = await params;
-        const role = param.role?.toLowerCase();
+        const role = param.role?.toLowerCase().split('-')[1];
 
         if (!role || !['admin', 'teacher', 'superuser'].includes(role.toLowerCase())) {
             return NextResponse.json({
-                error: "Invalid role specified",
+                message: "Invalid role specified",
             }, { status: 400 });
         }
 
@@ -22,13 +22,13 @@ export const POST = withDB(async (req, { params }) => {
 
         if (!employee_id || !name || !email || !phone) {
             return NextResponse.json({
-                error: "All fields are required",
+                message: "All fields are required",
             }, { status: 400 });
         }
 
         if (role === "teacher" && !department) {
             return NextResponse.json({
-                error: "Department is required for teachers",
+                message: "Department is required for teachers",
             }, { status: 400 });
         }
 
@@ -36,7 +36,7 @@ export const POST = withDB(async (req, { params }) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             return NextResponse.json({
-                error: "Invalid email format",
+                message: "Invalid email format",
             }, { status: 400 });
         }
 

@@ -33,11 +33,10 @@ export default function ViewStudent({ student, loading }) {
   }
 
   const handleDelete = () => {
-    setDialogOpen(false)
     setDeleting(true)
-
+    
     axios.delete(`/api/shared/manage/delete-student?id=${student._id}`)
-      .then(response => {
+    .then(response => {
         toast.success(response.data.message)
         window.history.back() // Go back to the previous page after deletion
         // Optionally redirect or update state after deletion
@@ -47,6 +46,7 @@ export default function ViewStudent({ student, loading }) {
       })
       .finally(() => {
         setDeleting(false)
+        setDialogOpen(false)
       })
   }
 

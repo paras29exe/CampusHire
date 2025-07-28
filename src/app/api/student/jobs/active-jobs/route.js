@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { withDB } from "@/utils/server/dbHandler";
 import { Job } from "@/db/models/jobModel";
 import mongoose from "mongoose";
+import { Student } from "@/db/models/studentModel";
 
 export const GET = withDB(async (req) => {
     try {
@@ -12,12 +13,23 @@ export const GET = withDB(async (req) => {
         const page = parseInt(req.nextUrl.searchParams.get('page')) || 1;
         const limit = parseInt(req.nextUrl.searchParams.get('limit')) || 50;
 
+        const studentData = await Student.findById(student._id, 'course branch batch')
+        if (!studentData) {
+            return NextResponse.json({ message: "Student not found" }, { status: 404 });
+        }
+        const { course, branch, batch } = studentData;
+
+        const studentCourse = (branch ? `${course}-${branch}` : course)?.toLowerCase();
+        const studentBatch = batch?.toLowerCase();
+
         // Find all active jobs the student has NOT applied to
         const activeJobs = await Job.aggregate([
             {
                 $match: {
                     status: 'active',
                     last_date_to_apply: { $gt: new Date() }, // Ensure the job is still open for applications
+                    "eligibility_criteria.courses": { $in: [studentCourse] },
+                    "eligibility_criteria.batches": { $in: [studentBatch] }
                 }
             },
             {

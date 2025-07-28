@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -24,7 +23,7 @@ export default function DialogBox({
 }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px]" showCloseButton={false}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     {description && (
@@ -32,11 +31,11 @@ export default function DialogBox({
                     )}
                 </DialogHeader>
                 <DialogFooter className="flex justify-end gap-2 mt-4">
-                    <Button variant="outline" onClick={() => {
+                    <Button disabled={loading} variant="outline" onClick={() => {
                         if (onCancel) onCancel()
                         setOpen(false)
                     }}>{cancelText}</Button>
-                    <Button onClick={() => {
+                    <Button disabled={loading} onClick={() => {
                         if (onSuccess) {
                             onSuccess()
                         }

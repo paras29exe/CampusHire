@@ -14,6 +14,7 @@ export default function JobAnalyticsDetailPage() {
     const [jobData, setJobData] = useState(null)
     const [applicantsData, setApplicantsData] = useState(null)
     const [nonApplicantsData, setNonApplicantsData] = useState(null)
+    const [error, setError] = useState(null)
 
     const [loading, setLoading] = useState(true)
     const [jobdataLoading, setJobDataLoading] = useState(true)
@@ -50,10 +51,12 @@ export default function JobAnalyticsDetailPage() {
                     }
                 }),
             ])
+            setError(null)
             setApplicantsData(applicantsResponse.data.data)
             setNonApplicantsData(nonApplicantsResponse.data.data)
         } catch (error) {
             console.error('Error fetching applicants or non-applicants data:', error.response?.data?.message || error.message)
+            setError(error.response?.data?.message)
             toast.error(error.response?.data?.message || "Failed to fetch data", {
                 duration: 3000,
                 position: "top-center",
@@ -71,7 +74,7 @@ export default function JobAnalyticsDetailPage() {
         const fetchJobData = async () => {
             try {
                 setJobDataLoading(true)
-                const response = await axios.get(`/api/shared//analytics/get-jobdata?jobId=${jobId}`)
+                const response = await axios.get(`/api/shared/analytics/get-jobdata?jobId=${jobId}`)
                 setJobData(response.data.data)
             } catch (error) {
                 console.error('Error fetching job data:', error)
@@ -108,7 +111,7 @@ export default function JobAnalyticsDetailPage() {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-gray-600">Failed to load job analytics data</p>
+                    <p className="text-gray-600">Failed to load job analytics data. <strong>Error: {error || "internal server error"}</strong></p>
                 </div>
             </div>
         )

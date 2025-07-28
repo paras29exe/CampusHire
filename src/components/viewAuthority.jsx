@@ -4,8 +4,18 @@ import { Mail, Phone, Building, Calendar, BadgeIcon as IdCard } from "lucide-rea
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "./ui/button"
+import DialogBox from "./DialogBox"
+import { useState } from "react"
+import axios from "axios"
+import { toast } from "sonner"
+import { useAuthStore } from "@/store/store"
 
 export default function ViewAuthorityPage({ authority, loading }) {
+
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const {role: loggedInUserRole} = useAuthStore()
 
   if (loading) {
     return (
@@ -23,15 +33,52 @@ export default function ViewAuthorityPage({ authority, loading }) {
     )
   }
 
+  const handleDelete = () => {
+    setDeleting(true)
+
+    axios.delete(`/api/superuser/manage/delete-user/${authority.role}?userId=${authority._id}`)
+      .then(response => {
+        toast.success(response.data.message)
+        window.history.back() // Go back to the previous page after deletion
+        // Optionally redirect or update state after deletion
+      })
+      .catch(error => {
+        toast.error(error.response?.data?.message || "Failed to delete user")
+      })
+      .finally(() => {
+        setDeleting(false)
+        setDialogOpen(false)
+      })
+  }
+
   const getInitials = (name) => name?.split(" ").map((n) => n[0])
     .join("")
     .toUpperCase()
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
+
+      <DialogBox
+        title="Delete User ?"
+        description={`Are you sure you want to delete ${authority.name}? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onSuccess={handleDelete}
+        onCancel={() => setDialogOpen(false)}
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+        loading={deleting}
+      />
       <div className="max-w-2xl mx-auto">
         <Card>
           <CardHeader className="text-center">
+            {
+              authority?.role !== 'superuser' && loggedInUserRole === 'superuser' && (
+                <Button variant={'destructive'} onClick={() => setDialogOpen(true)} className={'w-fit ml-auto'}>
+                  Delete User
+                </Button>
+              )
+            }
             <Avatar className="w-20 h-20 mx-auto mb-4">
               <AvatarFallback className="text-2xl bg-blue-600 text-white">{getInitials(authority.name) || 'N/A'}</AvatarFallback>
             </Avatar>

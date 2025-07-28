@@ -40,7 +40,7 @@ export const GET = withDB(async (req) => {
         }
 
         if (!job.eligibility_criteria.batches.length || !job.eligibility_criteria.courses.length) {
-            return NextResponse.json({ message: "Data for this job is incomplete" }, { status: 404 });
+            return NextResponse.json({ message: "Data for this drive is incomplete by admins." }, { status: 404 });
         }
 
         // if specific batch is provided, filter by that batch

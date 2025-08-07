@@ -14,7 +14,7 @@ export default function Page() {
     return (
         <>
             <div className="">
-                <div className="max-w-7xl space-y-4">
+                <div className=" space-y-4">
                     <Card className="border-orange-200 rounded-none bg-orange-50">
                         <CardHeader className="flex items-center justify-center space-x-4">
                             <div className="text-center flex flex-col items-center justify-center">

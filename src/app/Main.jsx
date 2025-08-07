@@ -29,7 +29,7 @@ export default function Main({ children }) {
                 setLoading(false);
             }
         };
-        pathname !== '/' && autoLogin();
+        !isHome && autoLogin();
     }, []);
 
     if (loading) return (

@@ -28,7 +28,7 @@ export const AppSidebar = ({ role }) => {
           <SidebarHeader className="mt-2 mb-8 overflow-hidden">
             <div className={"flex items-center gap-2 pl-1"}>
               <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 aspect-square rounded-lg overflow-hidden">
+                <div onClick={() => window.location.href = "/"} className="flex items-center justify-center w-10 aspect-square rounded-lg overflow-hidden">
                   <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
                 </div>
               </div>

@@ -8,9 +8,12 @@ import { useAuthStore } from "@/store/store";
 
 export default function Page() {
     const {userData } = useAuthStore()
-    const { data: unpublishedJobs, isLoading, hasMore, lastElementRef } = useInfiniteScroll('/api/shared/jobs/unpublished-jobs');
+    const { data: unpublishedJobs, setData, isLoading, hasMore, lastElementRef } = useInfiniteScroll('/api/shared/jobs/unpublished-jobs');
 
-    
+    const deleteJob = (id) => {
+        setData((prev) => prev.filter((job) => job._id !== id));
+    }
+
     return (
         <>
             <div className="">
@@ -28,7 +31,7 @@ export default function Page() {
                         <CardContent className="space-y-4">
                             {unpublishedJobs?.length !== 0 && !isLoading ? (
                                 unpublishedJobs?.map((job) => (
-                                    <UnpublishedJobCard key={job._id} userData={userData} jobData={job} />
+                                    <UnpublishedJobCard key={job._id} userData={userData} jobData={job} deleteJob={removeJob} />
                                 ))
                             ) : (
                                 <div className="text-center text-gray-500">

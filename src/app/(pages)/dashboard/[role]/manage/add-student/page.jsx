@@ -32,8 +32,8 @@ export default function AddStudent() {
             setLoading(true);
             const response = await axios.post('/api/shared/manage/add-student', data);
             setPassword(response.data.password);
+            setModalOpen(() => true);
             reset();
-            setModalOpen(true);
         } catch (error) {
             console.error("Error adding student:", error);
             toast(error.response?.data?.message || "Internal Server Error.", { style: { background: "red", color: "white" } });
@@ -44,11 +44,13 @@ export default function AddStudent() {
 
     return (
         <div>
-            <PasswordRevealModal
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
-                password={password}
-            />
+            {modalOpen &&
+                <PasswordRevealModal
+                    open={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    password={password}
+                />
+            }
             {/* Header */}
             <div className="border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-10">
                 <div className="mx-auto px-4 py-6">

@@ -1,8 +1,6 @@
 "use client"
 
-import { useState } from "react"
 import { UserPlus, Building2, Mail, Phone, User, Hash } from "lucide-react"
-import { useForm } from "react-hook-form"
 
 const DEPARTMENTS = [
   "Computer Science",

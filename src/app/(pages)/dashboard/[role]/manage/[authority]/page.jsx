@@ -72,11 +72,13 @@ export default function Page() {
         role={roleToAdd}
         form={form}
       />
-      <PasswordRevealModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        password={password}
-      />
+      {modalOpen &&
+        <PasswordRevealModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          password={password}
+        />
+      }
     </>
   )
 }

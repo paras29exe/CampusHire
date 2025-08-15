@@ -24,7 +24,7 @@ export default function UnassignedJobsDemo() {
         return diffDays > 3
     })
 
-    const removeVideo = (id) => {
+    const deleteJob = (id) => {
         setUnassignedJobs((prev) => prev.filter((job) => job._id !== id));
     }
 
@@ -60,7 +60,7 @@ export default function UnassignedJobsDemo() {
                 <CardContent className="space-y-4">
                     {unassignedJobs.length > 0 ? (
                         unassignedJobs.map((job) => (
-                            <UnassignedJobCard key={job._id} jobData={job} removeVideo={removeVideo} />
+                            <UnassignedJobCard key={job._id} jobData={job} deleteJob={deleteJob} />
                         ))
                     ) : (
                         <div className="text-center py-8 space-y-2">

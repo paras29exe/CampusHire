@@ -15,7 +15,7 @@ import { toast } from "sonner"
 import axios from "axios"
 import DialogBox from "./DialogBox"
 
-export default function UnpublishedJobCard({ jobData, userData }) {
+export default function UnpublishedJobCard({ jobData, deleteJob, userData }) {
   const [isAdminsOpen, setIsAdminsOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function UnpublishedJobCard({ jobData, userData }) {
       setDeleteLoading(true);
       await axios.delete(`/api/superuser/jobs/delete?jobId=${jobData._id}`);
       toast("Job deleted successfully");
-      window.location.reload(); 
+      deleteJob(jobData._id);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete job");
       console.error("Error deleting job:", error);

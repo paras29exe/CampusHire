@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Copy, Check } from 'lucide-react';
@@ -8,7 +8,7 @@ import { Copy, Check } from 'lucide-react';
 export function PasswordRevealModal({ open, onClose, password }) {
   const [copied, setCopied] = useState(false);
 
-  const copyToClipboard = async () => {
+  const copyToClipboard = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(String(password));
       setCopied(true);
@@ -16,7 +16,7 @@ export function PasswordRevealModal({ open, onClose, password }) {
     } catch {
       setCopied(false);
     }
-  };
+  }, [password]);
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

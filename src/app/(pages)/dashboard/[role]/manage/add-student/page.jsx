@@ -294,14 +294,14 @@ export default function AddStudent() {
                                 <button
                                     type="reset"
                                     onClick={() => reset()}
-                                    className="flex-1 h-11 outline shadow-sm rounded-md"
+                                    className="flex-1 p-2 outline shadow-sm rounded-md"
                                 >
                                     Reset Form
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="flex-1 h-11 rounded-md bg-foreground text-background flex items-center justify-center gap-2"
+                                    className="flex-1 p-2 rounded-md bg-foreground text-background flex items-center justify-center gap-2"
                                 >
                                     {isSubmitting ? (
                                         <>

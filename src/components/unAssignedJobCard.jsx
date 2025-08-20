@@ -12,7 +12,7 @@ import { useState } from "react"
 import { toast } from "sonner"
 import axios from "axios"
 
-export default function UnassignedJobCard({ jobData, deleteJob }) {
+export default function UnassignedJobCard({ jobData, removeJobFromUi }) {
   const router = useRouter()
   const { userData } = useAuthStore()
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -31,7 +31,7 @@ export default function UnassignedJobCard({ jobData, deleteJob }) {
       setLoading(true)
       await axios.delete(`/api/superuser/jobs/delete?jobId=${jobData._id}`);
       toast("Job deleted successfully");
-      deleteJob(jobData._id);
+      removeJobFromUi(jobData._id);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete job");
       console.error("Error deleting job:", error);

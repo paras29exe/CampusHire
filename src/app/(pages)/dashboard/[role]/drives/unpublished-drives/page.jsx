@@ -10,7 +10,7 @@ export default function Page() {
     const {userData } = useAuthStore()
     const { data: unpublishedJobs, setData, isLoading, hasMore, lastElementRef } = useInfiniteScroll('/api/shared/jobs/unpublished-jobs');
 
-    const deleteJob = (id) => {
+    const removeJobFromUi = (id) => {
         setData((prev) => prev.filter((job) => job._id !== id));
     }
 
@@ -31,7 +31,7 @@ export default function Page() {
                         <CardContent className="space-y-4">
                             {unpublishedJobs?.length !== 0 && !isLoading ? (
                                 unpublishedJobs?.map((job) => (
-                                    <UnpublishedJobCard key={job._id} userData={userData} jobData={job} deleteJob={removeJob} />
+                                    <UnpublishedJobCard key={job._id} userData={userData} jobData={job} removeJobFromUi={removeJobFromUi} />
                                 ))
                             ) : (
                                 <div className="text-center text-gray-500">

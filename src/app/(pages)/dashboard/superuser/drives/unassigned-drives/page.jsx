@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { useInfiniteScroll } from "@/hooks/infiniteScrollHook"
 import { useRouter } from "next/navigation"
 
-export default function UnassignedJobsDemo() {
+export default function UnassignedDrives() {
     const { data: unassignedJobs, setData: setUnassignedJobs, isLoading, hasMore, lastElementRef } = useInfiniteScroll('/api/superuser/jobs/unassigned-jobs');
     const router = useRouter()
 
@@ -24,7 +24,7 @@ export default function UnassignedJobsDemo() {
         return diffDays > 3
     })
 
-    const deleteJob = (id) => {
+    const removeJobFromUi = (id) => {
         setUnassignedJobs((prev) => prev.filter((job) => job._id !== id));
     }
 
@@ -60,7 +60,7 @@ export default function UnassignedJobsDemo() {
                 <CardContent className="space-y-4">
                     {unassignedJobs.length > 0 ? (
                         unassignedJobs.map((job) => (
-                            <UnassignedJobCard key={job._id} jobData={job} deleteJob={deleteJob} />
+                            <UnassignedJobCard key={job._id} jobData={job} removeJobFromUi={removeJobFromUi} />
                         ))
                     ) : (
                         <div className="text-center py-8 space-y-2">

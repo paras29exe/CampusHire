@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation"
 
 const heroContent = {
   headline: "From Chaos to Clarity",
-  subheadline: "Automate, track, and simplify campus hiring — all in one platform.",
+  subheadline: "Smarter hiring. Powered by AI.",
   description:
-    "Say goodbye to WhatsApp chaos. Streamline every step of campus hiring with automation and insights.",
+    "Say goodbye to WhatsApp chaos - streamline every step of campus hiring with automation and insights.",
   primaryCTA: "Get started",
   secondaryCTA: "Request Demo",
 }

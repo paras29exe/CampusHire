@@ -9,7 +9,7 @@ export default function Main({ children }) {
     const { setUserData, setRole } = useAuthStore();
     const router = useRouter();
     const pathname = usePathname()
-    const isHome = useMemo(() => pathname === '/', [pathname]);
+    const isHome = useMemo(() => pathname === '/' || pathname === '/auth/login', [pathname]);
     const [loading, setLoading] = useState(!isHome);
 
     useEffect(() => {

@@ -41,12 +41,11 @@ const superUserSchema = new mongoose.Schema({
 })
 
 // Encrypt password before saving
-superUserSchema.pre("save", async function (next) {
+superUserSchema.pre("save", async function () {
     if (this.isModified("password")) {
         // Hash the password before saving
         this.password = await bcrypt.hash(this.password, 10);
     }
-    next();
 });
 
 // Method to compare password

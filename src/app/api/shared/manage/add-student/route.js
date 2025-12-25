@@ -7,8 +7,9 @@ import { NextResponse } from "next/server";
 
 export const POST = withDB(async (req) => {
     try {
+        
         const { roll_number, name, email, college_email, phone, course, branch, department, batch, backlogs, tenth_percentage, twelfth_percentage, graduation_percentage } = await req.json();
-    
+
         if (!roll_number || !name || !email || !college_email || !phone || !course || !department || !batch || !tenth_percentage || !twelfth_percentage) {
             return NextResponse.json({ message: "All fields are required" }, { status: 400 });
         }

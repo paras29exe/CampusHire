@@ -75,19 +75,21 @@ export default function LoginPage() {
 
   useEffect(() => {
     const autoLogin = async () => {
-      setLoading(true)
       try {
         const response = await axios.get('/api/auth/auto-login');
+
+        if (response.status !== 200) return;
+        setLoading(true)
+
         setUserData(response.data.user);
         setRole(response.data.role);
         router.replace(`/dashboard/${response.data.role}/drives/active-drives`);
+        toast.success("Auto-login successful!");
       } catch (error) {
         console.error('Error during auto-login:', error.response?.data?.message || error.message);
-        // Optionally handle the error, e.g., redirect to login page
-        setLoading(false)
       }
     };
-    document.cookie.includes("accessToken") && autoLogin();
+    autoLogin();
   }, [])
 
   if (loading) return (

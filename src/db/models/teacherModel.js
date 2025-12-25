@@ -45,12 +45,11 @@ const teacherSchema = new mongoose.Schema({
 });
 
 // Encrypt password before saving
-teacherSchema.pre("save", async function (next) {
+teacherSchema.pre("save", async function () {
     if (this.isModified("password")) {
         // Hash the password before saving
         this.password = await bcrypt.hash(this.password, 10);
     }
-    next();
 });
 
 // Method to compare password

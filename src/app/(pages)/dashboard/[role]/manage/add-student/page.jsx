@@ -95,6 +95,7 @@ export default function AddStudent() {
                                             <User className="h-4 w-4" /> Full Name <span className="text-red-500">*</span>
                                         </label>
                                         <input
+                                            required
                                             {...register("name", { required: "Name is required" })}
                                             placeholder="Enter full name" className="h-11 w-full rounded-md border px-3"
                                         />
@@ -106,6 +107,8 @@ export default function AddStudent() {
                                             <Hash className="h-4 w-4" /> Roll Number <span className="text-red-500">*</span>
                                         </label>
                                         <input
+                                            type="number"
+                                            required
                                             {...register("roll_number", { required: "Roll number is required" })}
                                             placeholder="Enter roll number" className="h-11 w-full rounded-md border px-3"
                                         />
@@ -126,10 +129,15 @@ export default function AddStudent() {
                                         <label className="text-sm font-medium flex items-center gap-2">
                                             <Mail className="h-4 w-4" /> Personal Email <span className="text-red-500">*</span>
                                         </label>
-                                        <input type="email" {...register("email", {
-                                            required: "Email is required",
-                                            pattern: { value: /^\S+@\S+$/, message: "Invalid email" }
-                                        })} placeholder="Enter personal email" className="h-11 w-full rounded-md border px-3" />
+                                        <input 
+                                            type="email" 
+                                            required
+                                            {...register("email", {
+                                                required: "Email is required",
+                                            })} 
+                                            placeholder="Enter personal email" 
+                                            className="h-11 w-full rounded-md border px-3" 
+                                        />
                                         {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
                                     </div>
 
@@ -139,9 +147,9 @@ export default function AddStudent() {
                                         </label>
                                         <input
                                             type="email"
+                                            required
                                             {...register("college_email", {
-                                                required: "College email is required",
-                                                pattern: { value: /^\S+@\S+$/, message: "Invalid email" }
+                                                required: "College email is required"
                                             })}
                                             placeholder="Enter college email"
                                             className="h-11 w-full rounded-md border px-3"
@@ -154,9 +162,17 @@ export default function AddStudent() {
                                             <Phone className="h-4 w-4" /> Phone Number <span className="text-red-500">*</span>
                                         </label>
                                         <input
-                                            {...register("phone", { required: "Phone is required" })}
+                                            type="tel"
+                                            required
+                                            pattern="[0-9]{10}"
+                                            minLength={10}
+                                            maxLength={10}
+                                            {...register("phone", { 
+                                                required: "Phone is required",
+                                            })}
                                             placeholder="Enter phone number"
                                             className="h-11 w-full rounded-md border px-3"
+                                            title="Phone number must be exactly 10 digits"
                                         />
                                         {errors.phone && <p className="text-sm text-red-600">{errors.phone.message}</p>}
                                     </div>
@@ -243,8 +259,11 @@ export default function AddStudent() {
                                             <Trophy className="h-4 w-4" /> 10th Percentage <span className="text-red-500">*</span>
                                         </label>
                                         <input
+                                            required
                                             type="number"
                                             step="0.01"
+                                            min={0}
+                                            max={100}
                                             {...register("tenth_percentage", { required: "Required" })}
                                             className="h-11 w-full rounded-md border px-3"
                                         />
@@ -257,7 +276,10 @@ export default function AddStudent() {
                                         </label>
                                         <input
                                             type="number"
+                                            required
                                             step="0.01"
+                                            min={0}
+                                            max={100}
                                             {...register("twelfth_percentage", { required: "Required" })}
                                             className="h-11 w-full rounded-md border px-3"
                                         />
@@ -270,6 +292,8 @@ export default function AddStudent() {
                                         </label>
                                         <input
                                             type="number"
+                                            min={0}
+                                            max={100}
                                             step="0.01"
                                             {...register("graduation_percentage")}
                                             className="h-11 w-full rounded-md border px-3"
@@ -281,6 +305,8 @@ export default function AddStudent() {
                                             <Hash className="h-4 w-4" /> Backlogs
                                         </label>
                                         <input
+                                            min={0}
+                                            defaultValue={0}
                                             type="number"
                                             {...register("backlogs")}
                                             className="h-11 w-full rounded-md border px-3"

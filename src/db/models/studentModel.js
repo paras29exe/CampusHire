@@ -83,12 +83,11 @@ const studentSchema = new mongoose.Schema({
 })
 
 // encrypt password
-studentSchema.pre("save", async function (next) {
+studentSchema.pre("save", async function () {
     if (this.isModified("password")) {
         // Hash the password before saving
         this.password = await bcrypt.hash(this.password, 10);
     }
-    next();
 });
 
 // Method to compare password

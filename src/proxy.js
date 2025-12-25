@@ -2,7 +2,7 @@
 import { jwtVerify } from "jose";
 import { NextResponse } from 'next/server';
 
-export const middleware = async (req) => {
+export const proxy = async (req) => {
     const { pathname } = req.nextUrl;
 
     // Skip validation for login page

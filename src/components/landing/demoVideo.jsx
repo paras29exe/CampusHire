@@ -1,12 +1,22 @@
 "use client";
 
 
-import { useState } from "react";
-import ReactPlayer from 'react-player';
+import { useRef, useState } from "react";
 import { Play } from "lucide-react";
 
 export default function DemoVideoSection() {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  const handlePlayClick = async () => {
+    if (!videoRef.current) return;
+
+    setHasInteracted(true);
+
+    try {
+      await videoRef.current.play();
+    } catch {}
+  };
 
   return (
     <section className="py-16 bg-white">
@@ -24,19 +34,32 @@ export default function DemoVideoSection() {
 
         {/* Video container */}
         <div className="relative max-w-5xl mx-auto aspect-video overflow-hidden rounded-md shadow-2xl">
-          <ReactPlayer
-            className="react-player rounded-md "
-            src="https://res.cloudinary.com/paras-29/video/upload/q_auto:best,f_auto/campushire-demo-video.mp4"
-            width="100%"
-            height="100%"
-            preLoad='none'
-            light="https://res.cloudinary.com/paras-29/image/upload/v1709300000/campushire-demo-thumbnail.jpg"
-            controls
-            playing={isPlaying}
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
-            playIcon={ <Play className="text-white w-12 h-12  p-2 rounded-full bg-blue-500" />}
-          />
+          {!hasInteracted && (
+            <button
+              type="button"
+              onClick={handlePlayClick}
+              aria-label="Play demo video"
+              className="absolute inset-0 z-10 flex items-center justify-center bg-transparent"
+            >
+              <span className="rounded-full bg-blue-600 p-4 shadow-lg transition-transform duration-200 hover:scale-110">
+                <Play className="h-12 w-12 text-white" />
+              </span>
+            </button>
+          )}
+          <video
+            ref={videoRef}
+            className="h-full w-full rounded-md object-cover"
+            controls={hasInteracted}
+            preload="none"
+            poster="https://res.cloudinary.com/paras-29/image/upload/v1709300000/campushire-demo-thumbnail.jpg"
+            playsInline
+          >
+            <source
+              src="https://res.cloudinary.com/paras-29/video/upload/q_auto:best,f_auto/campushire-demo-video.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
         </div>
 
         <div className="text-center mt-12">

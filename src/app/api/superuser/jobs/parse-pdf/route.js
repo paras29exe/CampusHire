@@ -44,7 +44,7 @@ export const POST = withDB(async (req) => {
 
         let res;
         try {
-            res = await axios.post("https://pdfprocessor-llm-script.onrender.com/process-pdf", formData, {
+            res = await axios.post(process.env.PDF_PROCESSING_URL, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
